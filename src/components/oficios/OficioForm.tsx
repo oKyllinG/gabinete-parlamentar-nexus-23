@@ -1,4 +1,3 @@
-
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -11,10 +10,11 @@ import { Upload, File, X, Calendar } from "lucide-react"
 
 interface OficioFormProps {
   onClose: () => void
+  oficio?: any
 }
 
-export function OficioForm({ onClose }: OficioFormProps) {
-  const [tipoOficio, setTipoOficio] = useState("enviado")
+export function OficioForm({ onClose, oficio }: OficioFormProps) {
+  const [tipoOficio, setTipoOficio] = useState(oficio?.tipo || "enviado")
   const [documentoAnexo, setDocumentoAnexo] = useState<File | null>(null)
   const [protocoloAnexo, setProtocoloAnexo] = useState<File | null>(null)
 
@@ -107,12 +107,12 @@ export function OficioForm({ onClose }: OficioFormProps) {
           <div className="grid grid-cols-2 gap-4">
             <div>
               <Label htmlFor="numero">Número do Ofício *</Label>
-              <Input id="numero" placeholder="Ex: OF/2025/001" />
+              <Input id="numero" placeholder="Ex: OF/2025/001" defaultValue={oficio?.numero || ""} />
             </div>
             <div>
               <Label htmlFor="data">Data *</Label>
               <div className="relative">
-                <Input id="data" type="date" />
+                <Input id="data" type="date" defaultValue={oficio?.data || ""} />
                 <Calendar className="absolute right-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground pointer-events-none" />
               </div>
             </div>
@@ -120,7 +120,7 @@ export function OficioForm({ onClose }: OficioFormProps) {
 
           <div>
             <Label htmlFor="destinatario">Destinatário *</Label>
-            <Input id="destinatario" placeholder="Nome do órgão/pessoa destinatária" />
+            <Input id="destinatario" placeholder="Nome do órgão/pessoa destinatária" defaultValue={oficio?.destinatario || ""} />
           </div>
 
           <div className="grid grid-cols-2 gap-4">
@@ -130,24 +130,24 @@ export function OficioForm({ onClose }: OficioFormProps) {
             </div>
             <div>
               <Label htmlFor="orgao-destinatario">Órgão do Destinatário</Label>
-              <Input id="orgao-destinatario" placeholder="Ex: Secretaria de Saúde" />
+              <Input id="orgao-destinatario" placeholder="Ex: Secretaria de Saúde" defaultValue={oficio?.orgao || ""} />
             </div>
           </div>
 
           <div className="grid grid-cols-2 gap-4">
             <div>
               <Label htmlFor="municipio">Município</Label>
-              <Input id="municipio" placeholder="Ex: São Paulo" />
+              <Input id="municipio" placeholder="Ex: São Paulo" defaultValue={oficio?.municipio || ""} />
             </div>
             <div>
               <Label htmlFor="responsavel">Responsável</Label>
-              <Input id="responsavel" placeholder="Nome de quem elaborou o ofício" />
+              <Input id="responsavel" placeholder="Nome de quem elaborou o ofício" defaultValue={oficio?.responsavel || ""} />
             </div>
           </div>
 
           <div>
             <Label htmlFor="assunto">Assunto *</Label>
-            <Textarea id="assunto" placeholder="Descreva o assunto do ofício" rows={3} />
+            <Textarea id="assunto" placeholder="Descreva o assunto do ofício" rows={3} defaultValue={oficio?.assunto || ""} />
           </div>
 
           <div className="grid grid-cols-2 gap-4">
@@ -173,12 +173,12 @@ export function OficioForm({ onClose }: OficioFormProps) {
           <div className="grid grid-cols-2 gap-4">
             <div>
               <Label htmlFor="numero-recebido">Número do Ofício *</Label>
-              <Input id="numero-recebido" placeholder="Ex: OF/2025/001" />
+              <Input id="numero-recebido" placeholder="Ex: OF/2025/001" defaultValue={oficio?.numero || ""} />
             </div>
             <div>
               <Label htmlFor="data-recebido">Data *</Label>
               <div className="relative">
-                <Input id="data-recebido" type="date" />
+                <Input id="data-recebido" type="date" defaultValue={oficio?.data || ""} />
                 <Calendar className="absolute right-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground pointer-events-none" />
               </div>
             </div>
@@ -186,7 +186,7 @@ export function OficioForm({ onClose }: OficioFormProps) {
 
           <div>
             <Label htmlFor="origem">Origem *</Label>
-            <Input id="origem" placeholder="Nome do órgão/pessoa de origem" />
+            <Input id="origem" placeholder="Nome do órgão/pessoa de origem" defaultValue={oficio?.origem || ""} />
           </div>
 
           <div className="grid grid-cols-2 gap-4">
@@ -196,24 +196,24 @@ export function OficioForm({ onClose }: OficioFormProps) {
             </div>
             <div>
               <Label htmlFor="orgao-origem">Órgão da Origem</Label>
-              <Input id="orgao-origem" placeholder="Ex: Secretaria de Saúde" />
+              <Input id="orgao-origem" placeholder="Ex: Secretaria de Saúde" defaultValue={oficio?.orgao || ""} />
             </div>
           </div>
 
           <div className="grid grid-cols-2 gap-4">
             <div>
               <Label htmlFor="municipio-recebido">Município</Label>
-              <Input id="municipio-recebido" placeholder="Ex: São Paulo" />
+              <Input id="municipio-recebido" placeholder="Ex: São Paulo" defaultValue={oficio?.municipio || ""} />
             </div>
             <div>
               <Label htmlFor="responsavel-recebido">Responsável</Label>
-              <Input id="responsavel-recebido" placeholder="Nome de quem elaborou o ofício" />
+              <Input id="responsavel-recebido" placeholder="Nome de quem elaborou o ofício" defaultValue={oficio?.responsavel || ""} />
             </div>
           </div>
 
           <div>
             <Label htmlFor="assunto-recebido">Assunto *</Label>
-            <Textarea id="assunto-recebido" placeholder="Descreva o assunto do ofício" rows={3} />
+            <Textarea id="assunto-recebido" placeholder="Descreva o assunto do ofício" rows={3} defaultValue={oficio?.assunto || ""} />
           </div>
 
           <FileUploadArea
@@ -230,12 +230,12 @@ export function OficioForm({ onClose }: OficioFormProps) {
           <div className="grid grid-cols-2 gap-4">
             <div>
               <Label htmlFor="numero-convite">Número do Ofício *</Label>
-              <Input id="numero-convite" placeholder="Ex: OF/2025/001" />
+              <Input id="numero-convite" placeholder="Ex: OF/2025/001" defaultValue={oficio?.numero || ""} />
             </div>
             <div>
               <Label htmlFor="data-convite">Data *</Label>
               <div className="relative">
-                <Input id="data-convite" type="date" />
+                <Input id="data-convite" type="date" defaultValue={oficio?.data || ""} />
                 <Calendar className="absolute right-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground pointer-events-none" />
               </div>
             </div>
@@ -243,7 +243,7 @@ export function OficioForm({ onClose }: OficioFormProps) {
 
           <div>
             <Label htmlFor="destinatario-convite">Destinatário *</Label>
-            <Input id="destinatario-convite" placeholder="Nome do órgão/pessoa destinatária" />
+            <Input id="destinatario-convite" placeholder="Nome do órgão/pessoa destinatária" defaultValue={oficio?.destinatario || ""} />
           </div>
 
           <div className="grid grid-cols-2 gap-4">
@@ -253,24 +253,24 @@ export function OficioForm({ onClose }: OficioFormProps) {
             </div>
             <div>
               <Label htmlFor="orgao-destinatario-convite">Órgão do Destinatário</Label>
-              <Input id="orgao-destinatario-convite" placeholder="Ex: Secretaria de Saúde" />
+              <Input id="orgao-destinatario-convite" placeholder="Ex: Secretaria de Saúde" defaultValue={oficio?.orgao || ""} />
             </div>
           </div>
 
           <div className="grid grid-cols-2 gap-4">
             <div>
               <Label htmlFor="municipio-convite">Município</Label>
-              <Input id="municipio-convite" placeholder="Ex: São Paulo" />
+              <Input id="municipio-convite" placeholder="Ex: São Paulo" defaultValue={oficio?.municipio || ""} />
             </div>
             <div>
               <Label htmlFor="responsavel-convite">Responsável</Label>
-              <Input id="responsavel-convite" placeholder="Nome de quem elaborou o ofício" />
+              <Input id="responsavel-convite" placeholder="Nome de quem elaborou o ofício" defaultValue={oficio?.responsavel || ""} />
             </div>
           </div>
 
           <div>
             <Label htmlFor="assunto-convite">Assunto *</Label>
-            <Textarea id="assunto-convite" placeholder="Descreva o assunto do ofício" rows={3} />
+            <Textarea id="assunto-convite" placeholder="Descreva o assunto do ofício" rows={3} defaultValue={oficio?.assunto || ""} />
           </div>
 
           <FileUploadArea
@@ -289,7 +289,7 @@ export function OficioForm({ onClose }: OficioFormProps) {
           Cancelar
         </Button>
         <Button>
-          Registrar Ofício
+          {oficio ? 'Atualizar Ofício' : 'Registrar Ofício'}
         </Button>
       </div>
     </div>
