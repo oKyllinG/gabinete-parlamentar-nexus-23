@@ -2,8 +2,30 @@
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar"
 import { AppSidebar } from "@/components/AppSidebar"
 import { Dashboard } from "@/components/Dashboard"
+import { useLocation } from "react-router-dom"
 
 const Index = () => {
+  const location = useLocation()
+  
+  // Determine which content to show based on route
+  const getPageContent = () => {
+    switch (location.pathname) {
+      case '/oficios':
+        return null // This will be handled by the Oficios component
+      default:
+        return <Dashboard />
+    }
+  }
+  
+  const getPageTitle = () => {
+    switch (location.pathname) {
+      case '/oficios':
+        return 'Ofícios'
+      default:
+        return 'Sistema de Gestão de Gabinete'
+    }
+  }
+
   return (
     <SidebarProvider>
       <div className="min-h-screen flex w-full">
@@ -14,12 +36,12 @@ const Index = () => {
               <SidebarTrigger className="text-foreground hover:bg-accent hover:text-accent-foreground" />
               <div className="flex items-center gap-2">
                 <h2 className="text-lg font-semibold text-foreground">
-                  Sistema de Gestão de Gabinete
+                  {getPageTitle()}
                 </h2>
               </div>
             </div>
           </div>
-          <Dashboard />
+          {getPageContent()}
         </main>
       </div>
     </SidebarProvider>
