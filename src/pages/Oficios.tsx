@@ -1,4 +1,3 @@
-
 import { useState, useMemo } from "react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
@@ -228,53 +227,53 @@ export default function Oficios() {
   }
 
   return (
-    <div className="p-6 space-y-6 bg-background min-h-screen">
+    <div className="p-4 space-y-4 bg-background">
       {/* Header com estatísticas */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
         <Card className="border-l-4 border-l-blue-500">
-          <CardContent className="p-4">
+          <CardContent className="p-3">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-muted-foreground">Total de Ofícios</p>
-                <p className="text-2xl font-bold text-foreground">{oficios.length}</p>
+                <p className="text-xs font-medium text-muted-foreground">Total de Ofícios</p>
+                <p className="text-xl font-bold text-foreground">{oficios.length}</p>
               </div>
-              <FileText className="w-8 h-8 text-blue-500" />
+              <FileText className="w-6 h-6 text-blue-500" />
             </div>
           </CardContent>
         </Card>
         
         <Card className="border-l-4 border-l-green-500">
-          <CardContent className="p-4">
+          <CardContent className="p-3">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-muted-foreground">Protocolados</p>
-                <p className="text-2xl font-bold text-foreground">{getTabCount("protocolados")}</p>
+                <p className="text-xs font-medium text-muted-foreground">Protocolados</p>
+                <p className="text-xl font-bold text-foreground">{getTabCount("protocolados")}</p>
               </div>
-              <FileCheck className="w-8 h-8 text-green-500" />
+              <FileCheck className="w-6 h-6 text-green-500" />
             </div>
           </CardContent>
         </Card>
         
         <Card className="border-l-4 border-l-yellow-500">
-          <CardContent className="p-4">
+          <CardContent className="p-3">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-muted-foreground">Pendentes</p>
-                <p className="text-2xl font-bold text-foreground">{oficios.filter(o => o.status === "pendente").length}</p>
+                <p className="text-xs font-medium text-muted-foreground">Pendentes</p>
+                <p className="text-xl font-bold text-foreground">{oficios.filter(o => o.status === "pendente").length}</p>
               </div>
-              <Calendar className="w-8 h-8 text-yellow-500" />
+              <Calendar className="w-6 h-6 text-yellow-500" />
             </div>
           </CardContent>
         </Card>
         
         <Card className="border-l-4 border-l-purple-500">
-          <CardContent className="p-4">
+          <CardContent className="p-3">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-muted-foreground">Este Mês</p>
-                <p className="text-2xl font-bold text-foreground">{oficios.filter(o => new Date(o.data).getMonth() === new Date().getMonth()).length}</p>
+                <p className="text-xs font-medium text-muted-foreground">Este Mês</p>
+                <p className="text-xl font-bold text-foreground">{oficios.filter(o => new Date(o.data).getMonth() === new Date().getMonth()).length}</p>
               </div>
-              <Building className="w-8 h-8 text-purple-500" />
+              <Building className="w-6 h-6 text-purple-500" />
             </div>
           </CardContent>
         </Card>
@@ -283,17 +282,17 @@ export default function Oficios() {
       {/* Header da página */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-foreground">Gestão de Ofícios</h1>
-          <p className="text-muted-foreground">Gerencie os ofícios enviados, recebidos e convites</p>
+          <h1 className="text-xl font-bold text-foreground">Gestão de Ofícios</h1>
+          <p className="text-sm text-muted-foreground">Gerencie os ofícios enviados, recebidos e convites</p>
         </div>
         <div className="flex gap-3">
-          <Button variant="outline" className="flex items-center gap-2">
+          <Button variant="outline" size="sm" className="flex items-center gap-2">
             <Download className="w-4 h-4" />
             Exportar
           </Button>
           <Dialog open={isFormOpen} onOpenChange={setIsFormOpen}>
             <DialogTrigger asChild>
-              <Button className="flex items-center gap-2 bg-primary hover:bg-primary/90">
+              <Button size="sm" className="flex items-center gap-2 bg-primary hover:bg-primary/90">
                 <Plus className="w-4 h-4" />
                 Novo Ofício
               </Button>
@@ -313,20 +312,20 @@ export default function Oficios() {
 
       {/* Filtros e busca */}
       <Card className="shadow-sm">
-        <CardContent className="p-4">
-          <div className="flex flex-col md:flex-row gap-4 items-center">
+        <CardContent className="p-3">
+          <div className="flex flex-col md:flex-row gap-3 items-center">
             <div className="relative flex-1">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
               <Input
                 placeholder="Pesquisar por número, assunto ou município..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-10 border-gray-200 focus:border-primary"
+                className="pl-10 border-gray-200 focus:border-primary h-9"
               />
             </div>
-            <Button variant="outline" className="flex items-center gap-2">
+            <Button variant="outline" size="sm" className="flex items-center gap-2">
               <Filter className="w-4 h-4" />
-              Filtros Avançados
+              Filtros
             </Button>
           </div>
         </CardContent>
@@ -334,144 +333,133 @@ export default function Oficios() {
 
       {/* Tabs e conteúdo principal */}
       <Card className="shadow-sm">
-        <CardHeader className="pb-3">
+        <CardHeader className="pb-2">
           <Tabs value={activeTab} onValueChange={setActiveTab}>
-            <TabsList className="grid w-full grid-cols-5 bg-muted/50">
-              <TabsTrigger value="todos" className="data-[state=active]:bg-white">
+            <TabsList className="grid w-full grid-cols-5 bg-muted/50 h-9">
+              <TabsTrigger value="todos" className="data-[state=active]:bg-white text-xs">
                 Todos ({getTabCount("todos")})
               </TabsTrigger>
-              <TabsTrigger value="enviados" className="data-[state=active]:bg-white">
+              <TabsTrigger value="enviados" className="data-[state=active]:bg-white text-xs">
                 Enviados ({getTabCount("enviados")})
               </TabsTrigger>
-              <TabsTrigger value="recebidos" className="data-[state=active]:bg-white">
+              <TabsTrigger value="recebidos" className="data-[state=active]:bg-white text-xs">
                 Recebidos ({getTabCount("recebidos")})
               </TabsTrigger>
-              <TabsTrigger value="convites" className="data-[state=active]:bg-white">
+              <TabsTrigger value="convites" className="data-[state=active]:bg-white text-xs">
                 Convites ({getTabCount("convites")})
               </TabsTrigger>
-              <TabsTrigger value="protocolados" className="data-[state=active]:bg-white">
+              <TabsTrigger value="protocolados" className="data-[state=active]:bg-white text-xs">
                 Protocolados ({getTabCount("protocolados")})
               </TabsTrigger>
             </TabsList>
             
-            <TabsContent value={activeTab} className="mt-6">
+            <TabsContent value={activeTab} className="mt-4">
               <div className="border rounded-lg overflow-hidden">
                 <Table>
                   <TableHeader className="bg-muted/50">
                     <TableRow className="hover:bg-muted/50">
                       <TableHead 
-                        className="cursor-pointer hover:bg-muted/70 font-semibold"
+                        className="cursor-pointer hover:bg-muted/70 font-semibold text-xs w-[140px]"
                         onClick={() => handleSort('numero')}
                       >
-                        <div className="flex items-center gap-2">
+                        <div className="flex items-center gap-1">
                           Número
                           {getSortIcon('numero')}
                         </div>
                       </TableHead>
                       <TableHead 
-                        className="cursor-pointer hover:bg-muted/70 font-semibold"
+                        className="cursor-pointer hover:bg-muted/70 font-semibold text-xs w-[100px]"
                         onClick={() => handleSort('data')}
                       >
-                        <div className="flex items-center gap-2">
+                        <div className="flex items-center gap-1">
                           Data
                           {getSortIcon('data')}
                         </div>
                       </TableHead>
                       <TableHead 
-                        className="cursor-pointer hover:bg-muted/70 font-semibold"
+                        className="cursor-pointer hover:bg-muted/70 font-semibold text-xs w-[90px]"
                         onClick={() => handleSort('tipo')}
                       >
-                        <div className="flex items-center gap-2">
+                        <div className="flex items-center gap-1">
                           Tipo
                           {getSortIcon('tipo')}
                         </div>
                       </TableHead>
                       <TableHead 
-                        className="cursor-pointer hover:bg-muted/70 font-semibold"
+                        className="cursor-pointer hover:bg-muted/70 font-semibold text-xs w-[100px]"
                         onClick={() => handleSort('status')}
                       >
-                        <div className="flex items-center gap-2">
+                        <div className="flex items-center gap-1">
                           Status
                           {getSortIcon('status')}
                         </div>
                       </TableHead>
                       <TableHead 
-                        className="cursor-pointer hover:bg-muted/70 font-semibold"
+                        className="cursor-pointer hover:bg-muted/70 font-semibold text-xs"
                         onClick={() => handleSort('assunto')}
                       >
-                        <div className="flex items-center gap-2">
+                        <div className="flex items-center gap-1">
                           Assunto
                           {getSortIcon('assunto')}
                         </div>
                       </TableHead>
-                      <TableHead className="font-semibold">Origem/Destino</TableHead>
+                      <TableHead className="font-semibold text-xs w-[150px]">Para/De</TableHead>
                       <TableHead 
-                        className="cursor-pointer hover:bg-muted/70 font-semibold"
+                        className="cursor-pointer hover:bg-muted/70 font-semibold text-xs w-[100px]"
                         onClick={() => handleSort('municipio')}
                       >
-                        <div className="flex items-center gap-2">
+                        <div className="flex items-center gap-1">
                           Município
                           {getSortIcon('municipio')}
                         </div>
                       </TableHead>
-                      <TableHead className="font-semibold">Anexos</TableHead>
-                      <TableHead className="font-semibold text-center">Ações</TableHead>
+                      <TableHead className="font-semibold text-xs w-[100px]">Anexos</TableHead>
+                      <TableHead className="font-semibold text-xs text-center w-[100px]">Ações</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
                     {filteredOficios.map((oficio) => (
                       <TableRow key={oficio.id} className="hover:bg-muted/30 transition-colors">
-                        <TableCell className="font-medium">
+                        <TableCell className="font-medium p-2">
                           <div className="flex items-center gap-2">
-                            <FileText className="w-4 h-4 text-primary" />
-                            <span className="font-mono text-sm">{oficio.numero}</span>
+                            <FileText className="w-3 h-3 text-primary" />
+                            <span className="font-mono text-xs">{oficio.numero}</span>
                           </div>
                         </TableCell>
-                        <TableCell>
-                          <div className="flex items-center gap-2">
-                            <Calendar className="w-4 h-4 text-muted-foreground" />
-                            <span className="text-sm">{oficio.dataFormatada}</span>
-                          </div>
+                        <TableCell className="p-2">
+                          <span className="text-xs">{oficio.dataFormatada}</span>
                         </TableCell>
-                        <TableCell>{getTipoBadge(oficio.tipo)}</TableCell>
-                        <TableCell>{getStatusBadge(oficio.status)}</TableCell>
-                        <TableCell className="max-w-xs">
-                          <div className="truncate font-medium" title={oficio.assunto}>
+                        <TableCell className="p-2">{getTipoBadge(oficio.tipo)}</TableCell>
+                        <TableCell className="p-2">{getStatusBadge(oficio.status)}</TableCell>
+                        <TableCell className="max-w-[200px] p-2">
+                          <div className="truncate font-medium text-xs" title={oficio.assunto}>
                             {oficio.assunto}
                           </div>
                           <div className="text-xs text-muted-foreground mt-1">
                             Resp: {oficio.responsavel}
                           </div>
                         </TableCell>
-                        <TableCell>
-                          <div className="flex items-start gap-2">
-                            {oficio.tipo === "enviado" ? (
-                              <User className="w-4 h-4 text-muted-foreground mt-0.5" />
-                            ) : (
-                              <Building className="w-4 h-4 text-muted-foreground mt-0.5" />
-                            )}
-                            <div className="text-sm">
-                              <div className="font-medium">
-                                {oficio.tipo === "enviado" ? oficio.destinatario : oficio.origem}
-                              </div>
-                              <div className="text-xs text-muted-foreground">{oficio.orgao}</div>
+                        <TableCell className="p-2">
+                          <div className="text-xs">
+                            <div className="font-medium truncate" title={oficio.tipo === "enviado" ? oficio.destinatario : oficio.origem}>
+                              {oficio.tipo === "enviado" ? oficio.destinatario : oficio.origem}
                             </div>
+                            <div className="text-xs text-muted-foreground truncate">{oficio.orgao}</div>
                           </div>
                         </TableCell>
-                        <TableCell>
+                        <TableCell className="p-2">
                           <span className="inline-flex items-center gap-1 px-2 py-1 bg-gray-100 text-gray-700 rounded-md text-xs font-medium">
-                            <Building className="w-3 h-3" />
                             {oficio.municipio}
                           </span>
                         </TableCell>
-                        <TableCell>
-                          <div className="flex gap-1">
+                        <TableCell className="p-2">
+                          <div className="flex flex-col gap-1">
                             {oficio.temArquivo && (
                               <Button 
                                 variant="outline" 
                                 size="sm"
                                 onClick={() => handleDownloadFile(oficio, 'arquivo')}
-                                className="h-7 px-2 text-xs bg-blue-50 text-blue-700 border-blue-200 hover:bg-blue-100"
+                                className="h-6 px-2 text-xs bg-blue-50 text-blue-700 border-blue-200 hover:bg-blue-100"
                               >
                                 <Paperclip className="w-3 h-3 mr-1" />
                                 Arquivo
@@ -482,7 +470,7 @@ export default function Oficios() {
                                 variant="outline" 
                                 size="sm"
                                 onClick={() => handleDownloadFile(oficio, 'protocolo')}
-                                className="h-7 px-2 text-xs bg-green-50 text-green-700 border-green-200 hover:bg-green-100"
+                                className="h-6 px-2 text-xs bg-green-50 text-green-700 border-green-200 hover:bg-green-100"
                               >
                                 <FileCheck className="w-3 h-3 mr-1" />
                                 Protocolo
@@ -490,31 +478,31 @@ export default function Oficios() {
                             )}
                           </div>
                         </TableCell>
-                        <TableCell>
+                        <TableCell className="p-2">
                           <div className="flex gap-1 justify-center">
                             <Button 
                               variant="ghost" 
                               size="sm"
                               onClick={() => handleView(oficio)}
-                              className="hover:bg-blue-100 hover:text-blue-600"
+                              className="hover:bg-blue-100 hover:text-blue-600 h-7 w-7 p-0"
                             >
-                              <Eye className="w-4 h-4" />
+                              <Eye className="w-3 h-3" />
                             </Button>
                             <Button 
                               variant="ghost" 
                               size="sm"
                               onClick={() => handleEdit(oficio)}
-                              className="hover:bg-green-100 hover:text-green-600"
+                              className="hover:bg-green-100 hover:text-green-600 h-7 w-7 p-0"
                             >
-                              <Edit className="w-4 h-4" />
+                              <Edit className="w-3 h-3" />
                             </Button>
                             <Button 
                               variant="ghost" 
                               size="sm"
                               onClick={() => handleDelete(oficio.id)}
-                              className="hover:bg-red-100 hover:text-red-600"
+                              className="hover:bg-red-100 hover:text-red-600 h-7 w-7 p-0"
                             >
-                              <Trash2 className="w-4 h-4" />
+                              <Trash2 className="w-3 h-3" />
                             </Button>
                           </div>
                         </TableCell>
@@ -524,10 +512,10 @@ export default function Oficios() {
                 </Table>
                 
                 {filteredOficios.length === 0 && (
-                  <div className="text-center py-12 text-muted-foreground">
-                    <FileText className="w-12 h-12 mx-auto mb-4 opacity-50" />
-                    <p className="text-lg font-medium">Nenhum ofício encontrado</p>
-                    <p className="text-sm">Ajuste os filtros ou adicione novos ofícios</p>
+                  <div className="text-center py-8 text-muted-foreground">
+                    <FileText className="w-8 h-8 mx-auto mb-3 opacity-50" />
+                    <p className="text-sm font-medium">Nenhum ofício encontrado</p>
+                    <p className="text-xs">Ajuste os filtros ou adicione novos ofícios</p>
                   </div>
                 )}
               </div>
