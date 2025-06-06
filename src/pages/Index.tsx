@@ -27,11 +27,11 @@ const Index = () => {
   }
 
   return (
-    <SidebarProvider>
+    <SidebarProvider defaultOpen={true}>
       <div className="min-h-screen flex w-full">
         <AppSidebar />
-        <main className="flex-1">
-          <div className="p-4 border-b border-border bg-card">
+        <main className="flex-1 bg-background">
+          <div className="p-4 border-b border-border bg-card shadow-sm">
             <div className="flex items-center gap-4">
               <SidebarTrigger className="text-foreground hover:bg-accent hover:text-accent-foreground" />
               <div className="flex items-center gap-2">
@@ -41,7 +41,9 @@ const Index = () => {
               </div>
             </div>
           </div>
-          {getPageContent()}
+          <div className="bg-muted/30">
+            {getPageContent()}
+          </div>
         </main>
       </div>
     </SidebarProvider>
