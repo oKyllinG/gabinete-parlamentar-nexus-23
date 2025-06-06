@@ -2,6 +2,7 @@
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar"
 import { AppSidebar } from "@/components/AppSidebar"
 import { Dashboard } from "@/components/Dashboard"
+import Oficios from "@/pages/Oficios"
 import { useLocation } from "react-router-dom"
 
 const Index = () => {
@@ -11,7 +12,7 @@ const Index = () => {
   const getPageContent = () => {
     switch (location.pathname) {
       case '/oficios':
-        return null // This will be handled by the Oficios component
+        return <Oficios />
       default:
         return <Dashboard />
     }

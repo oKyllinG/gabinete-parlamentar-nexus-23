@@ -8,7 +8,7 @@ import { Badge } from "@/components/ui/badge"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog"
-import { FileText, Plus, Search, Calendar, User, Building, FileCheck, Eye, Edit, Trash2, ChevronUp, ChevronDown, Filter, Download } from "lucide-react"
+import { FileText, Plus, Search, Calendar, User, Building, FileCheck, Eye, Edit, Trash2, ChevronUp, ChevronDown, Filter, Download, Paperclip } from "lucide-react"
 import { OficioForm } from "@/components/oficios/OficioForm"
 
 type SortField = 'numero' | 'data' | 'tipo' | 'status' | 'assunto' | 'municipio'
@@ -39,7 +39,9 @@ export default function Oficios() {
       orgao: "Prefeitura Municipal",
       municipio: "Dourados",
       responsavel: "Leonardo Silva",
-      protocolo: "2025001234"
+      protocolo: "2025001234",
+      temArquivo: true,
+      temProtocolo: true
     },
     {
       id: 2,
@@ -53,7 +55,9 @@ export default function Oficios() {
       orgao: "Prefeitura Municipal",
       municipio: "Campo Grande",
       responsavel: "Maria Silva",
-      protocolo: null
+      protocolo: null,
+      temArquivo: true,
+      temProtocolo: false
     },
     {
       id: 3,
@@ -68,7 +72,9 @@ export default function Oficios() {
       municipio: "Três Lagoas",
       responsavel: "João Santos",
       evento: "Audiência Pública",
-      dataEvento: "20/05/2025"
+      dataEvento: "20/05/2025",
+      temArquivo: true,
+      temProtocolo: false
     },
     {
       id: 4,
@@ -82,7 +88,9 @@ export default function Oficios() {
       orgao: "Secretaria de Infraestrutura",
       municipio: "Corumbá",
       responsavel: "Ana Paula",
-      protocolo: null
+      protocolo: null,
+      temArquivo: true,
+      temProtocolo: false
     }
   ]
 
@@ -142,14 +150,14 @@ export default function Oficios() {
 
   const getStatusBadge = (status: string) => {
     const statusMap = {
-      protocolado: { label: "Protocolado", variant: "default" as const, className: "bg-blue-100 text-blue-800 border-blue-200" },
-      pendente: { label: "Pendente", variant: "destructive" as const, className: "bg-yellow-100 text-yellow-800 border-yellow-200" },
-      aceito: { label: "Aceito", variant: "secondary" as const, className: "bg-green-100 text-green-800 border-green-200" },
-      enviado: { label: "Enviado", variant: "outline" as const, className: "bg-gray-100 text-gray-800 border-gray-200" }
+      protocolado: { label: "Protocolado", className: "bg-blue-50 text-blue-700 border border-blue-200" },
+      pendente: { label: "Pendente", className: "bg-yellow-50 text-yellow-700 border border-yellow-200" },
+      aceito: { label: "Aceito", className: "bg-green-50 text-green-700 border border-green-200" },
+      enviado: { label: "Enviado", className: "bg-gray-50 text-gray-700 border border-gray-200" }
     }
-    const statusInfo = statusMap[status as keyof typeof statusMap] || { label: status, variant: "outline" as const, className: "" }
+    const statusInfo = statusMap[status as keyof typeof statusMap] || { label: status, className: "bg-gray-50 text-gray-700 border border-gray-200" }
     return (
-      <Badge variant={statusInfo.variant} className={`font-medium ${statusInfo.className}`}>
+      <Badge variant="outline" className={`font-medium ${statusInfo.className}`}>
         {statusInfo.label}
       </Badge>
     )
@@ -157,16 +165,15 @@ export default function Oficios() {
 
   const getTipoBadge = (tipo: string) => {
     const tipoMap = {
-      enviado: { label: "Enviado", icon: "↗️", className: "text-blue-600 bg-blue-50" },
-      recebido: { label: "Recebido", icon: "↙️", className: "text-green-600 bg-green-50" },
-      convite: { label: "Convite", icon: "📅", className: "text-purple-600 bg-purple-50" }
+      enviado: { label: "Enviado", className: "bg-blue-50 text-blue-700 border border-blue-200" },
+      recebido: { label: "Recebido", className: "bg-green-50 text-green-700 border border-green-200" },
+      convite: { label: "Convite", className: "bg-purple-50 text-purple-700 border border-purple-200" }
     }
-    const tipoInfo = tipoMap[tipo as keyof typeof tipoMap] || { label: tipo, icon: "📄", className: "text-gray-600 bg-gray-50" }
+    const tipoInfo = tipoMap[tipo as keyof typeof tipoMap] || { label: tipo, className: "bg-gray-50 text-gray-700 border border-gray-200" }
     return (
-      <div className={`inline-flex items-center gap-1 px-2 py-1 rounded-md text-xs font-medium ${tipoInfo.className}`}>
-        <span>{tipoInfo.icon}</span>
+      <Badge variant="outline" className={`font-medium ${tipoInfo.className}`}>
         {tipoInfo.label}
-      </div>
+      </Badge>
     )
   }
 
@@ -213,6 +220,11 @@ export default function Oficios() {
       case "protocolados": return oficios.filter(o => o.status === "protocolado").length
       default: return 0
     }
+  }
+
+  const handleDownloadFile = (oficio: any, tipo: 'arquivo' | 'protocolo') => {
+    // Aqui seria implementada a lógica de download
+    console.log(`Baixando ${tipo} do ofício:`, oficio.numero)
   }
 
   return (
@@ -402,6 +414,7 @@ export default function Oficios() {
                           {getSortIcon('municipio')}
                         </div>
                       </TableHead>
+                      <TableHead className="font-semibold">Anexos</TableHead>
                       <TableHead className="font-semibold text-center">Ações</TableHead>
                     </TableRow>
                   </TableHeader>
@@ -450,6 +463,32 @@ export default function Oficios() {
                             <Building className="w-3 h-3" />
                             {oficio.municipio}
                           </span>
+                        </TableCell>
+                        <TableCell>
+                          <div className="flex gap-1">
+                            {oficio.temArquivo && (
+                              <Button 
+                                variant="outline" 
+                                size="sm"
+                                onClick={() => handleDownloadFile(oficio, 'arquivo')}
+                                className="h-7 px-2 text-xs bg-blue-50 text-blue-700 border-blue-200 hover:bg-blue-100"
+                              >
+                                <Paperclip className="w-3 h-3 mr-1" />
+                                Arquivo
+                              </Button>
+                            )}
+                            {oficio.temProtocolo && (
+                              <Button 
+                                variant="outline" 
+                                size="sm"
+                                onClick={() => handleDownloadFile(oficio, 'protocolo')}
+                                className="h-7 px-2 text-xs bg-green-50 text-green-700 border-green-200 hover:bg-green-100"
+                              >
+                                <FileCheck className="w-3 h-3 mr-1" />
+                                Protocolo
+                              </Button>
+                            )}
+                          </div>
                         </TableCell>
                         <TableCell>
                           <div className="flex gap-1 justify-center">
