@@ -1,8 +1,7 @@
-
 export const exportToCSV = (data: any[], filename: string, headers: string[]) => {
-  // Convert data to CSV format
+  // Convert data to CSV format using semicolon separator (Brazilian standard)
   const csvContent = [
-    headers.join(','), // Header row
+    headers.join(';'), // Header row with semicolon separator
     ...data.map(row => 
       headers.map(header => {
         let value = row[header];
@@ -15,18 +14,20 @@ export const exportToCSV = (data: any[], filename: string, headers: string[]) =>
         // Convert to string
         const stringValue = String(value);
         
-        // Escape quotes and wrap in quotes if contains comma, quote, or newline
-        if (stringValue.includes(',') || stringValue.includes('"') || stringValue.includes('\n') || stringValue.includes(';')) {
-          return `"${stringValue.replace(/"/g, '""')}"`;
-        }
-        return stringValue;
-      }).join(',')
+        // Always wrap in quotes to ensure proper column separation
+        // Escape internal quotes by doubling them
+        const escapedValue = stringValue.replace(/"/g, '""');
+        return `"${escapedValue}"`;
+      }).join(';') // Use semicolon separator
     )
   ].join('\n');
 
-  // Add BOM for proper UTF-8 encoding in Excel
+  // Add BOM for proper UTF-8 encoding in Excel and use semicolon-compatible MIME type
   const bom = '\uFEFF';
-  const blob = new Blob([bom + csvContent], { type: 'text/csv;charset=utf-8;' });
+  const blob = new Blob([bom + csvContent], { 
+    type: 'text/csv;charset=utf-8;' 
+  });
+  
   const link = document.createElement('a');
   
   if (link.download !== undefined) {
@@ -37,6 +38,8 @@ export const exportToCSV = (data: any[], filename: string, headers: string[]) =>
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
+    // Clean up the URL object
+    URL.revokeObjectURL(url);
   }
 };
 
