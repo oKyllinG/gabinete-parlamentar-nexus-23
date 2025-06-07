@@ -57,7 +57,15 @@ export const DestinacaoDialog: React.FC<DestinacaoDialogProps> = ({
   });
 
   const handleSubmit = (data: DestinacaoFormData) => {
-    onSubmit(data);
+    // Cast the form data to the expected type since we know all required fields are present
+    const destinacaoData: Omit<Destinacao, 'id' | 'emendaId' | 'dataDestinacao'> = {
+      tipo: data.tipo,
+      destinatario: data.destinatario,
+      cnpj: data.cnpj,
+      valor: data.valor,
+      observacoes: data.observacoes
+    };
+    onSubmit(destinacaoData);
   };
 
   const watchedTipo = form.watch('tipo');

@@ -70,7 +70,23 @@ export const EmendasForm: React.FC<EmendasFormProps> = ({ emenda, onSubmit, onCa
   });
 
   const handleSubmit = (data: EmendasFormData) => {
-    onSubmit(data);
+    // Cast the form data to the expected type since we know all required fields are present
+    const emendaData: Omit<Emenda, 'id' | 'dataCriacao' | 'valorDestinado' | 'destinacoes'> = {
+      numero: data.numero,
+      ano: data.ano,
+      tipo: data.tipo,
+      autor: data.autor,
+      programa: data.programa,
+      acao: data.acao,
+      localizador: data.localizador,
+      valor: data.valor,
+      prazoExecucao: data.prazoExecucao,
+      objeto: data.objeto,
+      justificativa: data.justificativa,
+      observacoes: data.observacoes,
+      status: data.status
+    };
+    onSubmit(emendaData);
   };
 
   return (
