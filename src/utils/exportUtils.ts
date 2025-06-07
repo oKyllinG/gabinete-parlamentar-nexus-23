@@ -5,11 +5,18 @@ export const exportToCSV = (data: any[], filename: string, headers: string[]) =>
     headers.join(','), // Header row
     ...data.map(row => 
       headers.map(header => {
-        const value = getNestedValue(row, header);
-        // Convert to string and escape quotes
-        const stringValue = String(value || '');
+        let value = row[header];
+        
+        // Handle null, undefined, or missing values
+        if (value === null || value === undefined) {
+          value = '';
+        }
+        
+        // Convert to string
+        const stringValue = String(value);
+        
         // Escape quotes and wrap in quotes if contains comma, quote, or newline
-        if (stringValue.includes(',') || stringValue.includes('"') || stringValue.includes('\n')) {
+        if (stringValue.includes(',') || stringValue.includes('"') || stringValue.includes('\n') || stringValue.includes(';')) {
           return `"${stringValue.replace(/"/g, '""')}"`;
         }
         return stringValue;
@@ -33,19 +40,11 @@ export const exportToCSV = (data: any[], filename: string, headers: string[]) =>
   }
 };
 
-const getNestedValue = (obj: any, path: string): any => {
-  if (path.includes('.')) {
-    const keys = path.split('.');
-    return keys.reduce((current, key) => current?.[key], obj);
-  }
-  return obj[path];
-};
-
 export const exportContacts = (contacts: any[], selectedType?: string, startDate?: Date, endDate?: Date) => {
   // Filter contacts by type and date range
   let filteredContacts = contacts;
   
-  if (selectedType) {
+  if (selectedType && selectedType !== 'all') {
     filteredContacts = filteredContacts.filter(contact => contact.tipo === selectedType);
   }
   
@@ -70,38 +69,38 @@ export const exportContacts = (contacts: any[], selectedType?: string, startDate
     'Cargo',
     'Empresa',
     'Rua',
-    'Número',
+    'Numero',
     'Bairro',
     'Cidade',
     'CEP',
     'Estado',
     'Dia Nascimento',
-    'Mês Nascimento',
+    'Mes Nascimento',
     'Ano Nascimento',
-    'Observações',
-    'Data Criação'
+    'Observacoes',
+    'Data Criacao'
   ];
 
-  // Map the data to match the headers
+  // Map the data to match the headers exactly
   const mappedData = filteredContacts.map(contact => ({
-    'Nome': contact.nome,
-    'Sobrenome': contact.sobrenome,
-    'Telefone': contact.telefone,
-    'Email': contact.email,
-    'Tipo': contact.tipo,
+    'Nome': contact.nome || '',
+    'Sobrenome': contact.sobrenome || '',
+    'Telefone': contact.telefone || '',
+    'Email': contact.email || '',
+    'Tipo': contact.tipo || '',
     'Cargo': contact.cargo || '',
     'Empresa': contact.empresa || '',
     'Rua': contact.endereco?.rua || '',
-    'Número': contact.endereco?.numero || '',
+    'Numero': contact.endereco?.numero || '',
     'Bairro': contact.endereco?.bairro || '',
     'Cidade': contact.endereco?.cidade || '',
     'CEP': contact.endereco?.cep || '',
     'Estado': contact.endereco?.estado || '',
     'Dia Nascimento': contact.nascimento?.dia || '',
-    'Mês Nascimento': contact.nascimento?.mes || '',
+    'Mes Nascimento': contact.nascimento?.mes || '',
     'Ano Nascimento': contact.nascimento?.ano || '',
-    'Observações': contact.observacoes || '',
-    'Data Criação': new Date(contact.dataCriacao).toLocaleDateString('pt-BR')
+    'Observacoes': contact.observacoes || '',
+    'Data Criacao': contact.dataCriacao ? new Date(contact.dataCriacao).toLocaleDateString('pt-BR') : ''
   }));
 
   const filename = `contatos_${new Date().toISOString().split('T')[0]}.csv`;
@@ -112,7 +111,7 @@ export const exportOficios = (oficios: any[], selectedType?: string, startDate?:
   // Filter oficios by type, date range, municipality and organ
   let filteredOficios = oficios;
   
-  if (selectedType) {
+  if (selectedType && selectedType !== 'all') {
     filteredOficios = filteredOficios.filter(oficio => oficio.tipo === selectedType);
   }
   
@@ -128,40 +127,40 @@ export const exportOficios = (oficios: any[], selectedType?: string, startDate?:
     );
   }
 
-  if (selectedMunicipio) {
+  if (selectedMunicipio && selectedMunicipio !== 'all') {
     filteredOficios = filteredOficios.filter(oficio => oficio.municipio === selectedMunicipio);
   }
 
-  if (selectedOrgao) {
+  if (selectedOrgao && selectedOrgao !== 'all') {
     filteredOficios = filteredOficios.filter(oficio => oficio.orgao === selectedOrgao);
   }
 
   const headers = [
-    'Número',
+    'Numero',
     'Data',
     'Tipo',
     'Assunto',
-    'Destinatário',
+    'Destinatario',
     'Origem',
-    'Órgão',
-    'Município',
-    'Responsável',
+    'Orgao',
+    'Municipio',
+    'Responsavel',
     'Protocolo',
     'Evento',
     'Data Evento'
   ];
 
-  // Map the data to match the headers
+  // Map the data to match the headers exactly
   const mappedData = filteredOficios.map(oficio => ({
-    'Número': oficio.numero,
-    'Data': oficio.dataFormatada || new Date(oficio.data).toLocaleDateString('pt-BR'),
-    'Tipo': oficio.tipo,
-    'Assunto': oficio.assunto,
-    'Destinatário': oficio.destinatario || '',
+    'Numero': oficio.numero || '',
+    'Data': oficio.data ? new Date(oficio.data).toLocaleDateString('pt-BR') : '',
+    'Tipo': oficio.tipo || '',
+    'Assunto': oficio.assunto || '',
+    'Destinatario': oficio.destinatario || '',
     'Origem': oficio.origem || '',
-    'Órgão': oficio.orgao || '',
-    'Município': oficio.municipio || '',
-    'Responsável': oficio.responsavel || '',
+    'Orgao': oficio.orgao || '',
+    'Municipio': oficio.municipio || '',
+    'Responsavel': oficio.responsavel || '',
     'Protocolo': oficio.protocolo || '',
     'Evento': oficio.evento || '',
     'Data Evento': oficio.dataEvento ? new Date(oficio.dataEvento).toLocaleDateString('pt-BR') : ''
