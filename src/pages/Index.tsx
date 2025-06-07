@@ -2,6 +2,7 @@
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar"
 import { AppSidebar } from "@/components/AppSidebar"
 import { Dashboard } from "@/components/Dashboard"
+import { Toaster } from "@/components/ui/toaster"
 import Oficios from "@/pages/Oficios"
 import Contatos from "@/pages/Contatos"
 import Emendas from "@/pages/Emendas"
@@ -57,6 +58,7 @@ const Index = () => {
           </div>
         </main>
       </div>
+      <Toaster />
     </SidebarProvider>
   );
 };

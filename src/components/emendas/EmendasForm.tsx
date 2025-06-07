@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
@@ -12,7 +11,7 @@ import { Emenda, Contrapartida } from "@/pages/Emendas";
 
 interface EmendasFormProps {
   emenda?: Emenda | null;
-  onSubmit: (emenda: Omit<Emenda, 'id' | 'dataCriacao' | 'valorDestinado' | 'destinacoes'>) => void;
+  onSubmit: (emenda: Omit<Emenda, 'id' | 'dataCriacao' | 'valorTotal' | 'valorDestinado' | 'destinacoes'>) => void;
   onCancel: () => void;
 }
 
@@ -27,7 +26,6 @@ export const EmendasForm: React.FC<EmendasFormProps> = ({ emenda, onSubmit, onCa
     acao: '',
     localizador: '',
     valor: 0,
-    prazoExecucao: '',
     objeto: '',
     justificativa: '',
     observacoes: '',
@@ -46,7 +44,6 @@ export const EmendasForm: React.FC<EmendasFormProps> = ({ emenda, onSubmit, onCa
         acao: emenda.acao,
         localizador: emenda.localizador,
         valor: emenda.valor,
-        prazoExecucao: emenda.prazoExecucao,
         objeto: emenda.objeto,
         justificativa: emenda.justificativa,
         observacoes: emenda.observacoes || '',
@@ -94,6 +91,9 @@ export const EmendasForm: React.FC<EmendasFormProps> = ({ emenda, onSubmit, onCa
       contrapartidas: prev.contrapartidas.filter((_, i) => i !== index)
     }));
   };
+
+  const valorContrapartidas = formData.contrapartidas.reduce((sum, c) => sum + c.valor, 0);
+  const valorTotal = formData.valor + valorContrapartidas;
 
   return (
     <Dialog open={true} onOpenChange={onCancel}>
@@ -205,34 +205,41 @@ export const EmendasForm: React.FC<EmendasFormProps> = ({ emenda, onSubmit, onCa
             </CardContent>
           </Card>
 
-          {/* Valor e Prazo */}
+          {/* Valor */}
           <Card>
             <CardHeader>
-              <CardTitle className="text-lg">Valor e Prazo</CardTitle>
+              <CardTitle className="text-lg">Valor</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <Label htmlFor="valor">Valor (R$)</Label>
-                  <Input
-                    id="valor"
-                    type="number"
-                    step="0.01"
-                    value={formData.valor}
-                    onChange={(e) => handleInputChange('valor', parseFloat(e.target.value) || 0)}
-                    required
-                  />
-                </div>
-                <div>
-                  <Label htmlFor="prazoExecucao">Prazo de Execução</Label>
-                  <Input
-                    id="prazoExecucao"
-                    value={formData.prazoExecucao}
-                    onChange={(e) => handleInputChange('prazoExecucao', e.target.value)}
-                    required
-                  />
-                </div>
+              <div>
+                <Label htmlFor="valor">Valor da Emenda (R$)</Label>
+                <Input
+                  id="valor"
+                  type="number"
+                  step="0.01"
+                  value={formData.valor}
+                  onChange={(e) => handleInputChange('valor', parseFloat(e.target.value) || 0)}
+                  required
+                />
               </div>
+              {valorContrapartidas > 0 && (
+                <div className="p-3 bg-muted rounded-lg">
+                  <div className="text-sm space-y-1">
+                    <div className="flex justify-between">
+                      <span>Valor da Emenda:</span>
+                      <span>{formData.valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span>Contrapartidas:</span>
+                      <span>{valorContrapartidas.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</span>
+                    </div>
+                    <div className="flex justify-between font-semibold border-t pt-1">
+                      <span>Valor Total:</span>
+                      <span>{valorTotal.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</span>
+                    </div>
+                  </div>
+                </div>
+              )}
             </CardContent>
           </Card>
 

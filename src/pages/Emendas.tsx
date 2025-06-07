@@ -1,11 +1,13 @@
+
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Plus, FileText, Target, DollarSign, Calendar } from "lucide-react";
+import { Plus, FileText, Target, DollarSign, Calendar, AlertTriangle } from "lucide-react";
 import { EmendasForm } from "@/components/emendas/EmendasForm";
 import { EmendasList } from "@/components/emendas/EmendasList";
 import { DestinacaoDialog } from "@/components/emendas/DestinacaoDialog";
 import { ExportDialog } from "@/components/emendas/ExportDialog";
+import { useToast } from "@/hooks/use-toast";
 
 export interface Contrapartida {
   id: string;
@@ -24,9 +26,9 @@ export interface Emenda {
   acao: string;
   localizador: string;
   valor: number;
+  valorTotal: number; // valor + contrapartidas
   valorDestinado: number;
   contrapartidas: Contrapartida[];
-  prazoExecucao: string;
   objeto: string;
   justificativa: string;
   observacoes?: string;
@@ -47,7 +49,11 @@ export interface Destinacao {
   statusExecucao: 'planejamento' | 'em_execucao' | 'concluida' | 'cancelada';
   valor: number;
   dataDestinacao: string;
+  prazoInicio: string;
+  prazoFim: string;
+  dataAlerta?: string;
   observacoes?: string;
+  projetosAnexados?: string[];
 }
 
 const Emendas = () => {
@@ -56,18 +62,24 @@ const Emendas = () => {
   const [selectedEmenda, setSelectedEmenda] = useState<Emenda | null>(null);
   const [showDestinacao, setShowDestinacao] = useState(false);
   const [selectedDestinacao, setSelectedDestinacao] = useState<Destinacao | null>(null);
+  const { toast } = useToast();
 
   // Load emendas from localStorage
   useEffect(() => {
     const savedEmendas = localStorage.getItem('emendas');
     if (savedEmendas) {
       const parsedEmendas = JSON.parse(savedEmendas);
-      // Ensure all emendas have proper array initialization
-      const normalizedEmendas = parsedEmendas.map((emenda: any) => ({
-        ...emenda,
-        contrapartidas: emenda.contrapartidas || [],
-        destinacoes: emenda.destinacoes || []
-      }));
+      // Ensure all emendas have proper array initialization and calculate valorTotal
+      const normalizedEmendas = parsedEmendas.map((emenda: any) => {
+        const contrapartidas = emenda.contrapartidas || [];
+        const valorContrapartidas = contrapartidas.reduce((sum: number, c: Contrapartida) => sum + c.valor, 0);
+        return {
+          ...emenda,
+          contrapartidas,
+          destinacoes: emenda.destinacoes || [],
+          valorTotal: emenda.valor + valorContrapartidas
+        };
+      });
       setEmendas(normalizedEmendas);
     }
   }, []);
@@ -77,11 +89,47 @@ const Emendas = () => {
     localStorage.setItem('emendas', JSON.stringify(emendas));
   }, [emendas]);
 
-  const handleSubmitEmenda = (emenda: Omit<Emenda, 'id' | 'dataCriacao' | 'valorDestinado' | 'destinacoes'>) => {
+  // Check for alerts
+  useEffect(() => {
+    const checkAlerts = () => {
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+
+      emendas.forEach(emenda => {
+        emenda.destinacoes?.forEach(destinacao => {
+          if (destinacao.dataAlerta) {
+            const alertDate = new Date(destinacao.dataAlerta);
+            alertDate.setHours(0, 0, 0, 0);
+            
+            if (alertDate.getTime() === today.getTime()) {
+              toast({
+                title: "Alerta de Destinação",
+                description: `Prazo para ${destinacao.destinatario} - Emenda ${emenda.numero}/${emenda.ano}`,
+                variant: "destructive",
+              });
+            }
+          }
+        });
+      });
+    };
+
+    checkAlerts();
+    const interval = setInterval(checkAlerts, 24 * 60 * 60 * 1000); // Check daily
+    return () => clearInterval(interval);
+  }, [emendas, toast]);
+
+  const calculateValorTotal = (valor: number, contrapartidas: Contrapartida[]) => {
+    const valorContrapartidas = contrapartidas.reduce((sum, c) => sum + c.valor, 0);
+    return valor + valorContrapartidas;
+  };
+
+  const handleSubmitEmenda = (emenda: Omit<Emenda, 'id' | 'dataCriacao' | 'valorTotal' | 'valorDestinado' | 'destinacoes'>) => {
+    const valorTotal = calculateValorTotal(emenda.valor, emenda.contrapartidas);
     const newEmenda: Emenda = {
       ...emenda,
       id: crypto.randomUUID(),
       dataCriacao: new Date().toISOString(),
+      valorTotal,
       valorDestinado: 0,
       destinacoes: [],
       contrapartidas: emenda.contrapartidas || []
@@ -95,11 +143,12 @@ const Emendas = () => {
     setShowForm(true);
   };
 
-  const handleUpdateEmenda = (updatedEmenda: Omit<Emenda, 'id' | 'dataCriacao' | 'valorDestinado' | 'destinacoes'>) => {
+  const handleUpdateEmenda = (updatedEmenda: Omit<Emenda, 'id' | 'dataCriacao' | 'valorTotal' | 'valorDestinado' | 'destinacoes'>) => {
     if (selectedEmenda) {
+      const valorTotal = calculateValorTotal(updatedEmenda.valor, updatedEmenda.contrapartidas);
       setEmendas(prev => prev.map(e => 
         e.id === selectedEmenda.id 
-          ? { ...selectedEmenda, ...updatedEmenda }
+          ? { ...selectedEmenda, ...updatedEmenda, valorTotal }
           : e
       ));
       setSelectedEmenda(null);
@@ -166,7 +215,8 @@ const Emendas = () => {
           ...destinacao,
           id: crypto.randomUUID(),
           emendaId: selectedEmenda.id,
-          dataDestinacao: new Date().toISOString()
+          dataDestinacao: new Date().toISOString(),
+          projetosAnexados: []
         };
 
         setEmendas(prev => prev.map(e => {
@@ -192,7 +242,7 @@ const Emendas = () => {
 
   // Calcular estatísticas
   const totalEmendas = emendas.length;
-  const valorTotal = emendas.reduce((sum, e) => sum + e.valor, 0);
+  const valorTotal = emendas.reduce((sum, e) => sum + e.valorTotal, 0);
   const valorDestinado = emendas.reduce((sum, e) => sum + e.valorDestinado, 0);
   const valorDisponivel = valorTotal - valorDestinado;
 
@@ -212,7 +262,7 @@ const Emendas = () => {
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Valor Total</CardTitle>
+            <CardTitle className="text-sm font-medium">Valor Total (+ Contrapartidas)</CardTitle>
             <DollarSign className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>

@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Edit, Trash2, Target, Search, Filter } from "lucide-react";
+import { Edit, Trash2, Target, Search, Filter, Calendar, Paperclip, AlertTriangle } from "lucide-react";
 import { Emenda, Destinacao } from "@/pages/Emendas";
 
 interface EmendasListProps {
@@ -77,7 +77,14 @@ export const EmendasList: React.FC<EmendasListProps> = ({
   });
 
   const getProgressPercentage = (emenda: Emenda) => {
-    return emenda.valor > 0 ? (emenda.valorDestinado / emenda.valor) * 100 : 0;
+    return emenda.valorTotal > 0 ? (emenda.valorDestinado / emenda.valorTotal) * 100 : 0;
+  };
+
+  const isDestinacaoVencendo = (destinacao: Destinacao) => {
+    if (!destinacao.dataAlerta) return false;
+    const today = new Date();
+    const alertDate = new Date(destinacao.dataAlerta);
+    return alertDate <= today;
   };
 
   return (
@@ -222,6 +229,28 @@ export const EmendasList: React.FC<EmendasListProps> = ({
                   </div>
                 )}
 
+                {/* Valores */}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 p-3 bg-muted rounded">
+                  <div className="text-center">
+                    <p className="text-xs text-muted-foreground">Valor da Emenda</p>
+                    <p className="text-sm font-medium">
+                      {emenda.valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
+                    </p>
+                  </div>
+                  <div className="text-center">
+                    <p className="text-xs text-muted-foreground">Contrapartidas</p>
+                    <p className="text-sm font-medium">
+                      {(emenda.valorTotal - emenda.valor).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
+                    </p>
+                  </div>
+                  <div className="text-center">
+                    <p className="text-xs text-muted-foreground">Valor Total</p>
+                    <p className="text-lg font-bold text-primary">
+                      {emenda.valorTotal.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
+                    </p>
+                  </div>
+                </div>
+
                 {/* Barra de Progresso */}
                 <div className="space-y-2">
                   <div className="flex justify-between text-sm">
@@ -242,7 +271,7 @@ export const EmendasList: React.FC<EmendasListProps> = ({
                       })}
                     </span>
                     <span>
-                      Total: {emenda.valor.toLocaleString('pt-BR', { 
+                      Disponível: {(emenda.valorTotal - emenda.valorDestinado).toLocaleString('pt-BR', { 
                         style: 'currency', 
                         currency: 'BRL' 
                       })}
@@ -264,6 +293,12 @@ export const EmendasList: React.FC<EmendasListProps> = ({
                                 <Badge className={statusExecucaoColors[destinacao.statusExecucao]} variant="secondary">
                                   {statusExecucaoLabels[destinacao.statusExecucao]}
                                 </Badge>
+                                {isDestinacaoVencendo(destinacao) && (
+                                  <Badge variant="destructive" className="flex items-center gap-1">
+                                    <AlertTriangle className="w-3 h-3" />
+                                    Alerta
+                                  </Badge>
+                                )}
                               </div>
                               
                               <div className="grid grid-cols-2 gap-2 text-xs text-muted-foreground mb-2">
@@ -281,6 +316,18 @@ export const EmendasList: React.FC<EmendasListProps> = ({
                                 </div>
                               </div>
 
+                              {/* Prazos */}
+                              <div className="grid grid-cols-2 gap-2 text-xs text-muted-foreground mb-2">
+                                <div className="flex items-center gap-1">
+                                  <Calendar className="w-3 h-3" />
+                                  <span className="font-medium">Início:</span> {new Date(destinacao.prazoInicio).toLocaleDateString('pt-BR')}
+                                </div>
+                                <div className="flex items-center gap-1">
+                                  <Calendar className="w-3 h-3" />
+                                  <span className="font-medium">Fim:</span> {new Date(destinacao.prazoFim).toLocaleDateString('pt-BR')}
+                                </div>
+                              </div>
+
                               {destinacao.cnpj && (
                                 <div className="text-xs text-muted-foreground mb-2">
                                   <span className="font-medium">CNPJ:</span> {destinacao.cnpj}
@@ -290,6 +337,15 @@ export const EmendasList: React.FC<EmendasListProps> = ({
                               {destinacao.observacoes && (
                                 <div className="text-xs text-muted-foreground mb-2">
                                   <span className="font-medium">Observações:</span> {destinacao.observacoes}
+                                </div>
+                              )}
+
+                              {destinacao.projetosAnexados && destinacao.projetosAnexados.length > 0 && (
+                                <div className="text-xs text-muted-foreground mb-2">
+                                  <div className="flex items-center gap-1">
+                                    <Paperclip className="w-3 h-3" />
+                                    <span className="font-medium">Projetos:</span> {destinacao.projetosAnexados.length} arquivo(s)
+                                  </div>
                                 </div>
                               )}
 
@@ -337,14 +393,14 @@ export const EmendasList: React.FC<EmendasListProps> = ({
 
                 <div className="flex justify-between items-center pt-2 border-t">
                   <div className="text-xs text-muted-foreground">
-                    Prazo: {emenda.prazoExecucao}
+                    Criada em: {new Date(emenda.dataCriacao).toLocaleDateString('pt-BR')}
                   </div>
                   <div className="flex gap-2">
                     <Button
                       size="sm"
                       variant="outline"
                       onClick={() => onDestinar(emenda)}
-                      disabled={emenda.valorDestinado >= emenda.valor}
+                      disabled={emenda.valorDestinado >= emenda.valorTotal}
                     >
                       <Target className="w-4 h-4 mr-1" />
                       Destinar
