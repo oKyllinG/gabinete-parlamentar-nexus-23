@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -6,13 +5,15 @@ import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Edit, Trash2, Target, Search, Filter } from "lucide-react";
-import { Emenda } from "@/pages/Emendas";
+import { Emenda, Destinacao } from "@/pages/Emendas";
 
 interface EmendasListProps {
   emendas: Emenda[];
   onEdit: (emenda: Emenda) => void;
   onDelete: (id: string) => void;
   onDestinar: (emenda: Emenda) => void;
+  onEditDestinacao: (emenda: Emenda, destinacao: Destinacao) => void;
+  onDeleteDestinacao: (emendaId: string, destinacaoId: string) => void;
 }
 
 const tipoLabels = {
@@ -21,18 +22,11 @@ const tipoLabels = {
   comissao: 'Comissão'
 };
 
-const statusLabels = {
-  cadastrada: 'Cadastrada',
+const statusExecucaoLabels = {
+  planejamento: 'Planejamento',
   em_execucao: 'Em Execução',
-  executada: 'Executada',
-  vencida: 'Vencida'
-};
-
-const statusColors = {
-  cadastrada: 'bg-blue-100 text-blue-800',
-  em_execucao: 'bg-yellow-100 text-yellow-800',
-  executada: 'bg-green-100 text-green-800',
-  vencida: 'bg-red-100 text-red-800'
+  concluida: 'Concluída',
+  cancelada: 'Cancelada'
 };
 
 const statusExecucaoColors = {
@@ -46,7 +40,9 @@ export const EmendasList: React.FC<EmendasListProps> = ({
   emendas, 
   onEdit, 
   onDelete, 
-  onDestinar 
+  onDestinar,
+  onEditDestinacao,
+  onDeleteDestinacao
 }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [filterType, setFilterType] = useState<string>('all');
@@ -198,11 +194,6 @@ export const EmendasList: React.FC<EmendasListProps> = ({
                       {emenda.autor} • {tipoLabels[emenda.tipo]} • {emenda.orgao}
                     </p>
                   </div>
-                  <div className="flex items-center gap-2">
-                    <Badge className={statusColors[emenda.status]}>
-                      {statusLabels[emenda.status]}
-                    </Badge>
-                  </div>
                 </div>
               </CardHeader>
               <CardContent className="space-y-4">
@@ -276,40 +267,85 @@ export const EmendasList: React.FC<EmendasListProps> = ({
 
                 {/* Destinações */}
                 {emenda.destinacoes && emenda.destinacoes.length > 0 && (
-                  <div className="space-y-2">
+                  <div className="space-y-3">
                     <p className="text-sm font-medium">Destinações ({emenda.destinacoes.length}):</p>
-                    <div className="space-y-2">
-                      {emenda.destinacoes.slice(0, 3).map((destinacao, index) => (
-                        <div key={index} className="text-xs p-3 bg-muted rounded space-y-1">
-                          <div className="flex justify-between items-start">
+                    <div className="space-y-3">
+                      {emenda.destinacoes.map((destinacao, index) => (
+                        <div key={destinacao.id} className="p-4 bg-muted rounded-lg border">
+                          <div className="flex justify-between items-start mb-3">
                             <div className="flex-1">
-                              <div className="font-medium">{destinacao.destinatario}</div>
-                              <div className="text-muted-foreground">
-                                {destinacao.municipio} • {destinacao.areaAtuacao}
+                              <div className="flex items-center gap-2 mb-2">
+                                <h4 className="font-medium text-sm">{destinacao.destinatario}</h4>
+                                <Badge className={statusExecucaoColors[destinacao.statusExecucao]} variant="secondary">
+                                  {statusExecucaoLabels[destinacao.statusExecucao]}
+                                </Badge>
                               </div>
-                              <div className="text-muted-foreground">
-                                GND: {destinacao.gnd} • PD: {destinacao.pd}
+                              
+                              <div className="grid grid-cols-2 gap-2 text-xs text-muted-foreground mb-2">
+                                <div>
+                                  <span className="font-medium">Município:</span> {destinacao.municipio}
+                                </div>
+                                <div>
+                                  <span className="font-medium">Área:</span> {destinacao.areaAtuacao}
+                                </div>
+                                <div>
+                                  <span className="font-medium">GND:</span> {destinacao.gnd}
+                                </div>
+                                <div>
+                                  <span className="font-medium">PD:</span> {destinacao.pd}
+                                </div>
+                              </div>
+
+                              {destinacao.cnpj && (
+                                <div className="text-xs text-muted-foreground mb-2">
+                                  <span className="font-medium">CNPJ:</span> {destinacao.cnpj}
+                                </div>
+                              )}
+
+                              {destinacao.observacoes && (
+                                <div className="text-xs text-muted-foreground mb-2">
+                                  <span className="font-medium">Observações:</span> {destinacao.observacoes}
+                                </div>
+                              )}
+
+                              <div className="text-xs text-muted-foreground">
+                                <span className="font-medium">Data:</span> {new Date(destinacao.dataDestinacao).toLocaleDateString('pt-BR')}
                               </div>
                             </div>
-                            <div className="text-right">
-                              <div className="font-medium">
+                            
+                            <div className="text-right ml-4">
+                              <div className="font-medium text-lg mb-2">
                                 {destinacao.valor.toLocaleString('pt-BR', { 
                                   style: 'currency', 
                                   currency: 'BRL' 
                                 })}
                               </div>
-                              <Badge className={statusExecucaoColors[destinacao.statusExecucao]} variant="secondary">
-                                {destinacao.statusExecucao.replace('_', ' ')}
-                              </Badge>
+                              <div className="flex gap-1">
+                                <Button
+                                  size="sm"
+                                  variant="outline"
+                                  onClick={() => onEditDestinacao(emenda, destinacao)}
+                                  className="h-7 px-2"
+                                >
+                                  <Edit className="w-3 h-3" />
+                                </Button>
+                                <Button
+                                  size="sm"
+                                  variant="outline"
+                                  onClick={() => {
+                                    if (confirm('Tem certeza que deseja excluir esta destinação?')) {
+                                      onDeleteDestinacao(emenda.id, destinacao.id);
+                                    }
+                                  }}
+                                  className="h-7 px-2"
+                                >
+                                  <Trash2 className="w-3 h-3" />
+                                </Button>
+                              </div>
                             </div>
                           </div>
                         </div>
                       ))}
-                      {emenda.destinacoes.length > 3 && (
-                        <p className="text-xs text-muted-foreground text-center">
-                          +{emenda.destinacoes.length - 3} destinações
-                        </p>
-                      )}
                     </div>
                   </div>
                 )}

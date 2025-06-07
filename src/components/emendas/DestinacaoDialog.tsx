@@ -29,6 +29,7 @@ type DestinacaoFormData = z.infer<typeof destinacaoSchema>;
 
 interface DestinacaoDialogProps {
   emenda: Emenda;
+  destinacao?: Destinacao | null;
   onSubmit: (data: Omit<Destinacao, 'id' | 'emendaId' | 'dataDestinacao'>) => void;
   onCancel: () => void;
 }
@@ -47,10 +48,12 @@ const statusExecucaoLabels = {
 
 export const DestinacaoDialog: React.FC<DestinacaoDialogProps> = ({ 
   emenda, 
+  destinacao,
   onSubmit, 
   onCancel 
 }) => {
-  const valorDisponivel = emenda.valor - emenda.valorDestinado;
+  const valorDestinado = emenda.valorDestinado - (destinacao?.valor || 0);
+  const valorDisponivel = emenda.valor - valorDestinado;
 
   const form = useForm<DestinacaoFormData>({
     resolver: zodResolver(destinacaoSchema.refine((data) => {
@@ -60,16 +63,16 @@ export const DestinacaoDialog: React.FC<DestinacaoDialogProps> = ({
       path: ['valor']
     })),
     defaultValues: {
-      tipo: 'entidade',
-      destinatario: '',
-      cnpj: '',
-      municipio: '',
-      gnd: '',
-      pd: '',
-      areaAtuacao: '',
-      statusExecucao: 'planejamento',
-      valor: 0,
-      observacoes: ''
+      tipo: destinacao?.tipo || 'entidade',
+      destinatario: destinacao?.destinatario || '',
+      cnpj: destinacao?.cnpj || '',
+      municipio: destinacao?.municipio || '',
+      gnd: destinacao?.gnd || '',
+      pd: destinacao?.pd || '',
+      areaAtuacao: destinacao?.areaAtuacao || '',
+      statusExecucao: destinacao?.statusExecucao || 'planejamento',
+      valor: destinacao?.valor || 0,
+      observacoes: destinacao?.observacoes || ''
     }
   });
 
@@ -95,7 +98,9 @@ export const DestinacaoDialog: React.FC<DestinacaoDialogProps> = ({
     <Dialog open={true} onOpenChange={onCancel}>
       <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle>Destinar Emenda</DialogTitle>
+          <DialogTitle>
+            {destinacao ? 'Editar Destinação' : 'Nova Destinação'}
+          </DialogTitle>
         </DialogHeader>
 
         {/* Informações da Emenda */}
@@ -334,7 +339,7 @@ export const DestinacaoDialog: React.FC<DestinacaoDialogProps> = ({
                 Cancelar
               </Button>
               <Button type="submit">
-                Confirmar Destinação
+                {destinacao ? 'Atualizar Destinação' : 'Confirmar Destinação'}
               </Button>
             </div>
           </form>

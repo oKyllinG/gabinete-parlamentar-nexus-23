@@ -30,7 +30,6 @@ export interface Emenda {
   objeto: string;
   justificativa: string;
   observacoes?: string;
-  status: 'cadastrada' | 'em_execucao' | 'executada' | 'vencida';
   dataCriacao: string;
   destinacoes: Destinacao[];
 }
@@ -56,6 +55,7 @@ const Emendas = () => {
   const [showForm, setShowForm] = useState(false);
   const [selectedEmenda, setSelectedEmenda] = useState<Emenda | null>(null);
   const [showDestinacao, setShowDestinacao] = useState(false);
+  const [selectedDestinacao, setSelectedDestinacao] = useState<Destinacao | null>(null);
 
   // Load emendas from localStorage
   useEffect(() => {
@@ -113,41 +113,80 @@ const Emendas = () => {
 
   const handleDestinarEmenda = (emenda: Emenda) => {
     setSelectedEmenda(emenda);
+    setSelectedDestinacao(null);
     setShowDestinacao(true);
+  };
+
+  const handleEditDestinacao = (emenda: Emenda, destinacao: Destinacao) => {
+    setSelectedEmenda(emenda);
+    setSelectedDestinacao(destinacao);
+    setShowDestinacao(true);
+  };
+
+  const handleDeleteDestinacao = (emendaId: string, destinacaoId: string) => {
+    setEmendas(prev => prev.map(e => {
+      if (e.id === emendaId) {
+        const novasDestinacoes = e.destinacoes.filter(d => d.id !== destinacaoId);
+        const novoValorDestinado = novasDestinacoes.reduce((sum, d) => sum + d.valor, 0);
+        
+        return {
+          ...e,
+          destinacoes: novasDestinacoes,
+          valorDestinado: novoValorDestinado
+        };
+      }
+      return e;
+    }));
   };
 
   const handleSubmitDestinacao = (destinacao: Omit<Destinacao, 'id' | 'emendaId' | 'dataDestinacao'>) => {
     if (selectedEmenda) {
-      const newDestinacao: Destinacao = {
-        ...destinacao,
-        id: crypto.randomUUID(),
-        emendaId: selectedEmenda.id,
-        dataDestinacao: new Date().toISOString()
-      };
-
-      setEmendas(prev => prev.map(e => {
-        if (e.id === selectedEmenda.id) {
-          const novasDestinacoes = [...e.destinacoes, newDestinacao];
-          const novoValorDestinado = novasDestinacoes.reduce((sum, d) => sum + d.valor, 0);
-          
-          // Atualizar status baseado na execução
-          let novoStatus = e.status;
-          if (novoValorDestinado > 0) {
-            novoStatus = novoValorDestinado >= e.valor ? 'executada' : 'em_execucao';
+      if (selectedDestinacao) {
+        // Editando destinação existente
+        setEmendas(prev => prev.map(e => {
+          if (e.id === selectedEmenda.id) {
+            const destinacoesAtualizadas = e.destinacoes.map(d => 
+              d.id === selectedDestinacao.id 
+                ? { ...d, ...destinacao }
+                : d
+            );
+            const novoValorDestinado = destinacoesAtualizadas.reduce((sum, d) => sum + d.valor, 0);
+            
+            return {
+              ...e,
+              destinacoes: destinacoesAtualizadas,
+              valorDestinado: novoValorDestinado
+            };
           }
+          return e;
+        }));
+      } else {
+        // Criando nova destinação
+        const newDestinacao: Destinacao = {
+          ...destinacao,
+          id: crypto.randomUUID(),
+          emendaId: selectedEmenda.id,
+          dataDestinacao: new Date().toISOString()
+        };
 
-          return {
-            ...e,
-            destinacoes: novasDestinacoes,
-            valorDestinado: novoValorDestinado,
-            status: novoStatus
-          };
-        }
-        return e;
-      }));
+        setEmendas(prev => prev.map(e => {
+          if (e.id === selectedEmenda.id) {
+            const novasDestinacoes = [...e.destinacoes, newDestinacao];
+            const novoValorDestinado = novasDestinacoes.reduce((sum, d) => sum + d.valor, 0);
+            
+            return {
+              ...e,
+              destinacoes: novasDestinacoes,
+              valorDestinado: novoValorDestinado
+            };
+          }
+          return e;
+        }));
+      }
 
       setShowDestinacao(false);
       setSelectedEmenda(null);
+      setSelectedDestinacao(null);
     }
   };
 
@@ -226,6 +265,8 @@ const Emendas = () => {
         onEdit={handleEditEmenda}
         onDelete={handleDeleteEmenda}
         onDestinar={handleDestinarEmenda}
+        onEditDestinacao={handleEditDestinacao}
+        onDeleteDestinacao={handleDeleteDestinacao}
       />
 
       {/* Formulário de Emenda */}
@@ -244,10 +285,12 @@ const Emendas = () => {
       {showDestinacao && selectedEmenda && (
         <DestinacaoDialog
           emenda={selectedEmenda}
+          destinacao={selectedDestinacao}
           onSubmit={handleSubmitDestinacao}
           onCancel={() => {
             setShowDestinacao(false);
             setSelectedEmenda(null);
+            setSelectedDestinacao(null);
           }}
         />
       )}
