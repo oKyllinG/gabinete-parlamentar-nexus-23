@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -23,6 +23,10 @@ export function OficioForm({ onClose, oficio }: OficioFormProps) {
       setDocumentoAnexo(file)
     } else {
       setProtocoloAnexo(file)
+      // Quando um arquivo de protocolo é adicionado em ofícios enviados, muda automaticamente para protocolado
+      if (tipoOficio === 'enviado') {
+        setTipoOficio('protocolado')
+      }
     }
   }
 
@@ -31,9 +35,14 @@ export function OficioForm({ onClose, oficio }: OficioFormProps) {
       setDocumentoAnexo(null)
     } else {
       setProtocoloAnexo(null)
+      // Quando remove o arquivo de protocolo de um ofício protocolado, volta para enviado
+      if (tipoOficio === 'protocolado') {
+        setTipoOficio('enviado')
+      }
     }
   }
 
+  // ... keep existing code (FileUploadArea component)
   const FileUploadArea = ({ 
     file, 
     onUpload, 
@@ -96,14 +105,28 @@ export function OficioForm({ onClose, oficio }: OficioFormProps) {
 
   return (
     <div className="space-y-6">
-      <Tabs value={tipoOficio} onValueChange={setTipoOficio}>
+      <Tabs value={tipoOficio === 'protocolado' ? 'enviado' : tipoOficio} onValueChange={(value) => {
+        if (value !== 'protocolado') {
+          setTipoOficio(value)
+        }
+      }}>
         <TabsList className="grid w-full grid-cols-3">
-          <TabsTrigger value="enviado">Ofício Enviado</TabsTrigger>
+          <TabsTrigger value="enviado">
+            {tipoOficio === 'protocolado' ? 'Ofício Protocolado' : 'Ofício Enviado'}
+          </TabsTrigger>
           <TabsTrigger value="recebido">Ofício Recebido</TabsTrigger>
           <TabsTrigger value="convite">Ofício Convite</TabsTrigger>
         </TabsList>
 
         <TabsContent value="enviado" className="space-y-4">
+          {tipoOficio === 'protocolado' && (
+            <div className="bg-amber-50 border border-amber-200 rounded-lg p-3 mb-4">
+              <p className="text-sm text-amber-700 font-medium">
+                ✓ Este ofício foi protocolado (arquivo de protocolo anexado)
+              </p>
+            </div>
+          )}
+          
           <div className="grid grid-cols-2 gap-4">
             <div>
               <Label htmlFor="numero">Número do Ofício *</Label>
@@ -164,7 +187,7 @@ export function OficioForm({ onClose, oficio }: OficioFormProps) {
               onUpload={(file) => handleFileUpload(file, 'protocolo')}
               onRemove={() => removeFile('protocolo')}
               title="Anexo do Protocolo"
-              description="Comprovante de protocolo/entrega"
+              description="Comprovante de protocolo/entrega (transforma em Protocolado)"
             />
           </div>
         </TabsContent>

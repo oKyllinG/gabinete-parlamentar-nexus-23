@@ -1,3 +1,4 @@
+
 import { useState, useMemo } from "react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
@@ -10,7 +11,7 @@ import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, 
 import { FileText, Plus, Search, Calendar, User, Building, FileCheck, Eye, Edit, Trash2, ChevronUp, ChevronDown, Filter, Download, Paperclip } from "lucide-react"
 import { OficioForm } from "@/components/oficios/OficioForm"
 
-type SortField = 'numero' | 'data' | 'tipo' | 'status' | 'assunto' | 'municipio'
+type SortField = 'numero' | 'data' | 'tipo' | 'assunto' | 'municipio'
 type SortDirection = 'asc' | 'desc'
 
 export default function Oficios() {
@@ -31,8 +32,7 @@ export default function Oficios() {
       numero: "253/2025/CG",
       data: "2025-05-10",
       dataFormatada: "10/05/2025",
-      tipo: "enviado",
-      status: "protocolado",
+      tipo: "protocolado",
       assunto: "SOLICITAÇÃO DE CONSTRUÇÃO DE ESCOLA NA REGIÃO SUL DE DOURADOS/MS, NO BAIRRO ESPLANADA",
       destinatario: "Marçal Gonçalves Leite Filho - Prefeito",
       orgao: "Prefeitura Municipal",
@@ -48,7 +48,6 @@ export default function Oficios() {
       data: "2025-05-08",
       dataFormatada: "08/05/2025",
       tipo: "recebido",
-      status: "pendente",
       assunto: "Resposta sobre infraestrutura urbana no centro da cidade",
       origem: "Secretaria de Obras Municipal",
       orgao: "Prefeitura Municipal",
@@ -64,7 +63,6 @@ export default function Oficios() {
       data: "2025-05-12",
       dataFormatada: "12/05/2025",
       tipo: "convite",
-      status: "aceito",
       assunto: "Convite para Audiência Pública sobre Meio Ambiente e Sustentabilidade",
       origem: "Câmara Municipal",
       orgao: "Câmara Municipal",
@@ -81,7 +79,6 @@ export default function Oficios() {
       data: "2025-05-15",
       dataFormatada: "15/05/2025",
       tipo: "enviado",
-      status: "enviado",
       assunto: "PEDIDO DE INFORMAÇÕES SOBRE OBRAS DE SANEAMENTO",
       destinatario: "João Carlos Silva - Secretário",
       orgao: "Secretaria de Infraestrutura",
@@ -124,10 +121,6 @@ export default function Oficios() {
           aValue = a.tipo
           bValue = b.tipo
           break
-        case 'status':
-          aValue = a.status
-          bValue = b.status
-          break
         case 'assunto':
           aValue = a.assunto
           bValue = b.assunto
@@ -147,28 +140,29 @@ export default function Oficios() {
     return sorted
   }, [sortField, sortDirection])
 
-  const getStatusBadge = (status: string) => {
-    const statusMap = {
-      protocolado: { label: "Protocolado", className: "bg-primary/10 text-primary border-primary/20 hover:bg-primary/15" },
-      pendente: { label: "Pendente", className: "bg-warning/10 text-warning border-warning/20 hover:bg-warning/15" },
-      aceito: { label: "Aceito", className: "bg-success/10 text-success border-success/20 hover:bg-success/15" },
-      enviado: { label: "Enviado", className: "bg-muted text-muted-foreground border-muted-foreground/20 hover:bg-muted/80" }
-    }
-    const statusInfo = statusMap[status as keyof typeof statusMap] || { label: status, className: "bg-muted text-muted-foreground border-muted-foreground/20" }
-    return (
-      <Badge variant="outline" className={`font-medium ${statusInfo.className}`}>
-        {statusInfo.label}
-      </Badge>
-    )
-  }
-
   const getTipoBadge = (tipo: string) => {
     const tipoMap = {
-      enviado: { label: "Enviado", className: "bg-primary/10 text-primary border-primary/30 hover:bg-primary/15" },
-      recebido: { label: "Recebido", className: "bg-secondary/10 text-secondary border-secondary/30 hover:bg-secondary/15" },
-      convite: { label: "Convite", className: "bg-accent text-accent-foreground border-accent/30 hover:bg-accent/80" }
+      enviado: { 
+        label: "Enviado", 
+        className: "bg-blue-50 text-blue-700 border-blue-200 hover:bg-blue-100" 
+      },
+      recebido: { 
+        label: "Recebido", 
+        className: "bg-green-50 text-green-700 border-green-200 hover:bg-green-100" 
+      },
+      convite: { 
+        label: "Convite", 
+        className: "bg-purple-50 text-purple-700 border-purple-200 hover:bg-purple-100" 
+      },
+      protocolado: { 
+        label: "Protocolado", 
+        className: "bg-amber-50 text-amber-700 border-amber-200 hover:bg-amber-100" 
+      }
     }
-    const tipoInfo = tipoMap[tipo as keyof typeof tipoMap] || { label: tipo, className: "bg-muted text-muted-foreground border-muted-foreground/20" }
+    const tipoInfo = tipoMap[tipo as keyof typeof tipoMap] || { 
+      label: tipo, 
+      className: "bg-slate-50 text-slate-700 border-slate-200" 
+    }
     return (
       <Badge variant="outline" className={`font-medium ${tipoInfo.className}`}>
         {tipoInfo.label}
@@ -182,10 +176,10 @@ export default function Oficios() {
                          oficio.municipio.toLowerCase().includes(searchTerm.toLowerCase())
     
     if (activeTab === "todos") return matchesSearch
-    if (activeTab === "enviados") return matchesSearch && oficio.tipo === "enviado"
+    if (activeTab === "enviados") return matchesSearch && (oficio.tipo === "enviado" || oficio.tipo === "protocolado")
     if (activeTab === "recebidos") return matchesSearch && oficio.tipo === "recebido"
     if (activeTab === "convites") return matchesSearch && oficio.tipo === "convite"
-    if (activeTab === "protocolados") return matchesSearch && oficio.status === "protocolado"
+    if (activeTab === "protocolados") return matchesSearch && oficio.tipo === "protocolado"
     
     return matchesSearch
   })
@@ -213,10 +207,10 @@ export default function Oficios() {
   const getTabCount = (tab: string) => {
     switch (tab) {
       case "todos": return oficios.length
-      case "enviados": return oficios.filter(o => o.tipo === "enviado").length
+      case "enviados": return oficios.filter(o => o.tipo === "enviado" || o.tipo === "protocolado").length
       case "recebidos": return oficios.filter(o => o.tipo === "recebido").length
       case "convites": return oficios.filter(o => o.tipo === "convite").length
-      case "protocolados": return oficios.filter(o => o.status === "protocolado").length
+      case "protocolados": return oficios.filter(o => o.tipo === "protocolado").length
       default: return 0
     }
   }
@@ -242,26 +236,26 @@ export default function Oficios() {
           </CardContent>
         </Card>
         
-        <Card className="border-l-4 border-l-success shadow-sm">
+        <Card className="border-l-4 border-l-amber-500 shadow-sm">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-muted-foreground">Protocolados</p>
                 <p className="text-2xl font-bold text-foreground">{getTabCount("protocolados")}</p>
               </div>
-              <FileCheck className="w-8 h-8 text-success" />
+              <FileCheck className="w-8 h-8 text-amber-500" />
             </div>
           </CardContent>
         </Card>
         
-        <Card className="border-l-4 border-l-warning shadow-sm">
+        <Card className="border-l-4 border-l-green-500 shadow-sm">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-muted-foreground">Pendentes</p>
-                <p className="text-2xl font-bold text-foreground">{oficios.filter(o => o.status === "pendente").length}</p>
+                <p className="text-sm font-medium text-muted-foreground">Recebidos</p>
+                <p className="text-2xl font-bold text-foreground">{oficios.filter(o => o.tipo === "recebido").length}</p>
               </div>
-              <Calendar className="w-8 h-8 text-warning" />
+              <Calendar className="w-8 h-8 text-green-500" />
             </div>
           </CardContent>
         </Card>
@@ -386,15 +380,6 @@ export default function Oficios() {
                         </div>
                       </TableHead>
                       <TableHead 
-                        className="cursor-pointer hover:bg-muted/70 font-semibold w-[100px]"
-                        onClick={() => handleSort('status')}
-                      >
-                        <div className="flex items-center gap-1">
-                          Status
-                          {getSortIcon('status')}
-                        </div>
-                      </TableHead>
-                      <TableHead 
                         className="cursor-pointer hover:bg-muted/70 font-semibold"
                         onClick={() => handleSort('assunto')}
                       >
@@ -430,7 +415,6 @@ export default function Oficios() {
                           <span className="text-sm">{oficio.dataFormatada}</span>
                         </TableCell>
                         <TableCell className="p-3">{getTipoBadge(oficio.tipo)}</TableCell>
-                        <TableCell className="p-3">{getStatusBadge(oficio.status)}</TableCell>
                         <TableCell className="max-w-[200px] p-3">
                           <div className="truncate font-medium text-sm" title={oficio.assunto}>
                             {oficio.assunto}
@@ -441,8 +425,8 @@ export default function Oficios() {
                         </TableCell>
                         <TableCell className="p-3">
                           <div className="text-sm">
-                            <div className="font-medium truncate" title={oficio.tipo === "enviado" ? oficio.destinatario : oficio.origem}>
-                              {oficio.tipo === "enviado" ? oficio.destinatario : oficio.origem}
+                            <div className="font-medium truncate" title={oficio.tipo === "enviado" || oficio.tipo === "protocolado" ? oficio.destinatario : oficio.origem}>
+                              {oficio.tipo === "enviado" || oficio.tipo === "protocolado" ? oficio.destinatario : oficio.origem}
                             </div>
                             <div className="text-sm text-muted-foreground truncate">{oficio.orgao}</div>
                           </div>
@@ -470,7 +454,7 @@ export default function Oficios() {
                                 variant="outline" 
                                 size="sm"
                                 onClick={() => handleDownloadFile(oficio, 'protocolo')}
-                                className="h-7 px-2 text-xs bg-success/5 text-success border-success/20 hover:bg-success/10"
+                                className="h-7 px-2 text-xs bg-amber-50 text-amber-700 border-amber-200 hover:bg-amber-100"
                               >
                                 <FileCheck className="w-3 h-3 mr-1" />
                                 Protocolo
@@ -546,15 +530,9 @@ export default function Oficios() {
                 <label className="text-sm font-medium text-muted-foreground">Assunto</label>
                 <p className="mt-1">{selectedOficio.assunto}</p>
               </div>
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="text-sm font-medium text-muted-foreground">Tipo</label>
-                  <div className="mt-1">{getTipoBadge(selectedOficio.tipo)}</div>
-                </div>
-                <div>
-                  <label className="text-sm font-medium text-muted-foreground">Status</label>
-                  <div className="mt-1">{getStatusBadge(selectedOficio.status)}</div>
-                </div>
+              <div>
+                <label className="text-sm font-medium text-muted-foreground">Tipo</label>
+                <div className="mt-1">{getTipoBadge(selectedOficio.tipo)}</div>
               </div>
             </div>
           )}
