@@ -172,3 +172,72 @@ export const exportOficios = (oficios: any[], selectedType?: string, startDate?:
   const filename = `oficios_${new Date().toISOString().split('T')[0]}.csv`;
   exportToCSV(mappedData, filename, headers);
 };
+
+export const exportEmendas = (emendas: any[], selectedType?: string, selectedStatus?: string, startDate?: Date, endDate?: Date) => {
+  // Filter emendas by type, status and date range
+  let filteredEmendas = emendas;
+  
+  if (selectedType && selectedType !== 'all') {
+    filteredEmendas = filteredEmendas.filter(emenda => emenda.tipo === selectedType);
+  }
+  
+  if (selectedStatus && selectedStatus !== 'all') {
+    filteredEmendas = filteredEmendas.filter(emenda => emenda.status === selectedStatus);
+  }
+  
+  if (startDate) {
+    filteredEmendas = filteredEmendas.filter(emenda => 
+      new Date(emenda.dataCriacao) >= startDate
+    );
+  }
+  
+  if (endDate) {
+    filteredEmendas = filteredEmendas.filter(emenda => 
+      new Date(emenda.dataCriacao) <= endDate
+    );
+  }
+
+  const headers = [
+    'Numero',
+    'Ano',
+    'Tipo',
+    'Autor',
+    'Programa',
+    'Acao',
+    'Localizador',
+    'Valor',
+    'Valor Destinado',
+    'Valor Disponivel',
+    'Prazo Execucao',
+    'Objeto',
+    'Justificativa',
+    'Status',
+    'Observacoes',
+    'Data Criacao',
+    'Destinacoes'
+  ];
+
+  // Map the data to match the headers exactly
+  const mappedData = filteredEmendas.map(emenda => ({
+    'Numero': emenda.numero || '',
+    'Ano': emenda.ano || '',
+    'Tipo': emenda.tipo || '',
+    'Autor': emenda.autor || '',
+    'Programa': emenda.programa || '',
+    'Acao': emenda.acao || '',
+    'Localizador': emenda.localizador || '',
+    'Valor': emenda.valor ? emenda.valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) : '',
+    'Valor Destinado': emenda.valorDestinado ? emenda.valorDestinado.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) : '',
+    'Valor Disponivel': emenda.valor && emenda.valorDestinado ? (emenda.valor - emenda.valorDestinado).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) : '',
+    'Prazo Execucao': emenda.prazoExecucao || '',
+    'Objeto': emenda.objeto || '',
+    'Justificativa': emenda.justificativa || '',
+    'Status': emenda.status || '',
+    'Observacoes': emenda.observacoes || '',
+    'Data Criacao': emenda.dataCriacao ? new Date(emenda.dataCriacao).toLocaleDateString('pt-BR') : '',
+    'Destinacoes': emenda.destinacoes ? emenda.destinacoes.map((d: any) => `${d.destinatario} (${d.valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })})`).join('; ') : ''
+  }));
+
+  const filename = `emendas_${new Date().toISOString().split('T')[0]}.csv`;
+  exportToCSV(mappedData, filename, headers);
+};

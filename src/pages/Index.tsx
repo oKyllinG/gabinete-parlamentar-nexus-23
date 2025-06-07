@@ -4,6 +4,7 @@ import { AppSidebar } from "@/components/AppSidebar"
 import { Dashboard } from "@/components/Dashboard"
 import Oficios from "@/pages/Oficios"
 import Contatos from "@/pages/Contatos"
+import Emendas from "@/pages/Emendas"
 import { useLocation } from "react-router-dom"
 
 const Index = () => {
@@ -16,6 +17,8 @@ const Index = () => {
         return <Oficios />
       case '/contatos':
         return <Contatos />
+      case '/emendas':
+        return <Emendas />
       default:
         return <Dashboard />
     }
@@ -27,6 +30,8 @@ const Index = () => {
         return 'Ofícios'
       case '/contatos':
         return 'Contatos'
+      case '/emendas':
+        return 'Emendas Parlamentares'
       default:
         return 'Sistema de Gestão de Gabinete'
     }
