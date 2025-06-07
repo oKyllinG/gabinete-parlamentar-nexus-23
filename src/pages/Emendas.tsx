@@ -61,7 +61,14 @@ const Emendas = () => {
   useEffect(() => {
     const savedEmendas = localStorage.getItem('emendas');
     if (savedEmendas) {
-      setEmendas(JSON.parse(savedEmendas));
+      const parsedEmendas = JSON.parse(savedEmendas);
+      // Ensure all emendas have proper array initialization
+      const normalizedEmendas = parsedEmendas.map((emenda: any) => ({
+        ...emenda,
+        contrapartidas: emenda.contrapartidas || [],
+        destinacoes: emenda.destinacoes || []
+      }));
+      setEmendas(normalizedEmendas);
     }
   }, []);
 
@@ -76,7 +83,8 @@ const Emendas = () => {
       id: crypto.randomUUID(),
       dataCriacao: new Date().toISOString(),
       valorDestinado: 0,
-      destinacoes: []
+      destinacoes: [],
+      contrapartidas: emenda.contrapartidas || []
     };
     setEmendas(prev => [...prev, newEmenda]);
     setShowForm(false);

@@ -73,9 +73,9 @@ export const EmendasList: React.FC<EmendasListProps> = ({
     const matchesOrgao = filterOrgao === '' || emenda.orgao.toLowerCase().includes(filterOrgao.toLowerCase());
     
     const matchesBeneficiario = filterBeneficiario === '' || 
-      emenda.destinacoes.some(dest => 
+      (emenda.destinacoes && emenda.destinacoes.some(dest => 
         dest.destinatario.toLowerCase().includes(filterBeneficiario.toLowerCase())
-      );
+      ));
 
     return matchesSearch && matchesType && matchesStatus && matchesAno && 
            matchesNumero && matchesOrgao && matchesBeneficiario;
@@ -225,7 +225,7 @@ export const EmendasList: React.FC<EmendasListProps> = ({
                 </div>
 
                 {/* Contrapartidas */}
-                {emenda.contrapartidas.length > 0 && (
+                {emenda.contrapartidas && emenda.contrapartidas.length > 0 && (
                   <div className="space-y-2">
                     <p className="text-sm font-medium">Contrapartidas:</p>
                     <div className="space-y-1">
@@ -275,7 +275,7 @@ export const EmendasList: React.FC<EmendasListProps> = ({
                 </div>
 
                 {/* Destinações */}
-                {emenda.destinacoes.length > 0 && (
+                {emenda.destinacoes && emenda.destinacoes.length > 0 && (
                   <div className="space-y-2">
                     <p className="text-sm font-medium">Destinações ({emenda.destinacoes.length}):</p>
                     <div className="space-y-2">
