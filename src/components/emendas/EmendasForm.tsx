@@ -1,464 +1,348 @@
 
-import React, { useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
+import React, { useState, useEffect } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Plus, Trash2 } from "lucide-react";
 import { Emenda, Contrapartida } from "@/pages/Emendas";
 
-const emendaSchema = z.object({
-  numero: z.string().min(1, 'Número é obrigatório'),
-  ano: z.string().min(4, 'Ano deve ter 4 dígitos'),
-  tipo: z.enum(['individual', 'bancada', 'comissao']),
-  autor: z.string().min(1, 'Autor é obrigatório'),
-  orgao: z.string().min(1, 'Órgão é obrigatório'),
-  programa: z.string().min(1, 'Programa é obrigatório'),
-  acao: z.string().min(1, 'Ação é obrigatória'),
-  localizador: z.string().min(1, 'Localizador é obrigatório'),
-  valor: z.number().min(0.01, 'Valor deve ser maior que zero'),
-  prazoExecucao: z.string().min(1, 'Prazo de execução é obrigatório'),
-  objeto: z.string().min(1, 'Objeto é obrigatório'),
-  justificativa: z.string().min(1, 'Justificativa é obrigatória'),
-  observacoes: z.string().optional(),
-  status: z.enum(['cadastrada', 'em_execucao', 'executada', 'vencida'])
-});
-
-type EmendasFormData = z.infer<typeof emendaSchema>;
-
 interface EmendasFormProps {
   emenda?: Emenda | null;
-  onSubmit: (data: Omit<Emenda, 'id' | 'dataCriacao' | 'valorDestinado' | 'destinacoes'>) => void;
+  onSubmit: (emenda: Omit<Emenda, 'id' | 'dataCriacao' | 'valorDestinado' | 'destinacoes'>) => void;
   onCancel: () => void;
 }
 
-const tipoLabels = {
-  individual: 'Individual',
-  bancada: 'Bancada',
-  comissao: 'Comissão'
-};
-
-const statusLabels = {
-  cadastrada: 'Cadastrada',
-  em_execucao: 'Em Execução',
-  executada: 'Executada',
-  vencida: 'Vencida'
-};
-
 export const EmendasForm: React.FC<EmendasFormProps> = ({ emenda, onSubmit, onCancel }) => {
-  const [contrapartidas, setContrapartidas] = useState<Contrapartida[]>(
-    emenda?.contrapartidas || []
-  );
-
-  const form = useForm<EmendasFormData>({
-    resolver: zodResolver(emendaSchema),
-    defaultValues: {
-      numero: emenda?.numero || '',
-      ano: emenda?.ano || new Date().getFullYear().toString(),
-      tipo: emenda?.tipo || 'individual',
-      autor: emenda?.autor || '',
-      orgao: emenda?.orgao || '',
-      programa: emenda?.programa || '',
-      acao: emenda?.acao || '',
-      localizador: emenda?.localizador || '',
-      valor: emenda?.valor || 0,
-      prazoExecucao: emenda?.prazoExecucao || '',
-      objeto: emenda?.objeto || '',
-      justificativa: emenda?.justificativa || '',
-      observacoes: emenda?.observacoes || '',
-      status: emenda?.status || 'cadastrada'
-    }
+  const [formData, setFormData] = useState({
+    numero: '',
+    ano: new Date().getFullYear().toString(),
+    tipo: 'individual' as 'individual' | 'bancada' | 'comissao',
+    autor: '',
+    orgao: '',
+    programa: '',
+    acao: '',
+    localizador: '',
+    valor: 0,
+    prazoExecucao: '',
+    objeto: '',
+    justificativa: '',
+    observacoes: '',
+    contrapartidas: [] as Contrapartida[]
   });
 
-  const handleSubmit = (data: EmendasFormData) => {
-    const emendaData: Omit<Emenda, 'id' | 'dataCriacao' | 'valorDestinado' | 'destinacoes'> = {
-      numero: data.numero,
-      ano: data.ano,
-      tipo: data.tipo,
-      autor: data.autor,
-      orgao: data.orgao,
-      programa: data.programa,
-      acao: data.acao,
-      localizador: data.localizador,
-      valor: data.valor,
-      contrapartidas: contrapartidas,
-      prazoExecucao: data.prazoExecucao,
-      objeto: data.objeto,
-      justificativa: data.justificativa,
-      observacoes: data.observacoes,
-      status: data.status
+  useEffect(() => {
+    if (emenda) {
+      setFormData({
+        numero: emenda.numero,
+        ano: emenda.ano,
+        tipo: emenda.tipo,
+        autor: emenda.autor,
+        orgao: emenda.orgao,
+        programa: emenda.programa,
+        acao: emenda.acao,
+        localizador: emenda.localizador,
+        valor: emenda.valor,
+        prazoExecucao: emenda.prazoExecucao,
+        objeto: emenda.objeto,
+        justificativa: emenda.justificativa,
+        observacoes: emenda.observacoes || '',
+        contrapartidas: emenda.contrapartidas || []
+      });
+    }
+  }, [emenda]);
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    onSubmit({
+      ...formData,
+      contrapartidas: formData.contrapartidas
+    });
+  };
+
+  const handleInputChange = (field: string, value: any) => {
+    setFormData(prev => ({ ...prev, [field]: value }));
+  };
+
+  const addContrapartida = () => {
+    const newContrapartida: Contrapartida = {
+      id: crypto.randomUUID(),
+      ente: '',
+      valor: 0
     };
-    onSubmit(emendaData);
-  };
-
-  const adicionarContrapartida = () => {
-    setContrapartidas(prev => [
+    setFormData(prev => ({
       ...prev,
-      {
-        id: crypto.randomUUID(),
-        ente: '',
-        valor: 0
-      }
-    ]);
+      contrapartidas: [...prev.contrapartidas, newContrapartida]
+    }));
   };
 
-  const removerContrapartida = (id: string) => {
-    setContrapartidas(prev => prev.filter(c => c.id !== id));
+  const updateContrapartida = (index: number, field: string, value: any) => {
+    setFormData(prev => ({
+      ...prev,
+      contrapartidas: prev.contrapartidas.map((item, i) => 
+        i === index ? { ...item, [field]: value } : item
+      )
+    }));
   };
 
-  const atualizarContrapartida = (id: string, field: keyof Contrapartida, value: string | number) => {
-    setContrapartidas(prev => prev.map(c => 
-      c.id === id ? { ...c, [field]: value } : c
-    ));
+  const removeContrapartida = (index: number) => {
+    setFormData(prev => ({
+      ...prev,
+      contrapartidas: prev.contrapartidas.filter((_, i) => i !== index)
+    }));
   };
 
   return (
     <Dialog open={true} onOpenChange={onCancel}>
       <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle>
-            {emenda ? 'Editar Emenda' : 'Nova Emenda Parlamentar'}
-          </DialogTitle>
+          <DialogTitle>{emenda ? 'Editar Emenda' : 'Nova Emenda'}</DialogTitle>
         </DialogHeader>
 
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6">
-            {/* Identificação */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-lg">Identificação da Emenda</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  <FormField
-                    control={form.control}
-                    name="numero"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Número da Emenda *</FormLabel>
-                        <FormControl>
-                          <Input placeholder="Ex: 12345" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
-                  <FormField
-                    control={form.control}
-                    name="ano"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Ano *</FormLabel>
-                        <FormControl>
-                          <Input placeholder="2024" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
-                  <FormField
-                    control={form.control}
-                    name="tipo"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Tipo *</FormLabel>
-                        <Select onValueChange={field.onChange} defaultValue={field.value}>
-                          <FormControl>
-                            <SelectTrigger>
-                              <SelectValue placeholder="Selecione o tipo" />
-                            </SelectTrigger>
-                          </FormControl>
-                          <SelectContent>
-                            {Object.entries(tipoLabels).map(([value, label]) => (
-                              <SelectItem key={value} value={value}>
-                                {label}
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                        <FormMessage />
-                      </FormItem>
-                    )}
+        <form onSubmit={handleSubmit} className="space-y-6">
+          {/* Dados Básicos */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-lg">Dados Básicos</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div>
+                  <Label htmlFor="numero">Número</Label>
+                  <Input
+                    id="numero"
+                    value={formData.numero}
+                    onChange={(e) => handleInputChange('numero', e.target.value)}
+                    required
                   />
                 </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <FormField
-                    control={form.control}
-                    name="autor"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Autor *</FormLabel>
-                        <FormControl>
-                          <Input placeholder="Nome do deputado/senador" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
-                  <FormField
-                    control={form.control}
-                    name="orgao"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Órgão *</FormLabel>
-                        <FormControl>
-                          <Input placeholder="Ex: Ministério da Saúde" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
+                <div>
+                  <Label htmlFor="ano">Ano</Label>
+                  <Input
+                    id="ano"
+                    value={formData.ano}
+                    onChange={(e) => handleInputChange('ano', e.target.value)}
+                    required
                   />
                 </div>
-              </CardContent>
-            </Card>
+                <div>
+                  <Label htmlFor="tipo">Tipo</Label>
+                  <Select value={formData.tipo} onValueChange={(value) => handleInputChange('tipo', value)}>
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="individual">Individual</SelectItem>
+                      <SelectItem value="bancada">Bancada</SelectItem>
+                      <SelectItem value="comissao">Comissão</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
 
-            {/* Detalhes Orçamentários */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-lg">Detalhes Orçamentários</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <FormField
-                    control={form.control}
-                    name="programa"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Programa *</FormLabel>
-                        <FormControl>
-                          <Input placeholder="Código do programa" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
-                  <FormField
-                    control={form.control}
-                    name="acao"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Ação *</FormLabel>
-                        <FormControl>
-                          <Input placeholder="Código da ação" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <Label htmlFor="autor">Autor</Label>
+                  <Input
+                    id="autor"
+                    value={formData.autor}
+                    onChange={(e) => handleInputChange('autor', e.target.value)}
+                    required
                   />
                 </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  <FormField
-                    control={form.control}
-                    name="localizador"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Localizador *</FormLabel>
-                        <FormControl>
-                          <Input placeholder="Código do localizador" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
-                  <FormField
-                    control={form.control}
-                    name="valor"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Valor (R$) *</FormLabel>
-                        <FormControl>
-                          <Input 
-                            type="number" 
-                            step="0.01" 
-                            placeholder="0,00" 
-                            {...field}
-                            onChange={(e) => field.onChange(parseFloat(e.target.value) || 0)}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
-                  <FormField
-                    control={form.control}
-                    name="prazoExecucao"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Prazo de Execução *</FormLabel>
-                        <FormControl>
-                          <Input placeholder="Ex: 31/12/2024" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
+                <div>
+                  <Label htmlFor="orgao">Órgão</Label>
+                  <Input
+                    id="orgao"
+                    value={formData.orgao}
+                    onChange={(e) => handleInputChange('orgao', e.target.value)}
+                    required
                   />
                 </div>
-              </CardContent>
-            </Card>
+              </div>
+            </CardContent>
+          </Card>
 
-            {/* Contrapartidas */}
-            <Card>
-              <CardHeader>
-                <div className="flex justify-between items-center">
-                  <CardTitle className="text-lg">Contrapartidas</CardTitle>
-                  <Button type="button" onClick={adicionarContrapartida} size="sm">
-                    <Plus className="w-4 h-4 mr-2" />
-                    Adicionar
-                  </Button>
+          {/* Programa e Localização */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-lg">Programa e Localização</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <Label htmlFor="programa">Programa</Label>
+                  <Input
+                    id="programa"
+                    value={formData.programa}
+                    onChange={(e) => handleInputChange('programa', e.target.value)}
+                    required
+                  />
                 </div>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                {contrapartidas.map((contrapartida) => (
-                  <div key={contrapartida.id} className="flex gap-4 items-end">
-                    <div className="flex-1">
-                      <label className="text-sm font-medium">Ente</label>
-                      <Input
-                        placeholder="Ex: Governo Federal"
-                        value={contrapartida.ente}
-                        onChange={(e) => atualizarContrapartida(contrapartida.id, 'ente', e.target.value)}
-                      />
-                    </div>
-                    <div className="flex-1">
-                      <label className="text-sm font-medium">Valor (R$)</label>
-                      <Input
-                        type="number"
-                        step="0.01"
-                        placeholder="0,00"
-                        value={contrapartida.valor}
-                        onChange={(e) => atualizarContrapartida(contrapartida.id, 'valor', parseFloat(e.target.value) || 0)}
-                      />
-                    </div>
+                <div>
+                  <Label htmlFor="acao">Ação</Label>
+                  <Input
+                    id="acao"
+                    value={formData.acao}
+                    onChange={(e) => handleInputChange('acao', e.target.value)}
+                    required
+                  />
+                </div>
+              </div>
+
+              <div>
+                <Label htmlFor="localizador">Localizador</Label>
+                <Input
+                  id="localizador"
+                  value={formData.localizador}
+                  onChange={(e) => handleInputChange('localizador', e.target.value)}
+                  required
+                />
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Valor e Prazo */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-lg">Valor e Prazo</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <Label htmlFor="valor">Valor (R$)</Label>
+                  <Input
+                    id="valor"
+                    type="number"
+                    step="0.01"
+                    value={formData.valor}
+                    onChange={(e) => handleInputChange('valor', parseFloat(e.target.value) || 0)}
+                    required
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="prazoExecucao">Prazo de Execução</Label>
+                  <Input
+                    id="prazoExecucao"
+                    value={formData.prazoExecucao}
+                    onChange={(e) => handleInputChange('prazoExecucao', e.target.value)}
+                    required
+                  />
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Contrapartidas */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-lg flex items-center justify-between">
+                Contrapartidas
+                <Button type="button" size="sm" onClick={addContrapartida}>
+                  <Plus className="w-4 h-4 mr-1" />
+                  Adicionar
+                </Button>
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              {formData.contrapartidas.map((contrapartida, index) => (
+                <div key={contrapartida.id} className="p-4 border rounded-lg space-y-4">
+                  <div className="flex justify-between items-center">
+                    <h4 className="font-medium">Contrapartida {index + 1}</h4>
                     <Button
                       type="button"
-                      variant="outline"
                       size="sm"
-                      onClick={() => removerContrapartida(contrapartida.id)}
+                      variant="outline"
+                      onClick={() => removeContrapartida(index)}
                     >
                       <Trash2 className="w-4 h-4" />
                     </Button>
                   </div>
-                ))}
-                {contrapartidas.length === 0 && (
-                  <p className="text-sm text-muted-foreground text-center py-4">
-                    Nenhuma contrapartida adicionada
-                  </p>
-                )}
-              </CardContent>
-            </Card>
-
-            {/* Descrição */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-lg">Descrição da Emenda</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <FormField
-                  control={form.control}
-                  name="objeto"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Objeto *</FormLabel>
-                      <FormControl>
-                        <Textarea 
-                          placeholder="Descrição do objeto da emenda"
-                          className="min-h-[80px]"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={form.control}
-                  name="justificativa"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Justificativa *</FormLabel>
-                      <FormControl>
-                        <Textarea 
-                          placeholder="Justificativa da emenda"
-                          className="min-h-[80px]"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <FormField
-                    control={form.control}
-                    name="status"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Status *</FormLabel>
-                        <Select onValueChange={field.onChange} defaultValue={field.value}>
-                          <FormControl>
-                            <SelectTrigger>
-                              <SelectValue placeholder="Selecione o status" />
-                            </SelectTrigger>
-                          </FormControl>
-                          <SelectContent>
-                            {Object.entries(statusLabels).map(([value, label]) => (
-                              <SelectItem key={value} value={value}>
-                                {label}
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
-                  <FormField
-                    control={form.control}
-                    name="observacoes"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Observações</FormLabel>
-                        <FormControl>
-                          <Textarea 
-                            placeholder="Observações adicionais (opcional)"
-                            className="min-h-[60px]"
-                            {...field}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <Label>Ente</Label>
+                      <Input
+                        value={contrapartida.ente}
+                        onChange={(e) => updateContrapartida(index, 'ente', e.target.value)}
+                        placeholder="Ex: Governo Federal, Governo Estadual..."
+                        required
+                      />
+                    </div>
+                    <div>
+                      <Label>Valor (R$)</Label>
+                      <Input
+                        type="number"
+                        step="0.01"
+                        value={contrapartida.valor}
+                        onChange={(e) => updateContrapartida(index, 'valor', parseFloat(e.target.value) || 0)}
+                        required
+                      />
+                    </div>
+                  </div>
                 </div>
-              </CardContent>
-            </Card>
+              ))}
+              
+              {formData.contrapartidas.length === 0 && (
+                <p className="text-sm text-muted-foreground text-center py-4">
+                  Nenhuma contrapartida adicionada. Clique em "Adicionar" para incluir contrapartidas.
+                </p>
+              )}
+            </CardContent>
+          </Card>
 
-            <div className="flex justify-end space-x-2 pt-4">
-              <Button type="button" variant="outline" onClick={onCancel}>
-                Cancelar
-              </Button>
-              <Button type="submit">
-                {emenda ? 'Atualizar' : 'Cadastrar'} Emenda
-              </Button>
-            </div>
-          </form>
-        </Form>
+          {/* Descrição */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-lg">Descrição</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div>
+                <Label htmlFor="objeto">Objeto</Label>
+                <Textarea
+                  id="objeto"
+                  value={formData.objeto}
+                  onChange={(e) => handleInputChange('objeto', e.target.value)}
+                  rows={3}
+                  required
+                />
+              </div>
+
+              <div>
+                <Label htmlFor="justificativa">Justificativa</Label>
+                <Textarea
+                  id="justificativa"
+                  value={formData.justificativa}
+                  onChange={(e) => handleInputChange('justificativa', e.target.value)}
+                  rows={3}
+                  required
+                />
+              </div>
+
+              <div>
+                <Label htmlFor="observacoes">Observações</Label>
+                <Textarea
+                  id="observacoes"
+                  value={formData.observacoes}
+                  onChange={(e) => handleInputChange('observacoes', e.target.value)}
+                  rows={2}
+                />
+              </div>
+            </CardContent>
+          </Card>
+
+          <div className="flex justify-end gap-2">
+            <Button type="button" variant="outline" onClick={onCancel}>
+              Cancelar
+            </Button>
+            <Button type="submit">
+              {emenda ? 'Atualizar' : 'Criar'} Emenda
+            </Button>
+          </div>
+        </form>
       </DialogContent>
     </Dialog>
   );

@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -46,7 +47,6 @@ export const EmendasList: React.FC<EmendasListProps> = ({
 }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [filterType, setFilterType] = useState<string>('all');
-  const [filterStatus, setFilterStatus] = useState<string>('all');
   const [filterAno, setFilterAno] = useState<string>('all');
   const [filterNumero, setFilterNumero] = useState('');
   const [filterOrgao, setFilterOrgao] = useState('');
@@ -63,7 +63,6 @@ export const EmendasList: React.FC<EmendasListProps> = ({
       emenda.orgao.toLowerCase().includes(searchTerm.toLowerCase());
 
     const matchesType = filterType === 'all' || emenda.tipo === filterType;
-    const matchesStatus = filterStatus === 'all' || emenda.status === filterStatus;
     const matchesAno = filterAno === 'all' || emenda.ano === filterAno;
     const matchesNumero = filterNumero === '' || emenda.numero.toLowerCase().includes(filterNumero.toLowerCase());
     const matchesOrgao = filterOrgao === '' || emenda.orgao.toLowerCase().includes(filterOrgao.toLowerCase());
@@ -73,7 +72,7 @@ export const EmendasList: React.FC<EmendasListProps> = ({
         dest.destinatario.toLowerCase().includes(filterBeneficiario.toLowerCase())
       ));
 
-    return matchesSearch && matchesType && matchesStatus && matchesAno && 
+    return matchesSearch && matchesType && matchesAno && 
            matchesNumero && matchesOrgao && matchesBeneficiario;
   });
 
@@ -117,22 +116,6 @@ export const EmendasList: React.FC<EmendasListProps> = ({
               </SelectContent>
             </Select>
 
-            <Select value={filterStatus} onValueChange={setFilterStatus}>
-              <SelectTrigger>
-                <SelectValue placeholder="Filtrar por status" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">Todos os status</SelectItem>
-                {Object.entries(statusLabels).map(([value, label]) => (
-                  <SelectItem key={value} value={value}>
-                    {label}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             <Select value={filterAno} onValueChange={setFilterAno}>
               <SelectTrigger>
                 <SelectValue placeholder="Filtrar por ano" />
@@ -146,7 +129,9 @@ export const EmendasList: React.FC<EmendasListProps> = ({
                 ))}
               </SelectContent>
             </Select>
+          </div>
 
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <Input
               placeholder="Filtrar por número"
               value={filterNumero}
@@ -270,7 +255,7 @@ export const EmendasList: React.FC<EmendasListProps> = ({
                   <div className="space-y-3">
                     <p className="text-sm font-medium">Destinações ({emenda.destinacoes.length}):</p>
                     <div className="space-y-3">
-                      {emenda.destinacoes.map((destinacao, index) => (
+                      {emenda.destinacoes.map((destinacao) => (
                         <div key={destinacao.id} className="p-4 bg-muted rounded-lg border">
                           <div className="flex justify-between items-start mb-3">
                             <div className="flex-1">
