@@ -7,9 +7,9 @@ import { Badge } from "@/components/ui/badge"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog"
-import { FileText, Plus, Search, Calendar, User, Building, FileCheck, Eye, Edit, Trash2, ChevronUp, ChevronDown, Filter, Download, Paperclip } from "lucide-react"
+import { FileText, Plus, Search, Calendar, User, Building, FileCheck, Eye, Edit, Trash2, ChevronUp, ChevronDown, Filter, Paperclip } from "lucide-react"
 import { OficioForm } from "@/components/oficios/OficioForm"
-import { exportOficios } from "@/utils/exportUtils"
+import { ExportDialog } from "@/components/oficios/ExportDialog"
 
 type SortField = 'numero' | 'data' | 'tipo' | 'assunto' | 'municipio'
 type SortDirection = 'asc' | 'desc'
@@ -220,10 +220,6 @@ export default function Oficios() {
     console.log(`Baixando ${tipo} do ofício:`, oficio.numero)
   }
 
-  const handleExportOficios = () => {
-    exportOficios(filteredOficios);
-  }
-
   return (
     <div className="p-6 space-y-6 bg-background">
       {/* Header com estatísticas */}
@@ -284,10 +280,7 @@ export default function Oficios() {
           <p className="text-muted-foreground">Gerencie os ofícios enviados, recebidos e convites</p>
         </div>
         <div className="flex gap-3">
-          <Button variant="outline" size="default" className="flex items-center gap-2" onClick={handleExportOficios}>
-            <Download className="w-4 h-4" />
-            Exportar
-          </Button>
+          <ExportDialog oficios={filteredOficios} />
           <Dialog open={isFormOpen} onOpenChange={setIsFormOpen}>
             <DialogTrigger asChild>
               <Button size="default" className="flex items-center gap-2 bg-primary hover:bg-primary/90">

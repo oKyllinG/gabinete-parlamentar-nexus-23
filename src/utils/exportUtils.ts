@@ -108,8 +108,8 @@ export const exportContacts = (contacts: any[], selectedType?: string, startDate
   exportToCSV(mappedData, filename, headers);
 };
 
-export const exportOficios = (oficios: any[], selectedType?: string, startDate?: Date, endDate?: Date) => {
-  // Filter oficios by type and date range
+export const exportOficios = (oficios: any[], selectedType?: string, startDate?: Date, endDate?: Date, selectedMunicipio?: string, selectedOrgao?: string) => {
+  // Filter oficios by type, date range, municipality and organ
   let filteredOficios = oficios;
   
   if (selectedType) {
@@ -126,6 +126,14 @@ export const exportOficios = (oficios: any[], selectedType?: string, startDate?:
     filteredOficios = filteredOficios.filter(oficio => 
       new Date(oficio.data) <= endDate
     );
+  }
+
+  if (selectedMunicipio) {
+    filteredOficios = filteredOficios.filter(oficio => oficio.municipio === selectedMunicipio);
+  }
+
+  if (selectedOrgao) {
+    filteredOficios = filteredOficios.filter(oficio => oficio.orgao === selectedOrgao);
   }
 
   const headers = [
@@ -149,7 +157,7 @@ export const exportOficios = (oficios: any[], selectedType?: string, startDate?:
     'Data': oficio.dataFormatada || new Date(oficio.data).toLocaleDateString('pt-BR'),
     'Tipo': oficio.tipo,
     'Assunto': oficio.assunto,
-    'Destinatário': oficio.destinatario,
+    'Destinatário': oficio.destinatario || '',
     'Origem': oficio.origem || '',
     'Órgão': oficio.orgao || '',
     'Município': oficio.municipio || '',
