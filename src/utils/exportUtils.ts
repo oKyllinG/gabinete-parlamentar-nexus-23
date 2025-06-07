@@ -45,7 +45,7 @@ export const exportContacts = (contacts: any[], selectedType?: string, startDate
   // Filter contacts by type and date range
   let filteredContacts = contacts;
   
-  if (selectedType && selectedType !== '') {
+  if (selectedType) {
     filteredContacts = filteredContacts.filter(contact => contact.tipo === selectedType);
   }
   
@@ -112,7 +112,7 @@ export const exportOficios = (oficios: any[], selectedType?: string, startDate?:
   // Filter oficios by type and date range
   let filteredOficios = oficios;
   
-  if (selectedType && selectedType !== '') {
+  if (selectedType) {
     filteredOficios = filteredOficios.filter(oficio => oficio.tipo === selectedType);
   }
   

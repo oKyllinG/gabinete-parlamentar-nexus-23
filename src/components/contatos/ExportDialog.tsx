@@ -25,13 +25,14 @@ const tipoLabels = {
 };
 
 export const ExportDialog: React.FC<ExportDialogProps> = ({ contacts }) => {
-  const [selectedType, setSelectedType] = useState<string>('');
+  const [selectedType, setSelectedType] = useState<string>('all');
   const [startDate, setStartDate] = useState<Date>();
   const [endDate, setEndDate] = useState<Date>();
   const [open, setOpen] = useState(false);
 
   const handleExport = () => {
-    exportContacts(contacts, selectedType, startDate, endDate);
+    const typeFilter = selectedType === 'all' ? undefined : selectedType;
+    exportContacts(contacts, typeFilter, startDate, endDate);
     setOpen(false);
   };
 
@@ -55,7 +56,7 @@ export const ExportDialog: React.FC<ExportDialogProps> = ({ contacts }) => {
                 <SelectValue placeholder="Todos os tipos" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">Todos os tipos</SelectItem>
+                <SelectItem value="all">Todos os tipos</SelectItem>
                 {Object.entries(tipoLabels).map(([value, label]) => (
                   <SelectItem key={value} value={value}>
                     {label}
