@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -36,7 +35,7 @@ export const ContatoForm: React.FC<ContatoFormProps> = ({ contact, onSave, onCan
     nascimento: {
       dia: 0,
       mes: 0,
-      ano: 0
+      ano: 0 as number | undefined
     },
     observacoes: '',
     foto: ''
@@ -60,10 +59,10 @@ export const ContatoForm: React.FC<ContatoFormProps> = ({ contact, onSave, onCan
           cep: '',
           estado: ''
         },
-        nascimento: contact.nascimento || {
-          dia: 0,
-          mes: 0,
-          ano: 0
+        nascimento: {
+          dia: contact.nascimento?.dia || 0,
+          mes: contact.nascimento?.mes || 0,
+          ano: contact.nascimento?.ano || 0
         },
         observacoes: contact.observacoes || '',
         foto: contact.foto || ''
@@ -83,7 +82,11 @@ export const ContatoForm: React.FC<ContatoFormProps> = ({ contact, onSave, onCan
       ...formData,
       tipo: formData.tipo as Contact['tipo'],
       endereco: Object.values(formData.endereco).some(v => v) ? formData.endereco : undefined,
-      nascimento: formData.nascimento.dia && formData.nascimento.mes ? formData.nascimento : undefined,
+      nascimento: formData.nascimento.dia && formData.nascimento.mes ? {
+        dia: formData.nascimento.dia,
+        mes: formData.nascimento.mes,
+        ano: formData.nascimento.ano || undefined
+      } : undefined,
       cargo: formData.cargo || undefined,
       empresa: formData.empresa || undefined,
       observacoes: formData.observacoes || undefined,
@@ -115,7 +118,7 @@ export const ContatoForm: React.FC<ContatoFormProps> = ({ contact, onSave, onCan
       ...prev,
       nascimento: {
         ...prev.nascimento,
-        [field]: value
+        [field]: value === 0 ? undefined : value
       }
     }));
   };
@@ -330,7 +333,7 @@ export const ContatoForm: React.FC<ContatoFormProps> = ({ contact, onSave, onCan
                   <div className="space-y-2">
                     <Label htmlFor="dia">Dia</Label>
                     <Select 
-                      value={formData.nascimento.dia.toString()} 
+                      value={formData.nascimento.dia?.toString() || ''} 
                       onValueChange={(value) => handleNascimentoChange('dia', parseInt(value))}
                     >
                       <SelectTrigger>
@@ -349,7 +352,7 @@ export const ContatoForm: React.FC<ContatoFormProps> = ({ contact, onSave, onCan
                   <div className="space-y-2">
                     <Label htmlFor="mes">Mês</Label>
                     <Select 
-                      value={formData.nascimento.mes.toString()} 
+                      value={formData.nascimento.mes?.toString() || ''} 
                       onValueChange={(value) => handleNascimentoChange('mes', parseInt(value))}
                     >
                       <SelectTrigger>
