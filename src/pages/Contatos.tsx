@@ -13,14 +13,13 @@ import {
   Search,
   Calendar,
   Filter,
-  Download,
   Edit,
   Trash2
 } from "lucide-react";
 import { ContatoForm } from "@/components/contatos/ContatoForm";
 import { ContactFilters } from "@/components/contatos/ContactFilters";
 import { BirthdayList } from "@/components/contatos/BirthdayList";
-import { exportContacts } from "@/utils/exportUtils";
+import { ExportDialog } from "@/components/contatos/ExportDialog";
 
 export interface Contact {
   id: string;
@@ -137,10 +136,6 @@ const Contatos = () => {
     );
   };
 
-  const handleExportContacts = () => {
-    exportContacts(filteredContacts);
-  };
-
   return (
     <div className="p-6 max-w-7xl mx-auto">
       <div className="flex items-center justify-between mb-6">
@@ -193,10 +188,7 @@ const Contatos = () => {
                     className="pl-10"
                   />
                 </div>
-                <Button variant="outline" onClick={handleExportContacts}>
-                  <Download className="w-4 h-4 mr-2" />
-                  Exportar
-                </Button>
+                <ExportDialog contacts={filteredContacts} />
               </div>
 
               <div className="grid gap-4">
