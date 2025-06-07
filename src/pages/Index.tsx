@@ -3,6 +3,7 @@ import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar"
 import { AppSidebar } from "@/components/AppSidebar"
 import { Dashboard } from "@/components/Dashboard"
 import Oficios from "@/pages/Oficios"
+import Contatos from "@/pages/Contatos"
 import { useLocation } from "react-router-dom"
 
 const Index = () => {
@@ -13,6 +14,8 @@ const Index = () => {
     switch (location.pathname) {
       case '/oficios':
         return <Oficios />
+      case '/contatos':
+        return <Contatos />
       default:
         return <Dashboard />
     }
@@ -22,6 +25,8 @@ const Index = () => {
     switch (location.pathname) {
       case '/oficios':
         return 'Ofícios'
+      case '/contatos':
+        return 'Contatos'
       default:
         return 'Sistema de Gestão de Gabinete'
     }
