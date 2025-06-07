@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -8,17 +7,25 @@ import { EmendasList } from "@/components/emendas/EmendasList";
 import { DestinacaoDialog } from "@/components/emendas/DestinacaoDialog";
 import { ExportDialog } from "@/components/emendas/ExportDialog";
 
+export interface Contrapartida {
+  id: string;
+  ente: string;
+  valor: number;
+}
+
 export interface Emenda {
   id: string;
   numero: string;
   ano: string;
   tipo: 'individual' | 'bancada' | 'comissao';
   autor: string;
+  orgao: string;
   programa: string;
   acao: string;
   localizador: string;
   valor: number;
   valorDestinado: number;
+  contrapartidas: Contrapartida[];
   prazoExecucao: string;
   objeto: string;
   justificativa: string;
@@ -34,6 +41,11 @@ export interface Destinacao {
   tipo: 'entidade' | 'municipio';
   destinatario: string;
   cnpj?: string;
+  municipio: string;
+  gnd: string;
+  pd: string;
+  areaAtuacao: string;
+  statusExecucao: 'planejamento' | 'em_execucao' | 'concluida' | 'cancelada';
   valor: number;
   dataDestinacao: string;
   observacoes?: string;

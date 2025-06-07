@@ -35,6 +35,13 @@ const statusColors = {
   vencida: 'bg-red-100 text-red-800'
 };
 
+const statusExecucaoColors = {
+  planejamento: 'bg-gray-100 text-gray-800',
+  em_execucao: 'bg-blue-100 text-blue-800',
+  concluida: 'bg-green-100 text-green-800',
+  cancelada: 'bg-red-100 text-red-800'
+};
+
 export const EmendasList: React.FC<EmendasListProps> = ({ 
   emendas, 
   onEdit, 
@@ -44,17 +51,34 @@ export const EmendasList: React.FC<EmendasListProps> = ({
   const [searchTerm, setSearchTerm] = useState('');
   const [filterType, setFilterType] = useState<string>('all');
   const [filterStatus, setFilterStatus] = useState<string>('all');
+  const [filterAno, setFilterAno] = useState<string>('all');
+  const [filterNumero, setFilterNumero] = useState('');
+  const [filterOrgao, setFilterOrgao] = useState('');
+  const [filterBeneficiario, setFilterBeneficiario] = useState('');
+
+  // Obter anos únicos das emendas para o filtro
+  const anosDisponiveis = Array.from(new Set(emendas.map(e => e.ano))).sort();
 
   const filteredEmendas = emendas.filter(emenda => {
     const matchesSearch = 
       emenda.numero.toLowerCase().includes(searchTerm.toLowerCase()) ||
       emenda.autor.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      emenda.objeto.toLowerCase().includes(searchTerm.toLowerCase());
+      emenda.objeto.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      emenda.orgao.toLowerCase().includes(searchTerm.toLowerCase());
 
     const matchesType = filterType === 'all' || emenda.tipo === filterType;
     const matchesStatus = filterStatus === 'all' || emenda.status === filterStatus;
+    const matchesAno = filterAno === 'all' || emenda.ano === filterAno;
+    const matchesNumero = filterNumero === '' || emenda.numero.toLowerCase().includes(filterNumero.toLowerCase());
+    const matchesOrgao = filterOrgao === '' || emenda.orgao.toLowerCase().includes(filterOrgao.toLowerCase());
+    
+    const matchesBeneficiario = filterBeneficiario === '' || 
+      emenda.destinacoes.some(dest => 
+        dest.destinatario.toLowerCase().includes(filterBeneficiario.toLowerCase())
+      );
 
-    return matchesSearch && matchesType && matchesStatus;
+    return matchesSearch && matchesType && matchesStatus && matchesAno && 
+           matchesNumero && matchesOrgao && matchesBeneficiario;
   });
 
   const getProgressPercentage = (emenda: Emenda) => {
@@ -72,11 +96,11 @@ export const EmendasList: React.FC<EmendasListProps> = ({
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
             <div className="relative">
               <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
               <Input
-                placeholder="Buscar por número, autor ou objeto..."
+                placeholder="Buscar por número, autor, objeto ou órgão..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="pl-10"
@@ -111,6 +135,40 @@ export const EmendasList: React.FC<EmendasListProps> = ({
               </SelectContent>
             </Select>
           </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <Select value={filterAno} onValueChange={setFilterAno}>
+              <SelectTrigger>
+                <SelectValue placeholder="Filtrar por ano" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">Todos os anos</SelectItem>
+                {anosDisponiveis.map((ano) => (
+                  <SelectItem key={ano} value={ano}>
+                    {ano}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+
+            <Input
+              placeholder="Filtrar por número"
+              value={filterNumero}
+              onChange={(e) => setFilterNumero(e.target.value)}
+            />
+
+            <Input
+              placeholder="Filtrar por órgão"
+              value={filterOrgao}
+              onChange={(e) => setFilterOrgao(e.target.value)}
+            />
+
+            <Input
+              placeholder="Filtrar por beneficiário"
+              value={filterBeneficiario}
+              onChange={(e) => setFilterBeneficiario(e.target.value)}
+            />
+          </div>
         </CardContent>
       </Card>
 
@@ -137,7 +195,7 @@ export const EmendasList: React.FC<EmendasListProps> = ({
                       Emenda {emenda.numero}/{emenda.ano}
                     </CardTitle>
                     <p className="text-sm text-muted-foreground mt-1">
-                      {emenda.autor} • {tipoLabels[emenda.tipo]}
+                      {emenda.autor} • {tipoLabels[emenda.tipo]} • {emenda.orgao}
                     </p>
                   </div>
                   <div className="flex items-center gap-2">
@@ -165,6 +223,28 @@ export const EmendasList: React.FC<EmendasListProps> = ({
                   <p className="text-sm font-medium">Objeto:</p>
                   <p className="text-sm text-muted-foreground">{emenda.objeto}</p>
                 </div>
+
+                {/* Contrapartidas */}
+                {emenda.contrapartidas.length > 0 && (
+                  <div className="space-y-2">
+                    <p className="text-sm font-medium">Contrapartidas:</p>
+                    <div className="space-y-1">
+                      {emenda.contrapartidas.map((contrapartida, index) => (
+                        <div key={index} className="text-xs p-2 bg-muted rounded">
+                          <div className="flex justify-between">
+                            <span>{contrapartida.ente}</span>
+                            <span className="font-medium">
+                              {contrapartida.valor.toLocaleString('pt-BR', { 
+                                style: 'currency', 
+                                currency: 'BRL' 
+                              })}
+                            </span>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
 
                 {/* Barra de Progresso */}
                 <div className="space-y-2">
@@ -198,17 +278,30 @@ export const EmendasList: React.FC<EmendasListProps> = ({
                 {emenda.destinacoes.length > 0 && (
                   <div className="space-y-2">
                     <p className="text-sm font-medium">Destinações ({emenda.destinacoes.length}):</p>
-                    <div className="space-y-1">
+                    <div className="space-y-2">
                       {emenda.destinacoes.slice(0, 3).map((destinacao, index) => (
-                        <div key={index} className="text-xs p-2 bg-muted rounded">
-                          <div className="flex justify-between">
-                            <span>{destinacao.destinatario}</span>
-                            <span className="font-medium">
-                              {destinacao.valor.toLocaleString('pt-BR', { 
-                                style: 'currency', 
-                                currency: 'BRL' 
-                              })}
-                            </span>
+                        <div key={index} className="text-xs p-3 bg-muted rounded space-y-1">
+                          <div className="flex justify-between items-start">
+                            <div className="flex-1">
+                              <div className="font-medium">{destinacao.destinatario}</div>
+                              <div className="text-muted-foreground">
+                                {destinacao.municipio} • {destinacao.areaAtuacao}
+                              </div>
+                              <div className="text-muted-foreground">
+                                GND: {destinacao.gnd} • PD: {destinacao.pd}
+                              </div>
+                            </div>
+                            <div className="text-right">
+                              <div className="font-medium">
+                                {destinacao.valor.toLocaleString('pt-BR', { 
+                                  style: 'currency', 
+                                  currency: 'BRL' 
+                                })}
+                              </div>
+                              <Badge className={statusExecucaoColors[destinacao.statusExecucao]} variant="secondary">
+                                {destinacao.statusExecucao.replace('_', ' ')}
+                              </Badge>
+                            </div>
                           </div>
                         </div>
                       ))}

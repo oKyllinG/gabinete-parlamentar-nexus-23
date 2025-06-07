@@ -16,6 +16,11 @@ const destinacaoSchema = z.object({
   tipo: z.enum(['entidade', 'municipio']),
   destinatario: z.string().min(1, 'Destinatário é obrigatório'),
   cnpj: z.string().optional(),
+  municipio: z.string().min(1, 'Município é obrigatório'),
+  gnd: z.string().min(1, 'GND é obrigatório'),
+  pd: z.string().min(1, 'PD é obrigatório'),
+  areaAtuacao: z.string().min(1, 'Área de atuação é obrigatória'),
+  statusExecucao: z.enum(['planejamento', 'em_execucao', 'concluida', 'cancelada']),
   valor: z.number().min(0.01, 'Valor deve ser maior que zero'),
   observacoes: z.string().optional()
 });
@@ -31,6 +36,13 @@ interface DestinacaoDialogProps {
 const tipoLabels = {
   entidade: 'Entidade',
   municipio: 'Município'
+};
+
+const statusExecucaoLabels = {
+  planejamento: 'Planejamento',
+  em_execucao: 'Em Execução',
+  concluida: 'Concluída',
+  cancelada: 'Cancelada'
 };
 
 export const DestinacaoDialog: React.FC<DestinacaoDialogProps> = ({ 
@@ -51,17 +63,26 @@ export const DestinacaoDialog: React.FC<DestinacaoDialogProps> = ({
       tipo: 'entidade',
       destinatario: '',
       cnpj: '',
+      municipio: '',
+      gnd: '',
+      pd: '',
+      areaAtuacao: '',
+      statusExecucao: 'planejamento',
       valor: 0,
       observacoes: ''
     }
   });
 
   const handleSubmit = (data: DestinacaoFormData) => {
-    // Cast the form data to the expected type since we know all required fields are present
     const destinacaoData: Omit<Destinacao, 'id' | 'emendaId' | 'dataDestinacao'> = {
       tipo: data.tipo,
       destinatario: data.destinatario,
       cnpj: data.cnpj,
+      municipio: data.municipio,
+      gnd: data.gnd,
+      pd: data.pd,
+      areaAtuacao: data.areaAtuacao,
+      statusExecucao: data.statusExecucao,
       valor: data.valor,
       observacoes: data.observacoes
     };
@@ -72,7 +93,7 @@ export const DestinacaoDialog: React.FC<DestinacaoDialogProps> = ({
 
   return (
     <Dialog open={true} onOpenChange={onCancel}>
-      <DialogContent className="max-w-md">
+      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>Destinar Emenda</DialogTitle>
         </DialogHeader>
@@ -105,30 +126,57 @@ export const DestinacaoDialog: React.FC<DestinacaoDialogProps> = ({
 
         <Form {...form}>
           <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-4">
-            <FormField
-              control={form.control}
-              name="tipo"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Tipo de Destinatário *</FormLabel>
-                  <Select onValueChange={field.onChange} defaultValue={field.value}>
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Selecione o tipo" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      {Object.entries(tipoLabels).map(([value, label]) => (
-                        <SelectItem key={value} value={value}>
-                          {label}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <FormField
+                control={form.control}
+                name="tipo"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Tipo de Destinatário *</FormLabel>
+                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Selecione o tipo" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        {Object.entries(tipoLabels).map(([value, label]) => (
+                          <SelectItem key={value} value={value}>
+                            {label}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="statusExecucao"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Status da Execução *</FormLabel>
+                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Selecione o status" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        {Object.entries(statusExecucaoLabels).map(([value, label]) => (
+                          <SelectItem key={value} value={value}>
+                            {label}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
 
             <FormField
               control={form.control}
@@ -153,37 +201,109 @@ export const DestinacaoDialog: React.FC<DestinacaoDialogProps> = ({
               )}
             />
 
-            <FormField
-              control={form.control}
-              name="cnpj"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>CNPJ (opcional)</FormLabel>
-                  <FormControl>
-                    <Input 
-                      placeholder="00.000.000/0000-00" 
-                      {...field} 
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <FormField
+                control={form.control}
+                name="cnpj"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>CNPJ (opcional)</FormLabel>
+                    <FormControl>
+                      <Input 
+                        placeholder="00.000.000/0000-00" 
+                        {...field} 
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="municipio"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Município *</FormLabel>
+                    <FormControl>
+                      <Input 
+                        placeholder="Ex: São Paulo - SP" 
+                        {...field} 
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <FormField
+                control={form.control}
+                name="gnd"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>GND *</FormLabel>
+                    <FormControl>
+                      <Input 
+                        placeholder="Ex: 3" 
+                        {...field} 
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="pd"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>PD *</FormLabel>
+                    <FormControl>
+                      <Input 
+                        placeholder="Ex: 4" 
+                        {...field} 
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="valor"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Valor da Destinação (R$) *</FormLabel>
+                    <FormControl>
+                      <Input 
+                        type="number" 
+                        step="0.01" 
+                        placeholder="0,00" 
+                        max={valorDisponivel}
+                        {...field}
+                        onChange={(e) => field.onChange(parseFloat(e.target.value) || 0)}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
 
             <FormField
               control={form.control}
-              name="valor"
+              name="areaAtuacao"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Valor da Destinação (R$) *</FormLabel>
+                  <FormLabel>Área de Atuação *</FormLabel>
                   <FormControl>
                     <Input 
-                      type="number" 
-                      step="0.01" 
-                      placeholder="0,00" 
-                      max={valorDisponivel}
-                      {...field}
-                      onChange={(e) => field.onChange(parseFloat(e.target.value) || 0)}
+                      placeholder="Ex: Saúde, Educação, Infraestrutura" 
+                      {...field} 
                     />
                   </FormControl>
                   <FormMessage />
