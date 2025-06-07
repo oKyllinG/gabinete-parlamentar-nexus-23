@@ -1,4 +1,3 @@
-
 import { useState, useMemo } from "react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
@@ -10,6 +9,7 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog"
 import { FileText, Plus, Search, Calendar, User, Building, FileCheck, Eye, Edit, Trash2, ChevronUp, ChevronDown, Filter, Download, Paperclip } from "lucide-react"
 import { OficioForm } from "@/components/oficios/OficioForm"
+import { exportOficios } from "@/utils/exportUtils"
 
 type SortField = 'numero' | 'data' | 'tipo' | 'assunto' | 'municipio'
 type SortDirection = 'asc' | 'desc'
@@ -220,6 +220,10 @@ export default function Oficios() {
     console.log(`Baixando ${tipo} do ofício:`, oficio.numero)
   }
 
+  const handleExportOficios = () => {
+    exportOficios(filteredOficios);
+  }
+
   return (
     <div className="p-6 space-y-6 bg-background">
       {/* Header com estatísticas */}
@@ -280,7 +284,7 @@ export default function Oficios() {
           <p className="text-muted-foreground">Gerencie os ofícios enviados, recebidos e convites</p>
         </div>
         <div className="flex gap-3">
-          <Button variant="outline" size="default" className="flex items-center gap-2">
+          <Button variant="outline" size="default" className="flex items-center gap-2" onClick={handleExportOficios}>
             <Download className="w-4 h-4" />
             Exportar
           </Button>

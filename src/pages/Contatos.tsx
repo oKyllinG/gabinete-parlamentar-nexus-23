@@ -1,4 +1,3 @@
-
 import React, { useState, useMemo } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -21,6 +20,7 @@ import {
 import { ContatoForm } from "@/components/contatos/ContatoForm";
 import { ContactFilters } from "@/components/contatos/ContactFilters";
 import { BirthdayList } from "@/components/contatos/BirthdayList";
+import { exportContacts } from "@/utils/exportUtils";
 
 export interface Contact {
   id: string;
@@ -137,6 +137,10 @@ const Contatos = () => {
     );
   };
 
+  const handleExportContacts = () => {
+    exportContacts(filteredContacts);
+  };
+
   return (
     <div className="p-6 max-w-7xl mx-auto">
       <div className="flex items-center justify-between mb-6">
@@ -189,7 +193,7 @@ const Contatos = () => {
                     className="pl-10"
                   />
                 </div>
-                <Button variant="outline">
+                <Button variant="outline" onClick={handleExportContacts}>
                   <Download className="w-4 h-4 mr-2" />
                   Exportar
                 </Button>
