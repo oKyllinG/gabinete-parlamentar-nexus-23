@@ -1,4 +1,3 @@
-
 import { useState } from "react"
 import { Plus, Edit3, Trash2, Check, X, GripVertical } from "lucide-react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
@@ -44,6 +43,7 @@ interface Lideranca {
   cargo: string
   partido: string
   telefone: string
+  votos?: number
   foto?: string
   ordem: number
 }
@@ -96,7 +96,7 @@ const SortableLiderancaItem = ({
         <GripVertical className="h-5 w-5 text-muted-foreground" />
       </div>
       
-      <Avatar className="h-12 w-12">
+      <Avatar className="h-16 w-16">
         <AvatarImage src={lideranca.foto} alt={lideranca.nome} />
         <AvatarFallback>
           {lideranca.nome.split(' ').map(n => n[0]).join('')}
@@ -127,10 +127,15 @@ const SortableLiderancaItem = ({
               placeholder="Telefone"
             />
             <Input
+              type="number"
+              value={editData.votos || ""}
+              onChange={(e) => onEditDataChange({...editData, votos: Number(e.target.value)})}
+              placeholder="Votos"
+            />
+            <Input
               value={editData.foto || ""}
               onChange={(e) => onEditDataChange({...editData, foto: e.target.value})}
               placeholder="URL da foto"
-              className="col-span-2"
             />
           </div>
         ) : (
@@ -141,6 +146,9 @@ const SortableLiderancaItem = ({
             </div>
             <p className="text-sm text-muted-foreground">{lideranca.cargo}</p>
             <p className="text-sm text-muted-foreground">{lideranca.telefone}</p>
+            {lideranca.votos && (
+              <p className="text-sm text-muted-foreground">Votos: {lideranca.votos.toLocaleString()}</p>
+            )}
           </>
         )}
       </div>
@@ -181,7 +189,6 @@ export const SortableLiderancasMunicipais = ({ municipio }: LiderancasMunicipais
     const saved = localStorage.getItem(`municipio-${municipio.id}-liderancas`)
     if (saved) {
       const liderancas = JSON.parse(saved)
-      // Adicionar campo ordem se não existir
       return liderancas.map((l: any, index: number) => ({
         ...l,
         ordem: l.ordem !== undefined ? l.ordem : index
@@ -194,6 +201,7 @@ export const SortableLiderancasMunicipais = ({ municipio }: LiderancasMunicipais
         cargo: "Prefeito",
         partido: "PSDB",
         telefone: "(67) 99999-9999",
+        votos: 5000,
         ordem: 0
       },
       {
@@ -202,6 +210,7 @@ export const SortableLiderancasMunicipais = ({ municipio }: LiderancasMunicipais
         cargo: "Vereadora",
         partido: "PT",
         telefone: "(67) 88888-8888",
+        votos: 1200,
         ordem: 1
       }
     ]
@@ -216,6 +225,7 @@ export const SortableLiderancasMunicipais = ({ municipio }: LiderancasMunicipais
     cargo: "",
     partido: "",
     telefone: "",
+    votos: 0,
     foto: ""
   })
 
@@ -240,7 +250,6 @@ export const SortableLiderancasMunicipais = ({ municipio }: LiderancasMunicipais
       
       const newLiderancas = arrayMove(liderancas, oldIndex, newIndex)
       
-      // Atualizar as ordens
       const updatedLiderancas = newLiderancas.map((lideranca, index) => ({
         ...lideranca,
         ordem: index
@@ -273,7 +282,6 @@ export const SortableLiderancasMunicipais = ({ municipio }: LiderancasMunicipais
 
   const handleDelete = (id: number) => {
     const updatedLiderancas = liderancas.filter(l => l.id !== id)
-    // Reordenar após exclusão
     const reorderedLiderancas = updatedLiderancas.map((l, index) => ({
       ...l,
       ordem: index
@@ -291,7 +299,7 @@ export const SortableLiderancasMunicipais = ({ municipio }: LiderancasMunicipais
         ordem: newOrder
       } as Lideranca]
       saveLiderancas(updatedLiderancas)
-      setNewLideranca({ nome: "", cargo: "", partido: "", telefone: "", foto: "" })
+      setNewLideranca({ nome: "", cargo: "", partido: "", telefone: "", votos: 0, foto: "" })
       setShowAddForm(false)
     }
   }
@@ -347,7 +355,16 @@ export const SortableLiderancasMunicipais = ({ municipio }: LiderancasMunicipais
                     onChange={(e) => setNewLideranca({...newLideranca, telefone: e.target.value})}
                   />
                 </div>
-                <div className="col-span-2">
+                <div>
+                  <Label htmlFor="new-votos">Votos</Label>
+                  <Input
+                    id="new-votos"
+                    type="number"
+                    value={newLideranca.votos}
+                    onChange={(e) => setNewLideranca({...newLideranca, votos: Number(e.target.value)})}
+                  />
+                </div>
+                <div>
                   <Label htmlFor="new-foto">URL da Foto</Label>
                   <Input
                     id="new-foto"

@@ -34,17 +34,16 @@ export const DeputadosTable = ({ tipo, municipio, deputados }: DeputadosTablePro
         <TableHeader>
           <TableRow>
             <TableHead>Colocação</TableHead>
-            <TableHead>Nome</TableHead>
+            <TableHead className="w-1/2">Nome</TableHead>
             <TableHead>Partido</TableHead>
             <TableHead>Votos</TableHead>
             <TableHead>%</TableHead>
-            <TableHead>Telefone</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
           {deputadosOrdenados.length === 0 ? (
             <TableRow>
-              <TableCell colSpan={6} className="text-center text-muted-foreground">
+              <TableCell colSpan={5} className="text-center text-muted-foreground">
                 Nenhum deputado {tipo} cadastrado para {municipio.nome}
               </TableCell>
             </TableRow>
@@ -58,7 +57,6 @@ export const DeputadosTable = ({ tipo, municipio, deputados }: DeputadosTablePro
                 <TableCell>{deputado.partido}</TableCell>
                 <TableCell>{deputado.votos.toLocaleString()}</TableCell>
                 <TableCell>{deputado.percentual.toFixed(2)}%</TableCell>
-                <TableCell>{deputado.telefone}</TableCell>
               </TableRow>
             ))
           )}
