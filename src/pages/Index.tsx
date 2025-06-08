@@ -6,6 +6,7 @@ import { Toaster } from "@/components/ui/toaster"
 import Oficios from "@/pages/Oficios"
 import Contatos from "@/pages/Contatos"
 import Emendas from "@/pages/Emendas"
+import ObrasEquipamentos from "@/pages/ObrasEquipamentos"
 import { useLocation } from "react-router-dom"
 
 const Index = () => {
@@ -20,6 +21,8 @@ const Index = () => {
         return <Contatos />
       case '/emendas':
         return <Emendas />
+      case '/obras-equipamentos':
+        return <ObrasEquipamentos />
       default:
         return <Dashboard />
     }
@@ -33,6 +36,8 @@ const Index = () => {
         return 'Contatos'
       case '/emendas':
         return 'Emendas Parlamentares'
+      case '/obras-equipamentos':
+        return 'Obras e Equipamentos'
       default:
         return 'Sistema de Gestão de Gabinete'
     }
