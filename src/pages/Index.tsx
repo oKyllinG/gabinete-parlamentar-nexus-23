@@ -1,4 +1,3 @@
-
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar"
 import { AppSidebar } from "@/components/AppSidebar"
 import { Dashboard } from "@/components/Dashboard"
@@ -9,6 +8,7 @@ import Emendas from "@/pages/Emendas"
 import ObrasEquipamentos from "@/pages/ObrasEquipamentos"
 import PainelControle from "@/pages/PainelControle"
 import Briefing from "@/pages/Briefing"
+import MunicipioBriefing from "@/pages/MunicipioBriefing"
 import { useLocation } from "react-router-dom"
 
 const Index = () => {
@@ -30,6 +30,10 @@ const Index = () => {
       case '/briefing':
         return <Briefing />
       default:
+        // Check if it's a municipality briefing route
+        if (location.pathname.startsWith('/briefing/')) {
+          return <MunicipioBriefing />
+        }
         return <Dashboard />
     }
   }
@@ -49,6 +53,10 @@ const Index = () => {
       case '/briefing':
         return 'Briefing'
       default:
+        // Check if it's a municipality briefing route
+        if (location.pathname.startsWith('/briefing/')) {
+          return 'Briefing Municipal'
+        }
         return 'Sistema de Gestão de Gabinete'
     }
   }

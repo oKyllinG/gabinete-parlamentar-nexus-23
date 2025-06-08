@@ -1,4 +1,3 @@
-
 import { useState } from "react"
 import { Search, MapPin, Edit3, Settings } from "lucide-react"
 import { Input } from "@/components/ui/input"
@@ -137,8 +136,9 @@ const Briefing = () => {
   }
 
   const handleMunicipioClick = (municipio: Municipio) => {
-    console.log(`Clicou no município: ${municipio.nome}`)
-    // Aqui será implementada a navegação para o briefing específico do município
+    console.log(`Navegando para: ${municipio.nome}`)
+    // Navegar para a página individual do município
+    window.location.href = `/briefing/${municipio.id}`
   }
 
   const handleUpdateRegioes = (newRegioes: string[]) => {
