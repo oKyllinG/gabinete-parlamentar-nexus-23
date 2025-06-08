@@ -8,6 +8,7 @@ import Contatos from "@/pages/Contatos"
 import Emendas from "@/pages/Emendas"
 import ObrasEquipamentos from "@/pages/ObrasEquipamentos"
 import PainelControle from "@/pages/PainelControle"
+import Briefing from "@/pages/Briefing"
 import { useLocation } from "react-router-dom"
 
 const Index = () => {
@@ -26,6 +27,8 @@ const Index = () => {
         return <Emendas />
       case '/obras-equipamentos':
         return <ObrasEquipamentos />
+      case '/briefing':
+        return <Briefing />
       default:
         return <Dashboard />
     }
@@ -43,6 +46,8 @@ const Index = () => {
         return 'Emendas Parlamentares'
       case '/obras-equipamentos':
         return 'Obras e Equipamentos'
+      case '/briefing':
+        return 'Briefing'
       default:
         return 'Sistema de Gestão de Gabinete'
     }
