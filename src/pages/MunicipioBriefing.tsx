@@ -3,10 +3,9 @@ import { useParams, useNavigate } from "react-router-dom"
 import { ArrowLeft } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { ResultadosEleitorais } from "@/components/briefing/ResultadosEleitorais"
 import { DeputadosTable } from "@/components/briefing/DeputadosTable"
-import { LiderancasMunicipais } from "@/components/briefing/LiderancasMunicipais"
+import { EditableLiderancasMunicipais } from "@/components/briefing/EditableLiderancasMunicipais"
 import { VotacaoDeputado } from "@/components/briefing/VotacaoDeputado"
 import { GerenciarDeputados } from "@/components/briefing/GerenciarDeputados"
 
@@ -55,6 +54,7 @@ interface Deputado {
   telefone: string
 }
 
+// ... keep existing code (municipiosMS array)
 const municipiosMS: Municipio[] = [
   { id: 1, nome: "Água Clara", regiao: "Fronteira", assessor: "testew" },
   { id: 2, nome: "Alcinópolis", regiao: "Norte", assessor: null },
@@ -262,86 +262,57 @@ const MunicipioBriefing = () => {
         </div>
       </div>
 
-      <Tabs defaultValue="politica" className="w-full">
-        <TabsList className="grid w-full grid-cols-3">
-          <TabsTrigger value="politica">Política</TabsTrigger>
-          <TabsTrigger value="obras">Obras Atuais</TabsTrigger>
-          <TabsTrigger value="acoes">Ações Anteriores</TabsTrigger>
-        </TabsList>
+      {/* Conteúdo político unificado */}
+      <div className="space-y-6">
+        {/* Votação do Deputado - agora editável */}
+        <VotacaoDeputado 
+          municipio={municipio} 
+          dadosPoliticos={dadosPoliticos}
+          onSave={handleSaveDadosPoliticos}
+        />
         
-        <TabsContent value="politica" className="space-y-6">
-          {/* Votação do Deputado - agora editável */}
-          <VotacaoDeputado 
-            municipio={municipio} 
-            dadosPoliticos={dadosPoliticos}
-            onSave={handleSaveDadosPoliticos}
-          />
-          
-          {/* Resultados Eleitorais - agora editável */}
-          <ResultadosEleitorais 
-            municipio={municipio} 
-            dadosPoliticos={dadosPoliticos}
-            onSave={handleSaveDadosPoliticos}
-          />
-          
-          {/* Deputados Federais */}
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between">
-              <CardTitle>Deputados Federais</CardTitle>
-              <GerenciarDeputados 
-                tipo="federal"
-                municipio={municipio}
-                deputados={deputadosFederais}
-                onSave={handleSaveDeputadosFederais}
-              />
-            </CardHeader>
-            <CardContent>
-              <DeputadosTable tipo="federal" municipio={municipio} deputados={deputadosFederais} />
-            </CardContent>
-          </Card>
-          
-          {/* Deputados Estaduais */}
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between">
-              <CardTitle>Deputados Estaduais</CardTitle>
-              <GerenciarDeputados 
-                tipo="estadual"
-                municipio={municipio}
-                deputados={deputadosEstaduais}
-                onSave={handleSaveDeputadosEstaduais}
-              />
-            </CardHeader>
-            <CardContent>
-              <DeputadosTable tipo="estadual" municipio={municipio} deputados={deputadosEstaduais} />
-            </CardContent>
-          </Card>
-          
-          {/* Lideranças Municipais */}
-          <LiderancasMunicipais municipio={municipio} />
-        </TabsContent>
+        {/* Resultados Eleitorais - agora editável */}
+        <ResultadosEleitorais 
+          municipio={municipio} 
+          dadosPoliticos={dadosPoliticos}
+          onSave={handleSaveDadosPoliticos}
+        />
         
-        <TabsContent value="obras">
-          <Card>
-            <CardHeader>
-              <CardTitle>Obras e Emendas Atuais</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-muted-foreground">Em desenvolvimento...</p>
-            </CardContent>
-          </Card>
-        </TabsContent>
+        {/* Deputados Federais */}
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between">
+            <CardTitle>Deputados Federais</CardTitle>
+            <GerenciarDeputados 
+              tipo="federal"
+              municipio={municipio}
+              deputados={deputadosFederais}
+              onSave={handleSaveDeputadosFederais}
+            />
+          </CardHeader>
+          <CardContent>
+            <DeputadosTable tipo="federal" municipio={municipio} deputados={deputadosFederais} />
+          </CardContent>
+        </Card>
         
-        <TabsContent value="acoes">
-          <Card>
-            <CardHeader>
-              <CardTitle>Ações Anteriores</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-muted-foreground">Em desenvolvimento...</p>
-            </CardContent>
-          </Card>
-        </TabsContent>
-      </Tabs>
+        {/* Deputados Estaduais */}
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between">
+            <CardTitle>Deputados Estaduais</CardTitle>
+            <GerenciarDeputados 
+              tipo="estadual"
+              municipio={municipio}
+              deputados={deputadosEstaduais}
+              onSave={handleSaveDeputadosEstaduais}
+            />
+          </CardHeader>
+          <CardContent>
+            <DeputadosTable tipo="estadual" municipio={municipio} deputados={deputadosEstaduais} />
+          </CardContent>
+        </Card>
+        
+        {/* Lideranças Municipais */}
+        <EditableLiderancasMunicipais municipio={municipio} />
+      </div>
     </div>
   )
 }

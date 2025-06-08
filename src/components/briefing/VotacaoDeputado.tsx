@@ -20,32 +20,47 @@ interface DadosPoliticos {
   colocacaoDeputado: string
 }
 
+interface VotacaoHistorica {
+  ano: number
+  votos: number
+}
+
 interface VotacaoDeputadoProps {
   municipio: Municipio
   dadosPoliticos: DadosPoliticos
   onSave: (dados: DadosPoliticos) => void
 }
 
-// Dados históricos mock - podem ser expandidos para serem editáveis também
-const votacaoHistorica = [
-  { ano: 2002, votos: 199 },
-  { ano: 2006, votos: 371 },
-  { ano: 2010, votos: 36 },
-  { ano: 2014, votos: 65 },
-  { ano: 2018, votos: 164 },
-  { ano: 2022, votos: 0 } // será substituído pelo valor atual
-]
-
 export const VotacaoDeputado = ({ municipio, dadosPoliticos, onSave }: VotacaoDeputadoProps) => {
+  // Carregar dados históricos do localStorage
+  const loadVotacaoHistorica = (): VotacaoHistorica[] => {
+    const saved = localStorage.getItem(`municipio-${municipio.id}-votacao-historica`)
+    if (saved) {
+      return JSON.parse(saved)
+    }
+    return [
+      { ano: 2002, votos: 199 },
+      { ano: 2006, votos: 371 },
+      { ano: 2010, votos: 36 },
+      { ano: 2014, votos: 65 },
+      { ano: 2018, votos: 164 },
+      { ano: 2022, votos: dadosPoliticos.votosDeputado }
+    ]
+  }
+
   const [isEditing, setIsEditing] = useState(false)
   const [editData, setEditData] = useState(dadosPoliticos)
-
-  // Substitui o valor de 2022 pelos dados atuais
-  const votacaoComDadosAtuais = votacaoHistorica.map(item => 
-    item.ano === 2022 ? { ...item, votos: dadosPoliticos.votosDeputado } : item
-  )
+  const [votacaoHistorica, setVotacaoHistorica] = useState<VotacaoHistorica[]>(loadVotacaoHistorica)
 
   const handleSave = () => {
+    // Atualizar os votos de 2022 na votação histórica
+    const updatedVotacao = votacaoHistorica.map(item => 
+      item.ano === 2022 ? { ...item, votos: editData.votosDeputado } : item
+    )
+    
+    setVotacaoHistorica(updatedVotacao)
+    localStorage.setItem(`municipio-${municipio.id}-votacao-historica`, JSON.stringify(updatedVotacao))
+    
     onSave(editData)
     setIsEditing(false)
   }
@@ -53,6 +68,17 @@ export const VotacaoDeputado = ({ municipio, dadosPoliticos, onSave }: VotacaoDe
   const handleCancel = () => {
     setEditData(dadosPoliticos)
     setIsEditing(false)
+  }
+
+  const handleVotacaoChange = (ano: number, novoValor: number) => {
+    setVotacaoHistorica(prev => 
+      prev.map(item => item.ano === ano ? { ...item, votos: novoValor } : item)
+    )
+    
+    // Se for 2022, também atualizar editData
+    if (ano === 2022) {
+      setEditData(prev => ({ ...prev, votosDeputado: novoValor }))
+    }
   }
 
   return (
@@ -106,7 +132,7 @@ export const VotacaoDeputado = ({ municipio, dadosPoliticos, onSave }: VotacaoDe
                     dadosPoliticos.totalEleitores.toLocaleString()
                   )}
                 </TableHead>
-                {votacaoComDadosAtuais.map((item) => (
+                {votacaoHistorica.map((item) => (
                   <TableHead key={item.ano} className="text-white font-bold text-center">
                     {item.ano}
                   </TableHead>
@@ -129,18 +155,14 @@ export const VotacaoDeputado = ({ municipio, dadosPoliticos, onSave }: VotacaoDe
                 <TableCell className="text-center font-medium">
                   {/* Espaço para eleitores */}
                 </TableCell>
-                {votacaoComDadosAtuais.map((item) => (
+                {votacaoHistorica.map((item) => (
                   <TableCell key={item.ano} className="text-center font-medium">
-                    {item.ano === 2022 ? (
-                      isEditing ? (
-                        <Input
-                          value={editData.votosDeputado}
-                          onChange={(e) => setEditData({...editData, votosDeputado: Number(e.target.value)})}
-                          className="w-20 text-center"
-                        />
-                      ) : (
-                        item.votos
-                      )
+                    {isEditing ? (
+                      <Input
+                        value={item.votos}
+                        onChange={(e) => handleVotacaoChange(item.ano, Number(e.target.value))}
+                        className="w-20 text-center"
+                      />
                     ) : (
                       item.votos
                     )}
