@@ -1,4 +1,5 @@
 import { useState } from "react"
+import { useNavigate } from "react-router-dom"
 import { Search, MapPin, Edit3, Settings } from "lucide-react"
 import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
@@ -111,6 +112,7 @@ const getRegiaoColor = (regiao: string) => {
 }
 
 const Briefing = () => {
+  const navigate = useNavigate()
   const [municipios, setMunicipios] = useState<Municipio[]>(municipiosMS)
   const [regioes, setRegioes] = useState<string[]>(defaultRegioes)
   const [searchTerm, setSearchTerm] = useState("")
@@ -137,8 +139,7 @@ const Briefing = () => {
 
   const handleMunicipioClick = (municipio: Municipio) => {
     console.log(`Navegando para: ${municipio.nome}`)
-    // Navegar para a página individual do município
-    window.location.href = `/briefing/${municipio.id}`
+    navigate(`/briefing/${municipio.id}`)
   }
 
   const handleUpdateRegioes = (newRegioes: string[]) => {
@@ -211,15 +212,13 @@ const Briefing = () => {
           <Card 
             key={municipio.id} 
             className="cursor-pointer hover:shadow-lg transition-shadow border border-border bg-card"
+            onClick={() => handleMunicipioClick(municipio)}
           >
             <CardContent className="p-4">
               <div className="flex items-start justify-between mb-3">
                 <div className="flex items-center gap-2">
                   <MapPin className="h-4 w-4 text-muted-foreground" />
-                  <h3 
-                    className="font-semibold text-card-foreground hover:text-primary transition-colors"
-                    onClick={() => handleMunicipioClick(municipio)}
-                  >
+                  <h3 className="font-semibold text-card-foreground hover:text-primary transition-colors">
                     {municipio.nome}
                   </h3>
                 </div>
