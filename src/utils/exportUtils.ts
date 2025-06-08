@@ -1,3 +1,4 @@
+
 export const exportToCSV = (data: any[], filename: string, headers: string[]) => {
   // Convert data to CSV format using semicolon separator (Brazilian standard)
   const csvContent = [
@@ -237,6 +238,10 @@ export const exportEmendas = (emendas: any[], selectedType?: string, selectedSta
     'Data Criacao': emenda.dataCriacao ? new Date(emenda.dataCriacao).toLocaleDateString('pt-BR') : '',
     'Destinacoes': emenda.destinacoes ? emenda.destinacoes.map((d: any) => `${d.destinatario} (${d.valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })})`).join('; ') : ''
   }));
+
+  const filename = `emendas_${new Date().toISOString().split('T')[0]}.csv`;
+  exportToCSV(mappedData, filename, headers);
+};
 
 export const exportObras = (obras: any[], selectedMunicipio?: string, selectedStatus?: string, selectedCategoria?: string, selectedArea?: string, startDate?: Date, endDate?: Date) => {
   // Filter obras by municipality, status, category, area and date range
