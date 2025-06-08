@@ -1,3 +1,4 @@
+
 import { MapPin } from "lucide-react"
 import { AcoesDeputado } from "./AcoesDeputado"
 import { ResultadosEleitoraisManager } from "./ResultadosEleitoraisManager"
@@ -5,6 +6,8 @@ import { VotacaoHistoricaManager } from "./VotacaoHistoricaManager"
 import { DeputadosFederaisManager } from "./DeputadosFederaisManager"
 import { DeputadosEstaduaisManager } from "./DeputadosEstaduaisManager"
 import { LiderancasManager } from "./LiderancasManager"
+import { HistoricoDeputadoManager } from "./HistoricoDeputadoManager"
+import { AcaoDeputado } from "@/types/historicoDeputado"
 
 interface Municipio {
   id: number
@@ -46,10 +49,12 @@ interface BriefingLayoutProps {
   deputadosFederais: Deputado[]
   deputadosEstaduais: Deputado[]
   liderancas: Lideranca[]
+  historicoAcoes: AcaoDeputado[]
   onSaveDadosPoliticos: (dados: DadosPoliticos) => void
   onSaveDeputadosFederais: (deputados: Deputado[]) => void
   onSaveDeputadosEstaduais: (deputados: Deputado[]) => void
   onSaveLiderancas: (liderancas: Lideranca[]) => void
+  onSaveHistoricoAcoes: (acoes: AcaoDeputado[]) => void
 }
 
 export const BriefingLayout = ({ 
@@ -58,10 +63,12 @@ export const BriefingLayout = ({
   deputadosFederais,
   deputadosEstaduais,
   liderancas,
+  historicoAcoes,
   onSaveDadosPoliticos,
   onSaveDeputadosFederais,
   onSaveDeputadosEstaduais,
-  onSaveLiderancas
+  onSaveLiderancas,
+  onSaveHistoricoAcoes
 }: BriefingLayoutProps) => {
   return (
     <div className="space-y-6 bg-background p-6">
@@ -87,6 +94,13 @@ export const BriefingLayout = ({
         municipioId={municipio.id}
         dadosPoliticos={dadosPoliticos}
         onUpdateDados={onSaveDadosPoliticos}
+      />
+
+      {/* Histórico do Deputado */}
+      <HistoricoDeputadoManager
+        acoes={historicoAcoes}
+        municipioNome={municipio.nome}
+        onSave={onSaveHistoricoAcoes}
       />
 
       {/* Deputados */}

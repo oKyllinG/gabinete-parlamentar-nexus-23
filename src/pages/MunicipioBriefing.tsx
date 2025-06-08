@@ -4,6 +4,8 @@ import { ArrowLeft } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { BriefingLayout } from "@/components/briefing/BriefingLayout"
 import { initializeMockDataForAguaClara } from "@/utils/briefingDataUtils"
+import { getHistoricoByMunicipio, saveHistoricoMunicipio } from "@/utils/historicoDeputadoUtils"
+import { AcaoDeputado } from "@/types/historicoDeputado"
 
 interface Municipio {
   id: number
@@ -163,6 +165,8 @@ const MunicipioBriefing = () => {
     }
   ])
 
+  const [historicoAcoes, setHistoricoAcoes] = useState<AcaoDeputado[]>([])
+
   // Carregar dados do localStorage e inicializar dados mock se necessário
   useEffect(() => {
     if (municipio) {
@@ -190,6 +194,10 @@ const MunicipioBriefing = () => {
       if (savedLiderancas) {
         setLiderancas(JSON.parse(savedLiderancas))
       }
+
+      // Load histórico actions
+      const historicoData = getHistoricoByMunicipio(municipio.id)
+      setHistoricoAcoes(historicoData)
     }
   }, [municipio])
 
@@ -218,6 +226,13 @@ const MunicipioBriefing = () => {
     setLiderancas(novasLiderancas)
     if (municipio) {
       localStorage.setItem(`municipio-${municipio.id}-liderancas`, JSON.stringify(novasLiderancas))
+    }
+  }
+
+  const handleSaveHistoricoAcoes = (acoes: AcaoDeputado[]) => {
+    setHistoricoAcoes(acoes)
+    if (municipio) {
+      saveHistoricoMunicipio(municipio.id, acoes)
     }
   }
   
@@ -255,10 +270,12 @@ const MunicipioBriefing = () => {
           deputadosFederais={deputadosFederais}
           deputadosEstaduais={deputadosEstaduais}
           liderancas={liderancas}
+          historicoAcoes={historicoAcoes}
           onSaveDadosPoliticos={handleSaveDadosPoliticos}
           onSaveDeputadosFederais={handleSaveDeputadosFederais}
           onSaveDeputadosEstaduais={handleSaveDeputadosEstaduais}
           onSaveLiderancas={handleSaveLiderancas}
+          onSaveHistoricoAcoes={handleSaveHistoricoAcoes}
         />
       </div>
     </div>
