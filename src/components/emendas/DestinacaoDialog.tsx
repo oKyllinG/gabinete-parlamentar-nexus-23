@@ -51,6 +51,14 @@ const statusExecucaoLabels = {
   cancelada: 'Cancelada'
 };
 
+// Helper function to safely format currency
+const formatCurrency = (value: number | undefined | null): string => {
+  if (value === undefined || value === null || isNaN(value)) {
+    return 'R$ 0,00';
+  }
+  return value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+};
+
 export const DestinacaoDialog: React.FC<DestinacaoDialogProps> = ({ 
   emenda, 
   destinacao,
@@ -59,8 +67,9 @@ export const DestinacaoDialog: React.FC<DestinacaoDialogProps> = ({
 }) => {
   const [projetos, setProjetos] = useState<string[]>(destinacao?.projetosAnexados || []);
   
-  const valorDestinado = emenda.valorDestinado - (destinacao?.valor || 0);
-  const valorDisponivel = emenda.valorTotal - valorDestinado;
+  // Safe calculations with null/undefined checks
+  const valorDestinado = (emenda.valorDestinado || 0) - (destinacao?.valor || 0);
+  const valorDisponivel = (emenda.valorTotal || 0) - valorDestinado;
 
   const form = useForm<DestinacaoFormData>({
     resolver: zodResolver(destinacaoSchema.refine((data) => {
@@ -73,7 +82,7 @@ export const DestinacaoDialog: React.FC<DestinacaoDialogProps> = ({
     }).refine((data) => {
       return data.valor <= valorDisponivel;
     }, {
-      message: `Valor não pode ser maior que o disponível (${valorDisponivel.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })})`,
+      message: `Valor não pode ser maior que o disponível (${formatCurrency(valorDisponivel)})`,
       path: ['valor']
     })),
     defaultValues: {
@@ -152,19 +161,19 @@ export const DestinacaoDialog: React.FC<DestinacaoDialogProps> = ({
           <div className="flex justify-between">
             <span className="text-sm font-medium">Valor Total (+ Contrapartidas):</span>
             <span className="text-sm">
-              {emenda.valorTotal.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
+              {formatCurrency(emenda.valorTotal)}
             </span>
           </div>
           <div className="flex justify-between">
             <span className="text-sm font-medium">Já Destinado:</span>
             <span className="text-sm">
-              {emenda.valorDestinado.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
+              {formatCurrency(emenda.valorDestinado)}
             </span>
           </div>
           <div className="flex justify-between border-t pt-2">
             <span className="text-sm font-medium">Disponível:</span>
             <Badge variant="secondary">
-              {valorDisponivel.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
+              {formatCurrency(valorDisponivel)}
             </Badge>
           </div>
         </div>
