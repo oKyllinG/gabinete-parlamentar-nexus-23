@@ -332,11 +332,27 @@ const ObrasEquipamentos = () => {
             setShowObraForm(false)
             setEditingObra(null)
           }}
-          onSave={(novaObra) => {
+          onSave={(novaObraData) => {
+            // Calcular valorTotal a partir das fontes de recurso
+            const valorTotal = novaObraData.fontesRecurso?.reduce((sum, fonte) => sum + (fonte.valor || 0), 0) || 0
+            
+            const novaObra: Obra = {
+              id: editingObra?.id || Date.now().toString(),
+              nome: novaObraData.nome,
+              municipio: novaObraData.municipio,
+              categoria: novaObraData.categoria,
+              status: novaObraData.status,
+              valorTotal: valorTotal,
+              percentualExecucao: novaObraData.percentualExecucao,
+              dataInicio: novaObraData.dataInicioEfetiva || novaObraData.dataInicioPrevista,
+              dataTermino: novaObraData.dataTerminoPrevista,
+              responsavelGabinete: novaObraData.responsavelGabinete
+            }
+
             if (editingObra) {
-              setObras(obras.map(o => o.id === editingObra.id ? { ...novaObra, id: editingObra.id } : o))
+              setObras(obras.map(o => o.id === editingObra.id ? novaObra : o))
             } else {
-              setObras([...obras, { ...novaObra, id: Date.now().toString() }])
+              setObras([...obras, novaObra])
             }
             setShowObraForm(false)
             setEditingObra(null)
