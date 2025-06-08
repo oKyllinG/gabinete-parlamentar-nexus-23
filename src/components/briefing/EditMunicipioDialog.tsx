@@ -17,11 +17,10 @@ interface EditMunicipioDialogProps {
   municipio: Municipio
   onSave: (municipio: Municipio) => void
   onCancel: () => void
+  availableRegioes: string[]
 }
 
-const regioes = ["Fronteira", "Norte", "Pantanal", "Bolsão", "Sul", "Centro"]
-
-export const EditMunicipioDialog = ({ municipio, onSave, onCancel }: EditMunicipioDialogProps) => {
+export const EditMunicipioDialog = ({ municipio, onSave, onCancel, availableRegioes }: EditMunicipioDialogProps) => {
   const [assessor, setAssessor] = useState(municipio.assessor || "")
   const [regiao, setRegiao] = useState(municipio.regiao)
 
@@ -62,7 +61,7 @@ export const EditMunicipioDialog = ({ municipio, onSave, onCancel }: EditMunicip
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                {regioes.map(r => (
+                {availableRegioes.map(r => (
                   <SelectItem key={r} value={r}>
                     {r}
                   </SelectItem>

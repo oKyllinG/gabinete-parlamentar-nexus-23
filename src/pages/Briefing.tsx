@@ -1,12 +1,12 @@
 
 import { useState } from "react"
-import { Search, MapPin, Edit3 } from "lucide-react"
+import { Search, MapPin, Edit3, Settings } from "lucide-react"
 import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Card, CardContent } from "@/components/ui/card"
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
 import { EditMunicipioDialog } from "@/components/briefing/EditMunicipioDialog"
+import { RegioesManagerDialog } from "@/components/briefing/RegioesManagerDialog"
 
 interface Municipio {
   id: number
@@ -75,29 +75,29 @@ const municipiosMS: Municipio[] = [
   { id: 57, nome: "Novo Horizonte do Sul", regiao: "Sul", assessor: null },
   { id: 58, nome: "Paranaíba", regiao: "Bolsão", assessor: null },
   { id: 59, nome: "Paranhos", regiao: "Fronteira", assessor: null },
-  { id: 60, nome: "Pedro Gomes", regiao: "Norte", assessor: null },
-  { id: 61, nome: "Ponta Porã", regiao: "Fronteira", assessor: null },
-  { id: 62, nome: "Porto Murtinho", regiao: "Pantanal", assessor: null },
-  { id: 63, nome: "Ribas do Rio Pardo", regiao: "Centro", assessor: null },
-  { id: 64, nome: "Rio Brilhante", regiao: "Sul", assessor: null },
-  { id: 65, nome: "Rio Negro", regiao: "Norte", assessor: null },
-  { id: 66, nome: "Rio Verde de Mato Grosso", regiao: "Norte", assessor: null },
-  { id: 67, nome: "Rochedo", regiao: "Centro", assessor: null },
-  { id: 68, nome: "Santa Rita do Pardo", regiao: "Bolsão", assessor: null },
-  { id: 69, nome: "São Gabriel do Oeste", regiao: "Norte", assessor: null },
-  { id: 70, nome: "Selvíria", regiao: "Bolsão", assessor: null },
-  { id: 71, nome: "Sete Quedas", regiao: "Norte", assessor: null },
-  { id: 72, nome: "Sidrolândia", regiao: "Centro", assessor: null },
-  { id: 73, nome: "Sonora", regiao: "Norte", assessor: null },
-  { id: 74, nome: "Tacuru", regiao: "Fronteira", assessor: null },
-  { id: 75, nome: "Taquarussu", regiao: "Norte", assessor: null },
-  { id: 76, nome: "Terenos", regiao: "Centro", assessor: null },
-  { id: 77, nome: "Três Lagoas", regiao: "Bolsão", assessor: null },
-  { id: 78, nome: "Vicentina", regiao: "Sul", assessor: null },
-  { id: 79, nome: "Vila Bela da Santíssima Trindade", regiao: "Norte", assessor: null }
+  { id: 60, nome: "Paraíso das Águas", regiao: "Norte", assessor: null },
+  { id: 61, nome: "Pedro Gomes", regiao: "Norte", assessor: null },
+  { id: 62, nome: "Ponta Porã", regiao: "Fronteira", assessor: null },
+  { id: 63, nome: "Porto Murtinho", regiao: "Pantanal", assessor: null },
+  { id: 64, nome: "Ribas do Rio Pardo", regiao: "Centro", assessor: null },
+  { id: 65, nome: "Rio Brilhante", regiao: "Sul", assessor: null },
+  { id: 66, nome: "Rio Negro", regiao: "Norte", assessor: null },
+  { id: 67, nome: "Rio Verde de Mato Grosso", regiao: "Norte", assessor: null },
+  { id: 68, nome: "Rochedo", regiao: "Centro", assessor: null },
+  { id: 69, nome: "Santa Rita do Pardo", regiao: "Bolsão", assessor: null },
+  { id: 70, nome: "São Gabriel do Oeste", regiao: "Norte", assessor: null },
+  { id: 71, nome: "Selvíria", regiao: "Bolsão", assessor: null },
+  { id: 72, nome: "Sete Quedas", regiao: "Norte", assessor: null },
+  { id: 73, nome: "Sidrolândia", regiao: "Centro", assessor: null },
+  { id: 74, nome: "Sonora", regiao: "Norte", assessor: null },
+  { id: 75, nome: "Tacuru", regiao: "Fronteira", assessor: null },
+  { id: 76, nome: "Taquarussu", regiao: "Norte", assessor: null },
+  { id: 77, nome: "Terenos", regiao: "Centro", assessor: null },
+  { id: 78, nome: "Três Lagoas", regiao: "Bolsão", assessor: null },
+  { id: 79, nome: "Vicentina", regiao: "Sul", assessor: null }
 ]
 
-const regioes = ["Todas", "Fronteira", "Norte", "Pantanal", "Bolsão", "Sul", "Centro"]
+const defaultRegioes = ["Fronteira", "Norte", "Pantanal", "Bolsão", "Sul", "Centro"]
 
 const getRegiaoColor = (regiao: string) => {
   const colors = {
@@ -113,9 +113,11 @@ const getRegiaoColor = (regiao: string) => {
 
 const Briefing = () => {
   const [municipios, setMunicipios] = useState<Municipio[]>(municipiosMS)
+  const [regioes, setRegioes] = useState<string[]>(defaultRegioes)
   const [searchTerm, setSearchTerm] = useState("")
   const [selectedRegiao, setSelectedRegiao] = useState("Todas")
   const [editingMunicipio, setEditingMunicipio] = useState<Municipio | null>(null)
+  const [showRegioesManager, setShowRegioesManager] = useState(false)
 
   const filteredMunicipios = municipios.filter(municipio => {
     const matchesSearch = municipio.nome.toLowerCase().includes(searchTerm.toLowerCase())
@@ -139,13 +141,44 @@ const Briefing = () => {
     // Aqui será implementada a navegação para o briefing específico do município
   }
 
+  const handleUpdateRegioes = (newRegioes: string[]) => {
+    setRegioes(newRegioes)
+    
+    // Atualizar municípios que podem ter regiões removidas
+    setMunicipios(prev => 
+      prev.map(m => 
+        !newRegioes.includes(m.regiao) 
+          ? { ...m, regiao: newRegioes[0] || "Sem Região" }
+          : m
+      )
+    )
+    
+    // Reset filtro se a região selecionada foi removida
+    if (selectedRegiao !== "Todas" && !newRegioes.includes(selectedRegiao)) {
+      setSelectedRegiao("Todas")
+    }
+  }
+
   return (
     <div className="p-6 space-y-6">
       <div className="space-y-2">
-        <h1 className="text-3xl font-bold text-foreground">Briefings Municipais</h1>
-        <p className="text-muted-foreground">
-          Selecione um município para visualizar seu briefing completo
-        </p>
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-3xl font-bold text-foreground">Briefings Municipais</h1>
+            <p className="text-muted-foreground">
+              Selecione um município para visualizar seu briefing completo
+            </p>
+          </div>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => setShowRegioesManager(true)}
+            className="flex items-center gap-2"
+          >
+            <Settings className="h-4 w-4" />
+            Gerenciar Regiões
+          </Button>
+        </div>
       </div>
 
       <div className="flex flex-col sm:flex-row gap-4">
@@ -163,6 +196,7 @@ const Briefing = () => {
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
+            <SelectItem value="Todas">Todas</SelectItem>
             {regioes.map(regiao => (
               <SelectItem key={regiao} value={regiao}>
                 {regiao}
@@ -230,6 +264,15 @@ const Briefing = () => {
           municipio={editingMunicipio}
           onSave={handleSaveMunicipio}
           onCancel={() => setEditingMunicipio(null)}
+          availableRegioes={regioes}
+        />
+      )}
+
+      {showRegioesManager && (
+        <RegioesManagerDialog
+          regioes={regioes}
+          onSave={handleUpdateRegioes}
+          onCancel={() => setShowRegioesManager(false)}
         />
       )}
     </div>
