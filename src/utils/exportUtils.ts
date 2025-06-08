@@ -238,6 +238,65 @@ export const exportEmendas = (emendas: any[], selectedType?: string, selectedSta
     'Destinacoes': emenda.destinacoes ? emenda.destinacoes.map((d: any) => `${d.destinatario} (${d.valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })})`).join('; ') : ''
   }));
 
-  const filename = `emendas_${new Date().toISOString().split('T')[0]}.csv`;
+export const exportObras = (obras: any[], selectedMunicipio?: string, selectedStatus?: string, selectedCategoria?: string, selectedArea?: string, startDate?: Date, endDate?: Date) => {
+  // Filter obras by municipality, status, category, area and date range
+  let filteredObras = obras;
+  
+  if (selectedMunicipio && selectedMunicipio !== 'all') {
+    filteredObras = filteredObras.filter(obra => obra.municipio === selectedMunicipio);
+  }
+  
+  if (selectedStatus && selectedStatus !== 'all') {
+    filteredObras = filteredObras.filter(obra => obra.status === selectedStatus);
+  }
+  
+  if (selectedCategoria && selectedCategoria !== 'all') {
+    filteredObras = filteredObras.filter(obra => obra.categoria === selectedCategoria);
+  }
+  
+  if (selectedArea && selectedArea !== 'all') {
+    filteredObras = filteredObras.filter(obra => obra.area === selectedArea);
+  }
+  
+  if (startDate) {
+    filteredObras = filteredObras.filter(obra => 
+      obra.dataInicio && new Date(obra.dataInicio) >= startDate
+    );
+  }
+  
+  if (endDate) {
+    filteredObras = filteredObras.filter(obra => 
+      obra.dataTermino && new Date(obra.dataTermino) <= endDate
+    );
+  }
+
+  const headers = [
+    'Nome',
+    'Municipio',
+    'Categoria',
+    'Area',
+    'Status',
+    'Valor Total',
+    'Percentual Execucao',
+    'Data Inicio',
+    'Data Termino',
+    'Responsavel Gabinete'
+  ];
+
+  // Map the data to match the headers exactly
+  const mappedData = filteredObras.map(obra => ({
+    'Nome': obra.nome || '',
+    'Municipio': obra.municipio || '',
+    'Categoria': obra.categoria || '',
+    'Area': obra.area || '',
+    'Status': obra.status || '',
+    'Valor Total': obra.valorTotal ? obra.valorTotal.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) : '',
+    'Percentual Execucao': obra.percentualExecucao ? `${obra.percentualExecucao}%` : '0%',
+    'Data Inicio': obra.dataInicio ? new Date(obra.dataInicio).toLocaleDateString('pt-BR') : '',
+    'Data Termino': obra.dataTermino ? new Date(obra.dataTermino).toLocaleDateString('pt-BR') : '',
+    'Responsavel Gabinete': obra.responsavelGabinete || ''
+  }));
+
+  const filename = `obras_${new Date().toISOString().split('T')[0]}.csv`;
   exportToCSV(mappedData, filename, headers);
 };
