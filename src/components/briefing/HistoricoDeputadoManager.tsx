@@ -88,7 +88,14 @@ export const HistoricoDeputadoManager = ({ acoes, municipioNome, onSave }: Histo
     <Card>
       <CardHeader className="bg-cyan-600 text-white rounded-t-lg">
         <div className="flex items-center justify-between">
-          <CardTitle className="text-xl font-bold">Histórico do Deputado em {municipioNome}</CardTitle>
+          <div className="space-y-2">
+            <CardTitle className="text-xl font-bold">Histórico do Deputado em {municipioNome}</CardTitle>
+            {totalGeral > 0 && (
+              <p className="text-lg font-semibold">
+                MAIS DE {formatCurrency(totalGeral)} REPASSADOS AO MUNICÍPIO
+              </p>
+            )}
+          </div>
           <Button onClick={handleAddAcao} size="sm" variant="secondary">
             <Plus className="h-4 w-4 mr-2" />
             Adicionar Ação
@@ -142,13 +149,6 @@ export const HistoricoDeputadoManager = ({ acoes, municipioNome, onSave }: Histo
                 </div>
               </div>
             ))}
-            
-            <div className="border-t pt-4">
-              <div className="flex items-center justify-between text-xl font-bold">
-                <span>Total Geral Investido:</span>
-                <span className="text-green-600">{formatCurrency(totalGeral)}</span>
-              </div>
-            </div>
           </>
         )}
 

@@ -6,8 +6,6 @@ export interface AcaoDeputado {
   valor: number
   municipio: string
   dataRegistro: string
-  ano: string
-  observacoes: string
 }
 
 export interface CategoriaHistorico {
@@ -16,7 +14,7 @@ export interface CategoriaHistorico {
   acoes: AcaoDeputado[]
 }
 
-// Categorias sugeridas para o histórico do deputado
+// Categorias sugeridas para o histórico do deputado (opcional)
 export const CATEGORIAS_SUGERIDAS = [
   "Emendas Parlamentares",
   "Obras e Equipamentos", 
