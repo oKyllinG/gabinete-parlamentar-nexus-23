@@ -15,7 +15,7 @@ export interface Obra {
   observacoes?: string
 }
 
-export interface Emenda {
+export interface DestinacaoEmenda {
   id: string
   numero: string
   objeto: string
@@ -24,6 +24,14 @@ export interface Emenda {
   status: string
   dataDestinacao: string
   observacoes?: string
+  destinatario: string
+  areaAtuacao: string
+  gnd: string
+  pd: string
+  prazoInicio: string
+  prazoFim: string
+  cnpj?: string
+  projetosAnexados?: string[]
 }
 
 export const getObrasByMunicipio = (municipioNome: string): Obra[] => {
@@ -34,12 +42,46 @@ export const getObrasByMunicipio = (municipioNome: string): Obra[] => {
   return obras.filter(obra => obra.municipio === municipioNome)
 }
 
-export const getEmendasByMunicipio = (municipioNome: string): Emenda[] => {
-  const savedEmendas = localStorage.getItem('emendas')
+export const getDestinacoesByMunicipio = (municipioNome: string): DestinacaoEmenda[] => {
+  const savedEmendas = localStorage.getItem('emendas-parlamentares')
   if (!savedEmendas) return []
   
-  const emendas: Emenda[] = JSON.parse(savedEmendas)
-  return emendas.filter(emenda => emenda.municipio === municipioNome)
+  const emendas = JSON.parse(savedEmendas)
+  const destinacoes: DestinacaoEmenda[] = []
+  
+  emendas.forEach((emenda: any) => {
+    if (emenda.destinacoes && emenda.destinacoes.length > 0) {
+      emenda.destinacoes.forEach((destinacao: any) => {
+        if (destinacao.municipio === municipioNome) {
+          destinacoes.push({
+            id: destinacao.id,
+            numero: emenda.numero,
+            objeto: emenda.objeto,
+            municipio: destinacao.municipio,
+            valor: destinacao.valor,
+            status: destinacao.statusExecucao,
+            dataDestinacao: destinacao.dataDestinacao,
+            observacoes: destinacao.observacoes,
+            destinatario: destinacao.destinatario,
+            areaAtuacao: destinacao.areaAtuacao,
+            gnd: destinacao.gnd,
+            pd: destinacao.pd,
+            prazoInicio: destinacao.prazoInicio,
+            prazoFim: destinacao.prazoFim,
+            cnpj: destinacao.cnpj,
+            projetosAnexados: destinacao.projetosAnexados
+          })
+        }
+      })
+    }
+  })
+  
+  return destinacoes
+}
+
+// Manter compatibilidade com código existente - deprecated
+export const getEmendasByMunicipio = (municipioNome: string) => {
+  return getDestinacoesByMunicipio(municipioNome)
 }
 
 // Function to initialize mock data for Água Clara if no data exists
@@ -48,7 +90,7 @@ export const initializeMockDataForAguaClara = () => {
   
   // Check if we already have data for Água Clara
   const existingObras = getObrasByMunicipio(municipioNome)
-  const existingEmendas = getEmendasByMunicipio(municipioNome)
+  const existingDestinacoes = getDestinacoesByMunicipio(municipioNome)
   
   if (existingObras.length === 0) {
     // Add mock obras data
@@ -87,44 +129,79 @@ export const initializeMockDataForAguaClara = () => {
     localStorage.setItem('obras', JSON.stringify([...allObras, ...mockObras]))
   }
   
-  if (existingEmendas.length === 0) {
-    // Add mock emendas data
-    const savedEmendas = localStorage.getItem('emendas')
-    const allEmendas: Emenda[] = savedEmendas ? JSON.parse(savedEmendas) : []
+  if (existingDestinacoes.length === 0) {
+    // Add mock emendas with destinações data
+    const savedEmendas = localStorage.getItem('emendas-parlamentares')
+    const allEmendas = savedEmendas ? JSON.parse(savedEmendas) : []
     
-    const mockEmendas: Emenda[] = [
+    const mockEmendas = [
       {
         id: `agua-clara-emenda-1`,
         numero: "EMD-2024-001",
+        autor: "Deputado Federal João Silva",
+        tipo: "individual",
+        ano: "2024",
+        programa: "Saúde Pública",
+        acao: "Equipamentos Médicos",
         objeto: "Aquisição de equipamentos médicos para o Posto de Saúde",
-        municipio: municipioNome,
+        orgao: "Ministério da Saúde",
+        localizador: "0001",
         valor: 150000,
-        status: "Aprovada",
-        dataDestinacao: "2024-04-10",
-        observacoes: "Equipamentos essenciais para atendimento da população"
+        valorTotal: 150000,
+        valorDestinado: 150000,
+        dataCriacao: "2024-04-01",
+        destinacoes: [
+          {
+            id: "dest-agua-clara-1",
+            destinatario: "Prefeitura Municipal de Água Clara",
+            municipio: municipioNome,
+            areaAtuacao: "Saúde",
+            valor: 150000,
+            statusExecucao: "em_execucao",
+            dataDestinacao: "2024-04-10",
+            prazoInicio: "2024-04-15",
+            prazoFim: "2024-12-15",
+            gnd: "4 - Investimentos",
+            pd: "10.302.1220.20YM",
+            observacoes: "Equipamentos essenciais para atendimento da população",
+            cnpj: "01.234.567/0001-89"
+          }
+        ]
       },
       {
         id: `agua-clara-emenda-2`,
         numero: "EMD-2024-002",
+        autor: "Deputado Federal João Silva",
+        tipo: "individual",
+        ano: "2024",
+        programa: "Esporte e Lazer",
+        acao: "Infraestrutura Esportiva",
         objeto: "Reforma e ampliação da quadra esportiva municipal",
-        municipio: municipioNome,
+        orgao: "Ministério do Esporte",
+        localizador: "0002",
         valor: 300000,
-        status: "Em análise",
-        dataDestinacao: "2024-05-20",
-        observacoes: "Fomento ao esporte e lazer da juventude"
-      },
-      {
-        id: `agua-clara-emenda-3`,
-        numero: "EMD-2024-003",
-        objeto: "Aquisição de veículo para transporte escolar",
-        municipio: municipioNome,
-        valor: 180000,
-        status: "Aprovada",
-        dataDestinacao: "2024-03-25",
-        observacoes: "Garantir transporte seguro para estudantes da zona rural"
+        valorTotal: 300000,
+        valorDestinado: 300000,
+        dataCriacao: "2024-05-01",
+        destinacoes: [
+          {
+            id: "dest-agua-clara-2",
+            destinatario: "Secretaria Municipal de Esportes",
+            municipio: municipioNome,
+            areaAtuacao: "Esporte e Lazer",
+            valor: 300000,
+            statusExecucao: "planejamento",
+            dataDestinacao: "2024-05-20",
+            prazoInicio: "2024-06-01",
+            prazoFim: "2024-11-30",
+            gnd: "4 - Investimentos",
+            pd: "27.812.1365.20YN",
+            observacoes: "Fomento ao esporte e lazer da juventude"
+          }
+        ]
       }
     ]
     
-    localStorage.setItem('emendas', JSON.stringify([...allEmendas, ...mockEmendas]))
+    localStorage.setItem('emendas-parlamentares', JSON.stringify([...allEmendas, ...mockEmendas]))
   }
 }
