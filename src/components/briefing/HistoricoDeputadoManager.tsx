@@ -8,18 +8,10 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog"
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table"
 import { Plus, Edit, Trash2 } from "lucide-react"
 import { AcaoDeputado } from "@/types/historicoDeputado"
 import { HistoricoAcaoForm } from "./HistoricoAcaoForm"
-import { organizarPorCategorias, calcularTotalGeral } from "@/utils/historicoDeputadoUtils"
+import { generateId } from "@/utils/historicoDeputadoUtils"
 
 interface HistoricoDeputadoManagerProps {
   acoes: AcaoDeputado[]
@@ -31,8 +23,23 @@ export const HistoricoDeputadoManager = ({ acoes, municipioNome, onSave }: Histo
   const [isFormOpen, setIsFormOpen] = useState(false)
   const [editingAcao, setEditingAcao] = useState<AcaoDeputado | undefined>()
 
-  const categorias = organizarPorCategorias(acoes)
-  const totalGeral = calcularTotalGeral(acoes)
+  // Agrupar ações por categoria
+  const acoesAgrupadas = acoes.reduce((grupos, acao) => {
+    const categoria = acao.categoria || "Sem Categoria"
+    if (!grupos[categoria]) {
+      grupos[categoria] = []
+    }
+    grupos[categoria].push(acao)
+    return grupos
+  }, {} as Record<string, AcaoDeputado[]>)
+
+  // Calcular total por categoria
+  const calcularTotalCategoria = (acoesDaCategoria: AcaoDeputado[]): number => {
+    return acoesDaCategoria.reduce((total, acao) => total + acao.valor, 0)
+  }
+
+  // Calcular total geral
+  const totalGeral = acoes.reduce((total, acao) => total + acao.valor, 0)
 
   const handleAddAcao = () => {
     setEditingAcao(undefined)
@@ -79,78 +86,60 @@ export const HistoricoDeputadoManager = ({ acoes, municipioNome, onSave }: Histo
 
   return (
     <Card>
-      <CardHeader>
+      <CardHeader className="bg-cyan-600 text-white rounded-t-lg">
         <div className="flex items-center justify-between">
-          <CardTitle className="text-xl">Histórico do Deputado em {municipioNome}</CardTitle>
-          <Button onClick={handleAddAcao} size="sm">
+          <CardTitle className="text-xl font-bold">Histórico do Deputado em {municipioNome}</CardTitle>
+          <Button onClick={handleAddAcao} size="sm" variant="secondary">
             <Plus className="h-4 w-4 mr-2" />
             Adicionar Ação
           </Button>
         </div>
       </CardHeader>
-      <CardContent className="space-y-6">
-        {categorias.length === 0 ? (
+      <CardContent className="space-y-6 pt-6">
+        {Object.keys(acoesAgrupadas).length === 0 ? (
           <div className="text-center py-8 text-muted-foreground">
             <p>Nenhuma ação registrada ainda.</p>
             <p className="text-sm">Clique em "Adicionar Ação" para começar.</p>
           </div>
         ) : (
           <>
-            {categorias.map((categoria) => (
-              <div key={categoria.nome} className="space-y-3">
-                <div className="flex items-center justify-between">
-                  <h3 className="text-lg font-semibold text-primary">{categoria.nome}</h3>
+            {Object.entries(acoesAgrupadas).map(([categoria, acoesDaCategoria]) => (
+              <div key={categoria} className="space-y-3">
+                <div className="flex items-center justify-between border-b pb-2">
+                  <h3 className="text-lg font-semibold text-primary">{categoria}</h3>
                   <span className="text-lg font-bold text-green-600">
-                    {formatCurrency(categoria.total)}
+                    {formatCurrency(calcularTotalCategoria(acoesDaCategoria))}
                   </span>
                 </div>
                 
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>Descrição</TableHead>
-                      <TableHead>Ano</TableHead>
-                      <TableHead className="text-right">Valor</TableHead>
-                      <TableHead className="text-center">Ações</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {categoria.acoes.map((acao) => (
-                      <TableRow key={acao.id}>
-                        <TableCell>
-                          <div>
-                            <p className="font-medium">{acao.descricao}</p>
-                            {acao.observacoes && (
-                              <p className="text-sm text-muted-foreground">{acao.observacoes}</p>
-                            )}
-                          </div>
-                        </TableCell>
-                        <TableCell>{acao.ano}</TableCell>
-                        <TableCell className="text-right font-medium">
+                <div className="space-y-2">
+                  {acoesDaCategoria.map((acao) => (
+                    <div key={acao.id} className="flex items-center justify-between p-3 bg-muted rounded-lg">
+                      <div className="flex-1">
+                        <p className="font-medium">{acao.descricao}</p>
+                        <p className="text-sm text-muted-foreground font-medium">
                           {formatCurrency(acao.valor)}
-                        </TableCell>
-                        <TableCell>
-                          <div className="flex items-center justify-center gap-2">
-                            <Button
-                              variant="ghost"
-                              size="sm"
-                              onClick={() => handleEditAcao(acao)}
-                            >
-                              <Edit className="h-4 w-4" />
-                            </Button>
-                            <Button
-                              variant="ghost"
-                              size="sm"
-                              onClick={() => handleDeleteAcao(acao.id)}
-                            >
-                              <Trash2 className="h-4 w-4" />
-                            </Button>
-                          </div>
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
+                        </p>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => handleEditAcao(acao)}
+                        >
+                          <Edit className="h-4 w-4" />
+                        </Button>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => handleDeleteAcao(acao.id)}
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </Button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
               </div>
             ))}
             

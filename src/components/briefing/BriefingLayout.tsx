@@ -96,13 +96,6 @@ export const BriefingLayout = ({
         onUpdateDados={onSaveDadosPoliticos}
       />
 
-      {/* Histórico do Deputado */}
-      <HistoricoDeputadoManager
-        acoes={historicoAcoes}
-        municipioNome={municipio.nome}
-        onSave={onSaveHistoricoAcoes}
-      />
-
       {/* Deputados */}
       <div className="space-y-6">
         {/* Deputados Federais */}
@@ -117,7 +110,7 @@ export const BriefingLayout = ({
           onSave={onSaveDeputadosEstaduais}
         />
 
-        {/* Lideranças Municipais - Movido para após os deputados */}
+        {/* Lideranças Municipais */}
         <LiderancasManager 
           liderancas={liderancas}
           onSave={onSaveLiderancas}
@@ -126,6 +119,13 @@ export const BriefingLayout = ({
 
       {/* Ações do Deputado */}
       <AcoesDeputado municipioNome={municipio.nome} />
+
+      {/* Histórico do Deputado - Movido para o final */}
+      <HistoricoDeputadoManager
+        acoes={historicoAcoes}
+        municipioNome={municipio.nome}
+        onSave={onSaveHistoricoAcoes}
+      />
     </div>
   )
 }

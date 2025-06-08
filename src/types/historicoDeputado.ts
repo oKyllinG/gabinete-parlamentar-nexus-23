@@ -5,8 +5,6 @@ export interface AcaoDeputado {
   descricao: string
   valor: number
   municipio: string
-  ano: string
-  observacoes?: string
   dataRegistro: string
 }
 
@@ -16,7 +14,8 @@ export interface CategoriaHistorico {
   acoes: AcaoDeputado[]
 }
 
-export const CATEGORIAS_HISTORICO = [
+// Removidas as categorias fixas para permitir categorias livres
+export const CATEGORIAS_SUGERIDAS = [
   "Emendas Parlamentares",
   "Obras e Equipamentos", 
   "Recursos Obtidos",
@@ -24,5 +23,3 @@ export const CATEGORIAS_HISTORICO = [
   "Projetos de Lei",
   "Outros"
 ] as const
-
-export type TipoCategoriaHistorico = typeof CATEGORIAS_HISTORICO[number]
