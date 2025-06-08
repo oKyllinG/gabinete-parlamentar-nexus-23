@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react"
 import { useParams, useNavigate } from "react-router-dom"
 import { ArrowLeft, Edit } from "lucide-react"
@@ -142,7 +143,28 @@ const MunicipioBriefing = () => {
   const { municipioId } = useParams()
   const navigate = useNavigate()
   
-  const municipio = municipiosMS.find(m => m.id === Number(municipioId))
+  // Debug logs
+  console.log("MunicipioBriefing renderizado")
+  console.log("municipioId capturado:", municipioId)
+  console.log("URL atual:", window.location.pathname)
+  console.log("Parâmetros capturados:", useParams())
+  
+  // Capturar o municipioId corretamente, extraindo da URL se necessário
+  let finalMunicipioId = municipioId
+  if (!finalMunicipioId) {
+    const path = window.location.pathname
+    const match = path.match(/\/briefing\/(\d+)/)
+    if (match) {
+      finalMunicipioId = match[1]
+    }
+  }
+  
+  console.log("finalMunicipioId:", finalMunicipioId)
+  
+  const municipio = municipiosMS.find(m => m.id === Number(finalMunicipioId))
+  
+  console.log("Município encontrado:", municipio)
+  console.log("Lista de municípios tem", municipiosMS.length, "itens")
   
   // Estado para dados políticos editáveis
   const [dadosPoliticos, setDadosPoliticos] = useState<DadosPoliticos>({
@@ -158,19 +180,24 @@ const MunicipioBriefing = () => {
   // Carregar dados salvos do localStorage
   useEffect(() => {
     if (municipio) {
+      console.log("Carregando dados do localStorage para:", municipio.nome)
+      
       const savedData = localStorage.getItem(`municipio-${municipio.id}-dados-politicos`)
       if (savedData) {
         setDadosPoliticos(JSON.parse(savedData))
+        console.log("Dados políticos carregados:", JSON.parse(savedData))
       }
 
       const savedFederais = localStorage.getItem(`municipio-${municipio.id}-deputados-federais`)
       if (savedFederais) {
         setDeputadosFederais(JSON.parse(savedFederais))
+        console.log("Deputados federais carregados:", JSON.parse(savedFederais))
       }
 
       const savedEstaduais = localStorage.getItem(`municipio-${municipio.id}-deputados-estaduais`)
       if (savedEstaduais) {
         setDeputadosEstaduais(JSON.parse(savedEstaduais))
+        console.log("Deputados estaduais carregados:", JSON.parse(savedEstaduais))
       }
     }
   }, [municipio])
@@ -179,6 +206,7 @@ const MunicipioBriefing = () => {
     setDadosPoliticos(dados)
     if (municipio) {
       localStorage.setItem(`municipio-${municipio.id}-dados-politicos`, JSON.stringify(dados))
+      console.log("Dados políticos salvos para:", municipio.nome)
     }
   }
 
@@ -186,6 +214,7 @@ const MunicipioBriefing = () => {
     setDeputadosFederais(deputados)
     if (municipio) {
       localStorage.setItem(`municipio-${municipio.id}-deputados-federais`, JSON.stringify(deputados))
+      console.log("Deputados federais salvos para:", municipio.nome)
     }
   }
 
@@ -193,6 +222,7 @@ const MunicipioBriefing = () => {
     setDeputadosEstaduais(deputados)
     if (municipio) {
       localStorage.setItem(`municipio-${municipio.id}-deputados-estaduais`, JSON.stringify(deputados))
+      console.log("Deputados estaduais salvos para:", municipio.nome)
     }
   }
   
@@ -201,6 +231,12 @@ const MunicipioBriefing = () => {
       <div className="p-6">
         <div className="text-center">
           <h2 className="text-2xl font-bold text-foreground mb-4">Município não encontrado</h2>
+          <p className="text-muted-foreground mb-4">
+            Tentando encontrar município com ID: {finalMunicipioId}
+          </p>
+          <p className="text-muted-foreground mb-4">
+            URL atual: {window.location.pathname}
+          </p>
           <Button onClick={() => navigate('/briefing')}>
             Voltar para Briefings
           </Button>
