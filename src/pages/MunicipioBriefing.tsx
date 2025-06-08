@@ -2,12 +2,7 @@ import { useState, useEffect } from "react"
 import { useParams, useNavigate } from "react-router-dom"
 import { ArrowLeft } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { ResultadosEleitorais } from "@/components/briefing/ResultadosEleitorais"
-import { DeputadosTable } from "@/components/briefing/DeputadosTable"
-import { SortableLiderancasMunicipais } from "@/components/briefing/SortableLiderancasMunicipais"
-import { VotacaoDeputado } from "@/components/briefing/VotacaoDeputado"
-import { GerenciarDeputados } from "@/components/briefing/GerenciarDeputados"
+import { BriefingLayout } from "@/components/briefing/BriefingLayout"
 
 interface Municipio {
   id: number
@@ -21,28 +16,6 @@ interface DadosPoliticos {
   votosDeputado: number
   percentualDeputado: number
   colocacaoDeputado: string
-  prefeito?: {
-    nome: string
-    partido: string
-    votos: number
-    telefone: string
-  }
-  vicePrefeito?: {
-    nome: string
-    partido: string
-    telefone: string
-  }
-  secretarios?: Array<{
-    nome: string
-    cargo: string
-    telefone: string
-  }>
-  presidentes?: Array<{
-    nome: string
-    partido: string
-    votos: number
-    telefone: string
-  }>
 }
 
 interface Deputado {
@@ -55,7 +28,16 @@ interface Deputado {
   colocacao?: number
 }
 
-// ... keep existing code (municipiosMS array)
+interface Lideranca {
+  id: number
+  nome: string
+  cargo: string
+  partido: string
+  telefone: string
+  votos?: number
+  foto?: string
+}
+
 const municipiosMS: Municipio[] = [
   { id: 1, nome: "Água Clara", regiao: "Fronteira", assessor: "testew" },
   { id: 2, nome: "Alcinópolis", regiao: "Norte", assessor: null },
@@ -145,10 +127,8 @@ const MunicipioBriefing = () => {
   // Debug logs
   console.log("MunicipioBriefing renderizado")
   console.log("municipioId capturado:", municipioId)
-  console.log("URL atual:", window.location.pathname)
-  console.log("Parâmetros capturados:", useParams())
   
-  // Capturar o municipioId corretamente, extraindo da URL se necessário
+  // Capturar o municipioId corretamente
   let finalMunicipioId = municipioId
   if (!finalMunicipioId) {
     const path = window.location.pathname
@@ -158,14 +138,9 @@ const MunicipioBriefing = () => {
     }
   }
   
-  console.log("finalMunicipioId:", finalMunicipioId)
-  
   const municipio = municipiosMS.find(m => m.id === Number(finalMunicipioId))
   
-  console.log("Município encontrado:", municipio)
-  console.log("Lista de municípios tem", municipiosMS.length, "itens")
-  
-  // Estado para dados políticos editáveis
+  // Estados para dados
   const [dadosPoliticos, setDadosPoliticos] = useState<DadosPoliticos>({
     totalEleitores: 12244,
     votosDeputado: 400,
@@ -175,28 +150,39 @@ const MunicipioBriefing = () => {
 
   const [deputadosFederais, setDeputadosFederais] = useState<Deputado[]>([])
   const [deputadosEstaduais, setDeputadosEstaduais] = useState<Deputado[]>([])
+  const [liderancas, setLiderancas] = useState<Lideranca[]>([
+    {
+      id: 1,
+      nome: "Ricardo Nunes",
+      cargo: "Prefeito",
+      partido: "MDB",
+      telefone: "(11) 3333-4444",
+      votos: 232323,
+      foto: "/placeholder.svg"
+    }
+  ])
 
-  // Carregar dados salvos do localStorage
+  // Carregar dados do localStorage
   useEffect(() => {
     if (municipio) {
-      console.log("Carregando dados do localStorage para:", municipio.nome)
-      
       const savedData = localStorage.getItem(`municipio-${municipio.id}-dados-politicos`)
       if (savedData) {
         setDadosPoliticos(JSON.parse(savedData))
-        console.log("Dados políticos carregados:", JSON.parse(savedData))
       }
 
       const savedFederais = localStorage.getItem(`municipio-${municipio.id}-deputados-federais`)
       if (savedFederais) {
         setDeputadosFederais(JSON.parse(savedFederais))
-        console.log("Deputados federais carregados:", JSON.parse(savedFederais))
       }
 
       const savedEstaduais = localStorage.getItem(`municipio-${municipio.id}-deputados-estaduais`)
       if (savedEstaduais) {
         setDeputadosEstaduais(JSON.parse(savedEstaduais))
-        console.log("Deputados estaduais carregados:", JSON.parse(savedEstaduais))
+      }
+
+      const savedLiderancas = localStorage.getItem(`municipio-${municipio.id}-liderancas`)
+      if (savedLiderancas) {
+        setLiderancas(JSON.parse(savedLiderancas))
       }
     }
   }, [municipio])
@@ -205,7 +191,6 @@ const MunicipioBriefing = () => {
     setDadosPoliticos(dados)
     if (municipio) {
       localStorage.setItem(`municipio-${municipio.id}-dados-politicos`, JSON.stringify(dados))
-      console.log("Dados políticos salvos para:", municipio.nome)
     }
   }
 
@@ -213,7 +198,6 @@ const MunicipioBriefing = () => {
     setDeputadosFederais(deputados)
     if (municipio) {
       localStorage.setItem(`municipio-${municipio.id}-deputados-federais`, JSON.stringify(deputados))
-      console.log("Deputados federais salvos para:", municipio.nome)
     }
   }
 
@@ -221,7 +205,13 @@ const MunicipioBriefing = () => {
     setDeputadosEstaduais(deputados)
     if (municipio) {
       localStorage.setItem(`municipio-${municipio.id}-deputados-estaduais`, JSON.stringify(deputados))
-      console.log("Deputados estaduais salvos para:", municipio.nome)
+    }
+  }
+
+  const handleSaveLiderancas = (novasLiderancas: Lideranca[]) => {
+    setLiderancas(novasLiderancas)
+    if (municipio) {
+      localStorage.setItem(`municipio-${municipio.id}-liderancas`, JSON.stringify(novasLiderancas))
     }
   }
   
@@ -233,9 +223,6 @@ const MunicipioBriefing = () => {
           <p className="text-muted-foreground mb-4">
             Tentando encontrar município com ID: {finalMunicipioId}
           </p>
-          <p className="text-muted-foreground mb-4">
-            URL atual: {window.location.pathname}
-          </p>
           <Button onClick={() => navigate('/briefing')}>
             Voltar para Briefings
           </Button>
@@ -245,74 +232,28 @@ const MunicipioBriefing = () => {
   }
 
   return (
-    <div className="p-6 space-y-6">
-      <div className="flex items-center gap-4 mb-6">
+    <div className="min-h-screen bg-background">
+      <div className="p-6">
         <Button
           variant="ghost"
           onClick={() => navigate('/briefing')}
-          className="flex items-center gap-2"
+          className="flex items-center gap-2 mb-6"
         >
           <ArrowLeft className="h-4 w-4" />
           Voltar
         </Button>
-        <div className="flex-1">
-          <h1 className="text-3xl font-bold text-foreground">{municipio.nome}</h1>
-          <p className="text-muted-foreground">
-            {municipio.regiao} • Mato Grosso do Sul
-          </p>
-        </div>
-      </div>
 
-      {/* Conteúdo político unificado */}
-      <div className="space-y-6">
-        {/* Votação do Deputado - agora editável */}
-        <VotacaoDeputado 
-          municipio={municipio} 
+        <BriefingLayout 
+          municipio={municipio}
           dadosPoliticos={dadosPoliticos}
-          onSave={handleSaveDadosPoliticos}
+          deputadosFederais={deputadosFederais}
+          deputadosEstaduais={deputadosEstaduais}
+          liderancas={liderancas}
+          onSaveDadosPoliticos={handleSaveDadosPoliticos}
+          onSaveDeputadosFederais={handleSaveDeputadosFederais}
+          onSaveDeputadosEstaduais={handleSaveDeputadosEstaduais}
+          onSaveLiderancas={handleSaveLiderancas}
         />
-        
-        {/* Resultados Eleitorais - agora editável */}
-        <ResultadosEleitorais 
-          municipio={municipio} 
-          dadosPoliticos={dadosPoliticos}
-          onSave={handleSaveDadosPoliticos}
-        />
-        
-        {/* Deputados Federais */}
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between">
-            <CardTitle>Deputados Federais</CardTitle>
-            <GerenciarDeputados 
-              tipo="federal"
-              municipio={municipio}
-              deputados={deputadosFederais}
-              onSave={handleSaveDeputadosFederais}
-            />
-          </CardHeader>
-          <CardContent>
-            <DeputadosTable tipo="federal" municipio={municipio} deputados={deputadosFederais} />
-          </CardContent>
-        </Card>
-        
-        {/* Deputados Estaduais */}
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between">
-            <CardTitle>Deputados Estaduais</CardTitle>
-            <GerenciarDeputados 
-              tipo="estadual"
-              municipio={municipio}
-              deputados={deputadosEstaduais}
-              onSave={handleSaveDeputadosEstaduais}
-            />
-          </CardHeader>
-          <CardContent>
-            <DeputadosTable tipo="estadual" municipio={municipio} deputados={deputadosEstaduais} />
-          </CardContent>
-        </Card>
-        
-        {/* Lideranças Municipais */}
-        <SortableLiderancasMunicipais municipio={municipio} />
       </div>
     </div>
   )
