@@ -1,4 +1,3 @@
-
 import { useState } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
@@ -96,12 +95,13 @@ const ObrasEquipamentos = () => {
     return matchesSearch && matchesStatus && matchesCategoria && matchesArea
   })
 
+  // Calcular estatísticas das obras filtradas em vez de todas as obras
   const stats = {
-    total: obras.length,
-    emExecucao: obras.filter(o => o.status === "Em Execução").length,
-    paralisadas: obras.filter(o => o.status === "Paralisada").length,
-    concluidas: obras.filter(o => o.status === "Concluída").length,
-    valorTotal: obras.reduce((sum, obra) => sum + obra.valorTotal, 0)
+    total: filteredObras.length,
+    emExecucao: filteredObras.filter(o => o.status === "Em Execução").length,
+    paralisadas: filteredObras.filter(o => o.status === "Paralisada").length,
+    concluidas: filteredObras.filter(o => o.status === "Concluída").length,
+    valorTotal: filteredObras.reduce((sum, obra) => sum + obra.valorTotal, 0)
   }
 
   const getStatusColor = (status: string) => {
@@ -184,6 +184,9 @@ const ObrasEquipamentos = () => {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{stats.total}</div>
+            {(searchTerm || statusFilter !== "all" || categoriaFilter !== "all" || areaFilter !== "all") && (
+              <p className="text-xs text-muted-foreground">filtradas</p>
+            )}
           </CardContent>
         </Card>
         
@@ -194,6 +197,9 @@ const ObrasEquipamentos = () => {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold text-blue-600">{stats.emExecucao}</div>
+            {(searchTerm || statusFilter !== "all" || categoriaFilter !== "all" || areaFilter !== "all") && (
+              <p className="text-xs text-muted-foreground">filtradas</p>
+            )}
           </CardContent>
         </Card>
 
@@ -204,6 +210,9 @@ const ObrasEquipamentos = () => {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold text-red-600">{stats.paralisadas}</div>
+            {(searchTerm || statusFilter !== "all" || categoriaFilter !== "all" || areaFilter !== "all") && (
+              <p className="text-xs text-muted-foreground">filtradas</p>
+            )}
           </CardContent>
         </Card>
 
@@ -214,6 +223,9 @@ const ObrasEquipamentos = () => {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold text-green-600">{stats.concluidas}</div>
+            {(searchTerm || statusFilter !== "all" || categoriaFilter !== "all" || areaFilter !== "all") && (
+              <p className="text-xs text-muted-foreground">filtradas</p>
+            )}
           </CardContent>
         </Card>
 
@@ -224,6 +236,9 @@ const ObrasEquipamentos = () => {
           </CardHeader>
           <CardContent>
             <div className="text-lg font-bold">{formatCurrency(stats.valorTotal)}</div>
+            {(searchTerm || statusFilter !== "all" || categoriaFilter !== "all" || areaFilter !== "all") && (
+              <p className="text-xs text-muted-foreground">filtrado</p>
+            )}
           </CardContent>
         </Card>
       </div>
