@@ -278,19 +278,19 @@ export const BriefingLayout = ({
   return (
     <div className="space-y-6 bg-background p-6">
       {/* Header */}
-      <div className="bg-gray-800 text-white rounded-lg p-6 border border-gray-700">
+      <div className="bg-cyan-600 text-white rounded-lg p-6 border border-gray-700">
         <div className="flex items-center gap-3 mb-2">
-          <h1 className="text-2xl font-bold">Briefing Municipal</h1>
+          <h1 className="text-2xl font-bold">{municipio.nome}</h1>
         </div>
         <div className="flex items-center gap-2">
           <MapPin className="h-4 w-4" />
-          <span className="font-semibold text-lg">{municipio.nome}</span>
+          <span className="font-semibold text-lg">Região {municipio.regiao}</span>
         </div>
       </div>
 
       {/* Resultados Eleitorais */}
       <Card className="border-gray-300">
-        <CardHeader className="bg-gray-800 text-white border-b border-gray-300">
+        <CardHeader className="bg-cyan-600 text-white border-b border-gray-300">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <div className="w-1 h-6 bg-white rounded"></div>
@@ -299,11 +299,11 @@ export const BriefingLayout = ({
             <div className="flex items-center gap-2">
               {isEditingResultados ? (
                 <>
-                  <Button size="sm" onClick={handleSaveResultados} className="bg-green-600 hover:bg-green-700">
+                  <Button size="sm" onClick={handleSaveResultados} className="bg-green-600 hover:bg-green-700 text-white">
                     <Check className="h-4 w-4" />
                     Salvar
                   </Button>
-                  <Button size="sm" variant="outline" onClick={handleCancelResultados} className="text-gray-800 border-gray-300">
+                  <Button size="sm" onClick={handleCancelResultados} className="bg-gray-600 hover:bg-gray-700 text-white">
                     <X className="h-4 w-4" />
                     Cancelar
                   </Button>
@@ -311,9 +311,8 @@ export const BriefingLayout = ({
               ) : (
                 <Button 
                   size="sm" 
-                  variant="outline" 
                   onClick={() => setIsEditingResultados(true)}
-                  className="text-white border-gray-300 hover:bg-gray-700"
+                  className="bg-blue-600 hover:bg-blue-700 text-white"
                 >
                   <Edit3 className="h-4 w-4" />
                   Editar
@@ -392,11 +391,11 @@ export const BriefingLayout = ({
               <div className="flex items-center gap-2">
                 {isEditingVotacao ? (
                   <>
-                    <Button size="sm" onClick={handleSaveVotacao} className="bg-green-600 hover:bg-green-700">
+                    <Button size="sm" onClick={handleSaveVotacao} className="bg-green-600 hover:bg-green-700 text-white">
                       <Check className="h-4 w-4" />
                       Salvar
                     </Button>
-                    <Button size="sm" variant="outline" onClick={() => setIsEditingVotacao(false)}>
+                    <Button size="sm" onClick={() => setIsEditingVotacao(false)} className="bg-gray-600 hover:bg-gray-700 text-white">
                       <X className="h-4 w-4" />
                       Cancelar
                     </Button>
@@ -404,9 +403,8 @@ export const BriefingLayout = ({
                 ) : (
                   <Button 
                     size="sm" 
-                    variant="outline" 
                     onClick={() => setIsEditingVotacao(true)}
-                    className="border-gray-300 hover:bg-gray-50"
+                    className="bg-blue-600 hover:bg-blue-700 text-white"
                   >
                     <Edit3 className="h-4 w-4" />
                     Editar
@@ -480,7 +478,7 @@ export const BriefingLayout = ({
       <div className="space-y-6">
         {/* Deputados Federais */}
         <Card className="border-gray-300">
-          <CardHeader className="bg-gray-800 text-white border-b border-gray-300">
+          <CardHeader className="bg-cyan-600 text-white border-b border-gray-300">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <div className="w-1 h-6 bg-white rounded"></div>
@@ -488,8 +486,7 @@ export const BriefingLayout = ({
               </div>
               <Button 
                 size="sm" 
-                variant="outline" 
-                className="text-white border-gray-300 hover:bg-gray-700"
+                className="bg-blue-600 hover:bg-blue-700 text-white"
                 onClick={() => setShowAddFederalForm(true)}
               >
                 <Plus className="h-4 w-4" />
@@ -501,7 +498,7 @@ export const BriefingLayout = ({
             {showAddFederalForm && (
               <div className="p-4 border rounded-lg bg-gray-50 mb-4">
                 <h4 className="font-semibold mb-3">Novo Deputado Federal</h4>
-                <div className="grid grid-cols-3 gap-3 mb-3">
+                <div className="grid grid-cols-5 gap-3 mb-3">
                   <div>
                     <Label htmlFor="fed-pos">Posição</Label>
                     <Input
@@ -553,11 +550,11 @@ export const BriefingLayout = ({
                   </div>
                 </div>
                 <div className="flex gap-2">
-                  <Button size="sm" onClick={handleAddFederal}>
+                  <Button size="sm" onClick={handleAddFederal} className="bg-green-600 hover:bg-green-700 text-white">
                     <Check className="h-4 w-4 mr-1" />
                     Salvar
                   </Button>
-                  <Button size="sm" variant="outline" onClick={() => setShowAddFederalForm(false)}>
+                  <Button size="sm" onClick={() => setShowAddFederalForm(false)} className="bg-gray-600 hover:bg-gray-700 text-white">
                     <X className="h-4 w-4 mr-1" />
                     Cancelar
                   </Button>
@@ -626,10 +623,10 @@ export const BriefingLayout = ({
                             </td>
                             <td className="p-3 border border-gray-300">
                               <div className="flex gap-1">
-                                <Button size="sm" variant="ghost" onClick={handleSaveFederal}>
+                                <Button size="sm" onClick={handleSaveFederal} className="bg-green-600 hover:bg-green-700 text-white">
                                   <Check className="h-4 w-4" />
                                 </Button>
-                                <Button size="sm" variant="ghost" onClick={() => setEditingFederalId(null)}>
+                                <Button size="sm" onClick={() => setEditingFederalId(null)} className="bg-gray-600 hover:bg-gray-700 text-white">
                                   <X className="h-4 w-4" />
                                 </Button>
                               </div>
@@ -646,10 +643,10 @@ export const BriefingLayout = ({
                             <td className="p-3 border border-gray-300">{deputado.percentual.toFixed(2)}%</td>
                             <td className="p-3 border border-gray-300">
                               <div className="flex gap-1">
-                                <Button size="sm" variant="ghost" onClick={() => handleEditFederal(deputado)}>
+                                <Button size="sm" onClick={() => handleEditFederal(deputado)} className="bg-blue-600 hover:bg-blue-700 text-white">
                                   <Edit className="h-4 w-4" />
                                 </Button>
-                                <Button size="sm" variant="ghost" className="text-red-600" onClick={() => handleDeleteFederal(deputado.id)}>
+                                <Button size="sm" onClick={() => handleDeleteFederal(deputado.id)} className="bg-red-600 hover:bg-red-700 text-white">
                                   <Trash2 className="h-4 w-4" />
                                 </Button>
                               </div>
@@ -667,7 +664,7 @@ export const BriefingLayout = ({
 
         {/* Deputados Estaduais */}
         <Card className="border-gray-300">
-          <CardHeader className="bg-gray-800 text-white border-b border-gray-300">
+          <CardHeader className="bg-cyan-600 text-white border-b border-gray-300">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <div className="w-1 h-6 bg-white rounded"></div>
@@ -675,8 +672,7 @@ export const BriefingLayout = ({
               </div>
               <Button 
                 size="sm" 
-                variant="outline" 
-                className="text-white border-gray-300 hover:bg-gray-700"
+                className="bg-blue-600 hover:bg-blue-700 text-white"
                 onClick={() => setShowAddEstadualForm(true)}
               >
                 <Plus className="h-4 w-4" />
@@ -688,7 +684,7 @@ export const BriefingLayout = ({
             {showAddEstadualForm && (
               <div className="p-4 border rounded-lg bg-gray-50 mb-4">
                 <h4 className="font-semibold mb-3">Novo Deputado Estadual</h4>
-                <div className="grid grid-cols-3 gap-3 mb-3">
+                <div className="grid grid-cols-5 gap-3 mb-3">
                   <div>
                     <Label htmlFor="est-pos">Posição</Label>
                     <Input
@@ -740,11 +736,11 @@ export const BriefingLayout = ({
                   </div>
                 </div>
                 <div className="flex gap-2">
-                  <Button size="sm" onClick={handleAddEstadual}>
+                  <Button size="sm" onClick={handleAddEstadual} className="bg-green-600 hover:bg-green-700 text-white">
                     <Check className="h-4 w-4 mr-1" />
                     Salvar
                   </Button>
-                  <Button size="sm" variant="outline" onClick={() => setShowAddEstadualForm(false)}>
+                  <Button size="sm" onClick={() => setShowAddEstadualForm(false)} className="bg-gray-600 hover:bg-gray-700 text-white">
                     <X className="h-4 w-4 mr-1" />
                     Cancelar
                   </Button>
@@ -813,10 +809,10 @@ export const BriefingLayout = ({
                             </td>
                             <td className="p-3 border border-gray-300">
                               <div className="flex gap-1">
-                                <Button size="sm" variant="ghost" onClick={handleSaveEstadual}>
+                                <Button size="sm" onClick={handleSaveEstadual} className="bg-green-600 hover:bg-green-700 text-white">
                                   <Check className="h-4 w-4" />
                                 </Button>
-                                <Button size="sm" variant="ghost" onClick={() => setEditingEstadualId(null)}>
+                                <Button size="sm" onClick={() => setEditingEstadualId(null)} className="bg-gray-600 hover:bg-gray-700 text-white">
                                   <X className="h-4 w-4" />
                                 </Button>
                               </div>
@@ -833,10 +829,10 @@ export const BriefingLayout = ({
                             <td className="p-3 border border-gray-300">{deputado.percentual.toFixed(2)}%</td>
                             <td className="p-3 border border-gray-300">
                               <div className="flex gap-1">
-                                <Button size="sm" variant="ghost" onClick={() => handleEditEstadual(deputado)}>
+                                <Button size="sm" onClick={() => handleEditEstadual(deputado)} className="bg-blue-600 hover:bg-blue-700 text-white">
                                   <Edit className="h-4 w-4" />
                                 </Button>
-                                <Button size="sm" variant="ghost" className="text-red-600" onClick={() => handleDeleteEstadual(deputado.id)}>
+                                <Button size="sm" onClick={() => handleDeleteEstadual(deputado.id)} className="bg-red-600 hover:bg-red-700 text-white">
                                   <Trash2 className="h-4 w-4" />
                                 </Button>
                               </div>
@@ -855,7 +851,7 @@ export const BriefingLayout = ({
 
       {/* Lideranças Municipais */}
       <Card className="border-gray-300">
-        <CardHeader className="bg-gray-800 text-white border-b border-gray-300">
+        <CardHeader className="bg-cyan-600 text-white border-b border-gray-300">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <div className="w-1 h-6 bg-white rounded"></div>
@@ -863,8 +859,7 @@ export const BriefingLayout = ({
             </div>
             <Button 
               size="sm" 
-              variant="outline" 
-              className="text-white border-gray-300 hover:bg-gray-700"
+              className="bg-blue-600 hover:bg-blue-700 text-white"
               onClick={() => setShowAddLiderancaForm(true)}
             >
               <Plus className="h-4 w-4" />
@@ -876,7 +871,7 @@ export const BriefingLayout = ({
           {showAddLiderancaForm && (
             <div className="p-4 border rounded-lg bg-gray-50 mb-4">
               <h4 className="font-semibold mb-3">Nova Liderança</h4>
-              <div className="grid grid-cols-2 gap-3 mb-3">
+              <div className="grid grid-cols-3 gap-3 mb-3">
                 <div>
                   <Label htmlFor="new-nome">Nome</Label>
                   <Input
@@ -929,11 +924,11 @@ export const BriefingLayout = ({
                 </div>
               </div>
               <div className="flex gap-2">
-                <Button size="sm" onClick={handleAddLideranca}>
+                <Button size="sm" onClick={handleAddLideranca} className="bg-green-600 hover:bg-green-700 text-white">
                   <Check className="h-4 w-4 mr-1" />
                   Salvar
                 </Button>
-                <Button size="sm" variant="outline" onClick={() => setShowAddLiderancaForm(false)}>
+                <Button size="sm" onClick={() => setShowAddLiderancaForm(false)} className="bg-gray-600 hover:bg-gray-700 text-white">
                   <X className="h-4 w-4 mr-1" />
                   Cancelar
                 </Button>
@@ -948,17 +943,19 @@ export const BriefingLayout = ({
           ) : (
             <div className="space-y-4">
               {liderancas.map((lideranca) => (
-                <div key={lideranca.id} className="flex items-center gap-4 p-4 bg-gray-50 rounded-lg border border-gray-200">
-                  <div className="w-2 h-16 bg-blue-500 rounded"></div>
-                  <Avatar className="h-16 w-16">
+                <div key={lideranca.id} className="flex items-center gap-6 p-6 bg-white rounded-lg border border-gray-200 shadow-sm">
+                  {/* Foto maior */}
+                  <Avatar className="h-24 w-24 border-2 border-gray-200">
                     <AvatarImage src={lideranca.foto} alt={lideranca.nome} />
-                    <AvatarFallback className="bg-gray-200 text-gray-700 text-lg">
+                    <AvatarFallback className="bg-gray-100 text-gray-700 text-xl font-semibold">
                       {lideranca.nome.split(' ').map(n => n[0]).join('')}
                     </AvatarFallback>
                   </Avatar>
+                  
+                  {/* Informações organizadas horizontalmente */}
                   <div className="flex-1">
                     {editingLiderancaId === lideranca.id ? (
-                      <div className="grid grid-cols-2 gap-2">
+                      <div className="grid grid-cols-3 gap-3">
                         <Input
                           value={editLiderancaData.nome || ""}
                           onChange={(e) => setEditLiderancaData({...editLiderancaData, nome: e.target.value})}
@@ -992,40 +989,49 @@ export const BriefingLayout = ({
                         />
                       </div>
                     ) : (
-                      <>
-                        <div className="flex items-center gap-2 mb-1">
-                          <h4 className="font-semibold text-gray-800 text-lg">{lideranca.nome}</h4>
-                          <Badge variant="outline" className="border-gray-300">
-                            {lideranca.partido}
-                          </Badge>
-                        </div>
-                        <p className="text-sm text-gray-600 mb-1">{lideranca.cargo}</p>
-                        <div className="flex items-center gap-4">
-                          <div className="text-blue-600 font-semibold">
-                            <span className="text-xs text-gray-500">Votos</span>
-                            <div className="text-lg">{lideranca.votos?.toLocaleString() || '0'}</div>
+                      <div className="flex items-center justify-between">
+                        {/* Informações principais em layout horizontal */}
+                        <div className="flex items-center gap-8">
+                          <div>
+                            <div className="flex items-center gap-3 mb-1">
+                              <h4 className="font-bold text-gray-900 text-xl">{lideranca.nome}</h4>
+                              <Badge variant="outline" className="border-blue-300 text-blue-700 bg-blue-50">
+                                {lideranca.partido}
+                              </Badge>
+                            </div>
+                            <p className="text-gray-600 font-medium">{lideranca.cargo}</p>
+                            <p className="text-gray-500 text-sm">{lideranca.telefone}</p>
                           </div>
-                          <span className="text-sm text-gray-500">{lideranca.telefone}</span>
+                          
+                          {/* Votos destacados */}
+                          <div className="text-center bg-blue-50 px-4 py-2 rounded-lg border border-blue-200">
+                            <div className="text-blue-600 font-bold text-2xl">
+                              {lideranca.votos?.toLocaleString() || '0'}
+                            </div>
+                            <div className="text-blue-500 text-xs font-medium">VOTOS</div>
+                          </div>
                         </div>
-                      </>
+                      </div>
                     )}
                   </div>
-                  <div className="flex items-center gap-1">
+                  
+                  {/* Botões de ação */}
+                  <div className="flex items-center gap-2">
                     {editingLiderancaId === lideranca.id ? (
                       <>
-                        <Button variant="ghost" size="sm" onClick={handleSaveLideranca}>
+                        <Button size="sm" onClick={handleSaveLideranca} className="bg-green-600 hover:bg-green-700 text-white">
                           <Check className="h-4 w-4" />
                         </Button>
-                        <Button variant="ghost" size="sm" onClick={() => setEditingLiderancaId(null)}>
+                        <Button size="sm" onClick={() => setEditingLiderancaId(null)} className="bg-gray-600 hover:bg-gray-700 text-white">
                           <X className="h-4 w-4" />
                         </Button>
                       </>
                     ) : (
                       <>
-                        <Button variant="ghost" size="sm" onClick={() => handleEditLideranca(lideranca)}>
+                        <Button size="sm" onClick={() => handleEditLideranca(lideranca)} className="bg-blue-600 hover:bg-blue-700 text-white">
                           <Edit className="h-4 w-4" />
                         </Button>
-                        <Button variant="ghost" size="sm" className="text-red-600" onClick={() => handleDeleteLideranca(lideranca.id)}>
+                        <Button size="sm" onClick={() => handleDeleteLideranca(lideranca.id)} className="bg-red-600 hover:bg-red-700 text-white">
                           <Trash2 className="h-4 w-4" />
                         </Button>
                       </>
