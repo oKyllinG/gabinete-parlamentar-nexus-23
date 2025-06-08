@@ -129,13 +129,13 @@ export function CategoriaManager({ onClose }: CategoriaManagerProps) {
     <Dialog open onOpenChange={onClose}>
       <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle className="flex items-center justify-between">
-            Gerenciar Categorias de Obras
-            <Button onClick={() => setShowNewForm(true)}>
+          <div className="flex items-center justify-between w-full">
+            <DialogTitle>Gerenciar Categorias de Obras</DialogTitle>
+            <Button onClick={() => setShowNewForm(true)} className="ml-4">
               <Plus className="w-4 h-4 mr-2" />
               Nova Categoria
             </Button>
-          </DialogTitle>
+          </div>
         </DialogHeader>
 
         <div className="space-y-4">
@@ -313,3 +313,4 @@ export function CategoriaManager({ onClose }: CategoriaManagerProps) {
     </Dialog>
   )
 }
+

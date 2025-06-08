@@ -1,4 +1,5 @@
 
+
 export const exportToCSV = (data: any[], filename: string, headers: string[]) => {
   // Convert data to CSV format using semicolon separator (Brazilian standard)
   const csvContent = [
@@ -40,6 +41,64 @@ export const exportToCSV = (data: any[], filename: string, headers: string[]) =>
     link.click();
     document.body.removeChild(link);
     // Clean up the URL object
+    URL.revokeObjectURL(url);
+  }
+};
+
+export const exportToPDF = (data: any[], filename: string, headers: string[], title: string) => {
+  // Create a simple HTML structure for PDF generation
+  const htmlContent = `
+    <!DOCTYPE html>
+    <html>
+    <head>
+      <meta charset="utf-8">
+      <title>${title}</title>
+      <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        h1 { color: #333; margin-bottom: 20px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; font-size: 12px; }
+        th { background-color: #f2f2f2; font-weight: bold; }
+        tr:nth-child(even) { background-color: #f9f9f9; }
+        .summary { margin-bottom: 20px; padding: 10px; background-color: #f0f8ff; border-radius: 5px; }
+      </style>
+    </head>
+    <body>
+      <h1>${title}</h1>
+      <div class="summary">
+        <p><strong>Total de registros:</strong> ${data.length}</p>
+        <p><strong>Data da exportação:</strong> ${new Date().toLocaleDateString('pt-BR')}</p>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            ${headers.map(header => `<th>${header}</th>`).join('')}
+          </tr>
+        </thead>
+        <tbody>
+          ${data.map(row => `
+            <tr>
+              ${headers.map(header => `<td>${row[header] || ''}</td>`).join('')}
+            </tr>
+          `).join('')}
+        </tbody>
+      </table>
+    </body>
+    </html>
+  `;
+
+  // Create blob and download
+  const blob = new Blob([htmlContent], { type: 'text/html' });
+  const link = document.createElement('a');
+  
+  if (link.download !== undefined) {
+    const url = URL.createObjectURL(blob);
+    link.setAttribute('href', url);
+    link.setAttribute('download', filename);
+    link.style.visibility = 'hidden';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
     URL.revokeObjectURL(url);
   }
 };
@@ -243,7 +302,7 @@ export const exportEmendas = (emendas: any[], selectedType?: string, selectedSta
   exportToCSV(mappedData, filename, headers);
 };
 
-export const exportObras = (obras: any[], selectedMunicipio?: string, selectedStatus?: string, selectedCategoria?: string, selectedArea?: string, startDate?: Date, endDate?: Date) => {
+export const exportObras = (obras: any[], format: "pdf" | "csv" = "csv", selectedMunicipio?: string, selectedStatus?: string, selectedCategoria?: string, selectedArea?: string, startDate?: Date, endDate?: Date) => {
   // Filter obras by municipality, status, category, area and date range
   let filteredObras = obras;
   
@@ -302,6 +361,14 @@ export const exportObras = (obras: any[], selectedMunicipio?: string, selectedSt
     'Responsavel Gabinete': obra.responsavelGabinete || ''
   }));
 
-  const filename = `obras_${new Date().toISOString().split('T')[0]}.csv`;
-  exportToCSV(mappedData, filename, headers);
+  const timestamp = new Date().toISOString().split('T')[0];
+  
+  if (format === "pdf") {
+    const filename = `obras_${timestamp}.html`;
+    exportToPDF(mappedData, filename, headers, "Relatório de Obras e Equipamentos");
+  } else {
+    const filename = `obras_${timestamp}.csv`;
+    exportToCSV(mappedData, filename, headers);
+  }
 };
+

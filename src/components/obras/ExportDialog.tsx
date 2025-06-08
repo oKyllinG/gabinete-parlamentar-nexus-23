@@ -1,4 +1,3 @@
-
 import { useState } from "react"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
@@ -108,9 +107,10 @@ export function ExportDialog({ obras, onClose }: ExportDialogProps) {
       return
     }
 
-    // Exportar usando a função real
+    // Exportar usando a função real com o formato correto
     exportObras(
       filteredObras,
+      exportFormat, // Pass the selected format
       selectedMunicipio !== "all" ? selectedMunicipio : undefined,
       selectedStatus !== "all" ? selectedStatus : undefined,
       selectedCategoria !== "all" ? selectedCategoria : undefined,
@@ -143,7 +143,6 @@ export function ExportDialog({ obras, onClose }: ExportDialogProps) {
         </DialogHeader>
 
         <div className="space-y-6">
-          {/* Filtros */}
           <div className="border rounded-lg p-4 space-y-4">
             <h4 className="font-medium flex items-center gap-2">
               <Calendar className="w-4 h-4" />
@@ -286,7 +285,6 @@ export function ExportDialog({ obras, onClose }: ExportDialogProps) {
             </div>
           </div>
 
-          {/* Campos para incluir */}
           <div>
             <Label className="text-base font-medium">Campos a Incluir</Label>
             <div className="space-y-3 mt-3">
