@@ -37,6 +37,14 @@ const statusExecucaoColors = {
   cancelada: 'bg-red-100 text-red-800'
 };
 
+// Helper function to safely format currency
+const formatCurrency = (value: number | undefined | null): string => {
+  if (value === undefined || value === null || isNaN(value)) {
+    return 'R$ 0,00';
+  }
+  return value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+};
+
 export const EmendasList: React.FC<EmendasListProps> = ({ 
   emendas, 
   onEdit, 
@@ -57,19 +65,19 @@ export const EmendasList: React.FC<EmendasListProps> = ({
 
   const filteredEmendas = emendas.filter(emenda => {
     const matchesSearch = 
-      emenda.numero.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      emenda.autor.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      emenda.objeto.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      emenda.orgao.toLowerCase().includes(searchTerm.toLowerCase());
+      emenda.numero?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      emenda.autor?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      emenda.objeto?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      emenda.orgao?.toLowerCase().includes(searchTerm.toLowerCase());
 
     const matchesType = filterType === 'all' || emenda.tipo === filterType;
     const matchesAno = filterAno === 'all' || emenda.ano === filterAno;
-    const matchesNumero = filterNumero === '' || emenda.numero.toLowerCase().includes(filterNumero.toLowerCase());
-    const matchesOrgao = filterOrgao === '' || emenda.orgao.toLowerCase().includes(filterOrgao.toLowerCase());
+    const matchesNumero = filterNumero === '' || emenda.numero?.toLowerCase().includes(filterNumero.toLowerCase());
+    const matchesOrgao = filterOrgao === '' || emenda.orgao?.toLowerCase().includes(filterOrgao.toLowerCase());
     
     const matchesBeneficiario = filterBeneficiario === '' || 
       (emenda.destinacoes && emenda.destinacoes.some(dest => 
-        dest.destinatario.toLowerCase().includes(filterBeneficiario.toLowerCase())
+        dest.destinatario?.toLowerCase().includes(filterBeneficiario.toLowerCase())
       ));
 
     return matchesSearch && matchesType && matchesAno && 
@@ -77,7 +85,9 @@ export const EmendasList: React.FC<EmendasListProps> = ({
   });
 
   const getProgressPercentage = (emenda: Emenda) => {
-    return emenda.valorTotal > 0 ? (emenda.valorDestinado / emenda.valorTotal) * 100 : 0;
+    const total = emenda.valorTotal || 0;
+    const destinado = emenda.valorDestinado || 0;
+    return total > 0 ? (destinado / total) * 100 : 0;
   };
 
   const isDestinacaoVencendo = (destinacao: Destinacao) => {
@@ -217,10 +227,7 @@ export const EmendasList: React.FC<EmendasListProps> = ({
                           <div className="flex justify-between">
                             <span>{contrapartida.ente}</span>
                             <span className="font-medium">
-                              {contrapartida.valor.toLocaleString('pt-BR', { 
-                                style: 'currency', 
-                                currency: 'BRL' 
-                              })}
+                              {formatCurrency(contrapartida.valor)}
                             </span>
                           </div>
                         </div>
@@ -234,19 +241,19 @@ export const EmendasList: React.FC<EmendasListProps> = ({
                   <div className="text-center">
                     <p className="text-xs text-muted-foreground">Valor da Emenda</p>
                     <p className="text-sm font-medium">
-                      {emenda.valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
+                      {formatCurrency(emenda.valor)}
                     </p>
                   </div>
                   <div className="text-center">
                     <p className="text-xs text-muted-foreground">Contrapartidas</p>
                     <p className="text-sm font-medium">
-                      {(emenda.valorTotal - emenda.valor).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
+                      {formatCurrency((emenda.valorTotal || 0) - (emenda.valor || 0))}
                     </p>
                   </div>
                   <div className="text-center">
                     <p className="text-xs text-muted-foreground">Valor Total</p>
                     <p className="text-lg font-bold text-primary">
-                      {emenda.valorTotal.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
+                      {formatCurrency(emenda.valorTotal)}
                     </p>
                   </div>
                 </div>
@@ -265,16 +272,10 @@ export const EmendasList: React.FC<EmendasListProps> = ({
                   </div>
                   <div className="flex justify-between text-xs text-muted-foreground">
                     <span>
-                      Destinado: {emenda.valorDestinado.toLocaleString('pt-BR', { 
-                        style: 'currency', 
-                        currency: 'BRL' 
-                      })}
+                      Destinado: {formatCurrency(emenda.valorDestinado)}
                     </span>
                     <span>
-                      Disponível: {(emenda.valorTotal - emenda.valorDestinado).toLocaleString('pt-BR', { 
-                        style: 'currency', 
-                        currency: 'BRL' 
-                      })}
+                      Disponível: {formatCurrency((emenda.valorTotal || 0) - (emenda.valorDestinado || 0))}
                     </span>
                   </div>
                 </div>
@@ -356,10 +357,7 @@ export const EmendasList: React.FC<EmendasListProps> = ({
                             
                             <div className="text-right ml-4">
                               <div className="font-medium text-lg mb-2">
-                                {destinacao.valor.toLocaleString('pt-BR', { 
-                                  style: 'currency', 
-                                  currency: 'BRL' 
-                                })}
+                                {formatCurrency(destinacao.valor)}
                               </div>
                               <div className="flex gap-1">
                                 <Button
@@ -400,7 +398,7 @@ export const EmendasList: React.FC<EmendasListProps> = ({
                       size="sm"
                       variant="outline"
                       onClick={() => onDestinar(emenda)}
-                      disabled={emenda.valorDestinado >= emenda.valorTotal}
+                      disabled={(emenda.valorDestinado || 0) >= (emenda.valorTotal || 0)}
                     >
                       <Target className="w-4 h-4 mr-1" />
                       Destinar
