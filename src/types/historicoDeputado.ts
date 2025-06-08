@@ -6,6 +6,8 @@ export interface AcaoDeputado {
   valor: number
   municipio: string
   dataRegistro: string
+  ano: string
+  observacoes: string
 }
 
 export interface CategoriaHistorico {
@@ -14,7 +16,7 @@ export interface CategoriaHistorico {
   acoes: AcaoDeputado[]
 }
 
-// Removidas as categorias fixas para permitir categorias livres
+// Categorias sugeridas para o histórico do deputado
 export const CATEGORIAS_SUGERIDAS = [
   "Emendas Parlamentares",
   "Obras e Equipamentos", 
@@ -23,3 +25,6 @@ export const CATEGORIAS_SUGERIDAS = [
   "Projetos de Lei",
   "Outros"
 ] as const
+
+// Export with the name used in the form component
+export const CATEGORIAS_HISTORICO = CATEGORIAS_SUGERIDAS
