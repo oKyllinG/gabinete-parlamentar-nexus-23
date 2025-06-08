@@ -1,7 +1,6 @@
-
 import { useState, useEffect } from "react"
 import { useParams, useNavigate } from "react-router-dom"
-import { ArrowLeft, Edit } from "lucide-react"
+import { ArrowLeft } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
@@ -9,7 +8,6 @@ import { ResultadosEleitorais } from "@/components/briefing/ResultadosEleitorais
 import { DeputadosTable } from "@/components/briefing/DeputadosTable"
 import { LiderancasMunicipais } from "@/components/briefing/LiderancasMunicipais"
 import { VotacaoDeputado } from "@/components/briefing/VotacaoDeputado"
-import { EditarDadosPoliticos } from "@/components/briefing/EditarDadosPoliticos"
 import { GerenciarDeputados } from "@/components/briefing/GerenciarDeputados"
 
 interface Municipio {
@@ -262,17 +260,6 @@ const MunicipioBriefing = () => {
             {municipio.regiao} • Mato Grosso do Sul
           </p>
         </div>
-        <EditarDadosPoliticos 
-          municipio={municipio} 
-          dados={dadosPoliticos}
-          onSave={handleSaveDadosPoliticos}
-          trigger={
-            <Button variant="outline" className="flex items-center gap-2">
-              <Edit className="h-4 w-4" />
-              Editar Dados Políticos
-            </Button>
-          }
-        />
       </div>
 
       <Tabs defaultValue="politica" className="w-full">
@@ -283,11 +270,19 @@ const MunicipioBriefing = () => {
         </TabsList>
         
         <TabsContent value="politica" className="space-y-6">
-          {/* Votação do Deputado */}
-          <VotacaoDeputado municipio={municipio} dadosPoliticos={dadosPoliticos} />
+          {/* Votação do Deputado - agora editável */}
+          <VotacaoDeputado 
+            municipio={municipio} 
+            dadosPoliticos={dadosPoliticos}
+            onSave={handleSaveDadosPoliticos}
+          />
           
-          {/* Resultados Eleitorais */}
-          <ResultadosEleitorais municipio={municipio} dadosPoliticos={dadosPoliticos} />
+          {/* Resultados Eleitorais - agora editável */}
+          <ResultadosEleitorais 
+            municipio={municipio} 
+            dadosPoliticos={dadosPoliticos}
+            onSave={handleSaveDadosPoliticos}
+          />
           
           {/* Deputados Federais */}
           <Card>
