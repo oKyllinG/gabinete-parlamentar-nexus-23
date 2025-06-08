@@ -9,25 +9,34 @@ interface Municipio {
   assessor: string | null
 }
 
+interface DadosPoliticos {
+  totalEleitores: number
+  votosDeputado: number
+  percentualDeputado: number
+  colocacaoDeputado: string
+}
+
 interface VotacaoDeputadoProps {
   municipio: Municipio
+  dadosPoliticos: DadosPoliticos
 }
 
-// Dados mock da votação do deputado (baseado na imagem fornecida)
-const votacaoData = {
-  eleitores2022: 12244,
-  anos: [
-    { ano: 2002, votos: 199 },
-    { ano: 2006, votos: 371 },
-    { ano: 2010, votos: 36 },
-    { ano: 2014, votos: 65 },
-    { ano: 2018, votos: 164 },
-    { ano: 2022, votos: 400 }
-  ],
-  colocacao: "5ª"
-}
+// Dados históricos mock - podem ser expandidos para serem editáveis também
+const votacaoHistorica = [
+  { ano: 2002, votos: 199 },
+  { ano: 2006, votos: 371 },
+  { ano: 2010, votos: 36 },
+  { ano: 2014, votos: 65 },
+  { ano: 2018, votos: 164 },
+  { ano: 2022, votos: 0 } // será substituído pelo valor atual
+]
 
-export const VotacaoDeputado = ({ municipio }: VotacaoDeputadoProps) => {
+export const VotacaoDeputado = ({ municipio, dadosPoliticos }: VotacaoDeputadoProps) => {
+  // Substitui o valor de 2022 pelos dados atuais
+  const votacaoComDadosAtuais = votacaoHistorica.map(item => 
+    item.ano === 2022 ? { ...item, votos: dadosPoliticos.votosDeputado } : item
+  )
+
   return (
     <Card>
       <CardHeader>
@@ -50,15 +59,15 @@ export const VotacaoDeputado = ({ municipio }: VotacaoDeputadoProps) => {
               </TableRow>
               <TableRow className="bg-cyan-400 hover:bg-cyan-400">
                 <TableHead className="text-white font-bold text-center">
-                  {votacaoData.eleitores2022.toLocaleString()}
+                  {dadosPoliticos.totalEleitores.toLocaleString()}
                 </TableHead>
-                {votacaoData.anos.map((item) => (
+                {votacaoComDadosAtuais.map((item) => (
                   <TableHead key={item.ano} className="text-white font-bold text-center">
                     {item.ano}
                   </TableHead>
                 ))}
                 <TableHead className="text-white font-bold text-center">
-                  {votacaoData.colocacao}
+                  {dadosPoliticos.colocacaoDeputado}
                 </TableHead>
               </TableRow>
             </TableHeader>
@@ -67,7 +76,7 @@ export const VotacaoDeputado = ({ municipio }: VotacaoDeputadoProps) => {
                 <TableCell className="text-center font-medium">
                   {/* Espaço para eleitores */}
                 </TableCell>
-                {votacaoData.anos.map((item) => (
+                {votacaoComDadosAtuais.map((item) => (
                   <TableCell key={item.ano} className="text-center font-medium">
                     {item.votos}
                   </TableCell>

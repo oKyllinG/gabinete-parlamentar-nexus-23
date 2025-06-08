@@ -1,6 +1,6 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useParams, useNavigate } from "react-router-dom"
-import { ArrowLeft, Plus } from "lucide-react"
+import { ArrowLeft, Edit } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
@@ -8,12 +8,52 @@ import { ResultadosEleitorais } from "@/components/briefing/ResultadosEleitorais
 import { DeputadosTable } from "@/components/briefing/DeputadosTable"
 import { LiderancasMunicipais } from "@/components/briefing/LiderancasMunicipais"
 import { VotacaoDeputado } from "@/components/briefing/VotacaoDeputado"
+import { EditarDadosPoliticos } from "@/components/briefing/EditarDadosPoliticos"
+import { GerenciarDeputados } from "@/components/briefing/GerenciarDeputados"
 
 interface Municipio {
   id: number
   nome: string
   regiao: string
   assessor: string | null
+}
+
+interface DadosPoliticos {
+  totalEleitores: number
+  votosDeputado: number
+  percentualDeputado: number
+  colocacaoDeputado: string
+  prefeito?: {
+    nome: string
+    partido: string
+    votos: number
+    telefone: string
+  }
+  vicePrefeito?: {
+    nome: string
+    partido: string
+    telefone: string
+  }
+  secretarios?: Array<{
+    nome: string
+    cargo: string
+    telefone: string
+  }>
+  presidentes?: Array<{
+    nome: string
+    partido: string
+    votos: number
+    telefone: string
+  }>
+}
+
+interface Deputado {
+  id: string
+  nome: string
+  partido: string
+  votos: number
+  percentual: number
+  telefone: string
 }
 
 const municipiosMS: Municipio[] = [
@@ -104,6 +144,58 @@ const MunicipioBriefing = () => {
   
   const municipio = municipiosMS.find(m => m.id === Number(municipioId))
   
+  // Estado para dados políticos editáveis
+  const [dadosPoliticos, setDadosPoliticos] = useState<DadosPoliticos>({
+    totalEleitores: 12244,
+    votosDeputado: 400,
+    percentualDeputado: 3.27,
+    colocacaoDeputado: "5ª"
+  })
+
+  const [deputadosFederais, setDeputadosFederais] = useState<Deputado[]>([])
+  const [deputadosEstaduais, setDeputadosEstaduais] = useState<Deputado[]>([])
+
+  // Carregar dados salvos do localStorage
+  useEffect(() => {
+    if (municipio) {
+      const savedData = localStorage.getItem(`municipio-${municipio.id}-dados-politicos`)
+      if (savedData) {
+        setDadosPoliticos(JSON.parse(savedData))
+      }
+
+      const savedFederais = localStorage.getItem(`municipio-${municipio.id}-deputados-federais`)
+      if (savedFederais) {
+        setDeputadosFederais(JSON.parse(savedFederais))
+      }
+
+      const savedEstaduais = localStorage.getItem(`municipio-${municipio.id}-deputados-estaduais`)
+      if (savedEstaduais) {
+        setDeputadosEstaduais(JSON.parse(savedEstaduais))
+      }
+    }
+  }, [municipio])
+
+  const handleSaveDadosPoliticos = (dados: DadosPoliticos) => {
+    setDadosPoliticos(dados)
+    if (municipio) {
+      localStorage.setItem(`municipio-${municipio.id}-dados-politicos`, JSON.stringify(dados))
+    }
+  }
+
+  const handleSaveDeputadosFederais = (deputados: Deputado[]) => {
+    setDeputadosFederais(deputados)
+    if (municipio) {
+      localStorage.setItem(`municipio-${municipio.id}-deputados-federais`, JSON.stringify(deputados))
+    }
+  }
+
+  const handleSaveDeputadosEstaduais = (deputados: Deputado[]) => {
+    setDeputadosEstaduais(deputados)
+    if (municipio) {
+      localStorage.setItem(`municipio-${municipio.id}-deputados-estaduais`, JSON.stringify(deputados))
+    }
+  }
+  
   if (!municipio) {
     return (
       <div className="p-6">
@@ -128,12 +220,23 @@ const MunicipioBriefing = () => {
           <ArrowLeft className="h-4 w-4" />
           Voltar
         </Button>
-        <div>
+        <div className="flex-1">
           <h1 className="text-3xl font-bold text-foreground">{municipio.nome}</h1>
           <p className="text-muted-foreground">
             {municipio.regiao} • Mato Grosso do Sul
           </p>
         </div>
+        <EditarDadosPoliticos 
+          municipio={municipio} 
+          dados={dadosPoliticos}
+          onSave={handleSaveDadosPoliticos}
+          trigger={
+            <Button variant="outline" className="flex items-center gap-2">
+              <Edit className="h-4 w-4" />
+              Editar Dados Políticos
+            </Button>
+          }
+        />
       </div>
 
       <Tabs defaultValue="politica" className="w-full">
@@ -145,22 +248,24 @@ const MunicipioBriefing = () => {
         
         <TabsContent value="politica" className="space-y-6">
           {/* Votação do Deputado */}
-          <VotacaoDeputado municipio={municipio} />
+          <VotacaoDeputado municipio={municipio} dadosPoliticos={dadosPoliticos} />
           
           {/* Resultados Eleitorais */}
-          <ResultadosEleitorais municipio={municipio} />
+          <ResultadosEleitorais municipio={municipio} dadosPoliticos={dadosPoliticos} />
           
           {/* Deputados Federais */}
           <Card>
             <CardHeader className="flex flex-row items-center justify-between">
               <CardTitle>Deputados Federais</CardTitle>
-              <Button size="sm" className="flex items-center gap-2">
-                <Plus className="h-4 w-4" />
-                Adicionar
-              </Button>
+              <GerenciarDeputados 
+                tipo="federal"
+                municipio={municipio}
+                deputados={deputadosFederais}
+                onSave={handleSaveDeputadosFederais}
+              />
             </CardHeader>
             <CardContent>
-              <DeputadosTable tipo="federal" municipio={municipio} />
+              <DeputadosTable tipo="federal" municipio={municipio} deputados={deputadosFederais} />
             </CardContent>
           </Card>
           
@@ -168,13 +273,15 @@ const MunicipioBriefing = () => {
           <Card>
             <CardHeader className="flex flex-row items-center justify-between">
               <CardTitle>Deputados Estaduais</CardTitle>
-              <Button size="sm" className="flex items-center gap-2">
-                <Plus className="h-4 w-4" />
-                Adicionar
-              </Button>
+              <GerenciarDeputados 
+                tipo="estadual"
+                municipio={municipio}
+                deputados={deputadosEstaduais}
+                onSave={handleSaveDeputadosEstaduais}
+              />
             </CardHeader>
             <CardContent>
-              <DeputadosTable tipo="estadual" municipio={municipio} />
+              <DeputadosTable tipo="estadual" municipio={municipio} deputados={deputadosEstaduais} />
             </CardContent>
           </Card>
           

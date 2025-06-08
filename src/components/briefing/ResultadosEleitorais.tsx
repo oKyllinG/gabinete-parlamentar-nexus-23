@@ -8,19 +8,19 @@ interface Municipio {
   assessor: string | null
 }
 
+interface DadosPoliticos {
+  totalEleitores: number
+  votosDeputado: number
+  percentualDeputado: number
+  colocacaoDeputado: string
+}
+
 interface ResultadosEleitoraisProps {
   municipio: Municipio
+  dadosPoliticos: DadosPoliticos
 }
 
-// Dados mock dos resultados eleitorais
-const resultadosData = {
-  totalEleitores: 12244,
-  votos: 400,
-  percentual: 3.27,
-  colocacao: 5
-}
-
-export const ResultadosEleitorais = ({ municipio }: ResultadosEleitoraisProps) => {
+export const ResultadosEleitorais = ({ municipio, dadosPoliticos }: ResultadosEleitoraisProps) => {
   return (
     <Card>
       <CardHeader>
@@ -30,28 +30,28 @@ export const ResultadosEleitorais = ({ municipio }: ResultadosEleitoraisProps) =
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           <div className="text-center p-4 bg-muted rounded-lg">
             <div className="text-2xl font-bold text-primary">
-              {resultadosData.totalEleitores.toLocaleString()}
+              {dadosPoliticos.totalEleitores.toLocaleString()}
             </div>
             <div className="text-sm text-muted-foreground">Total de Eleitores</div>
           </div>
           
           <div className="text-center p-4 bg-muted rounded-lg">
             <div className="text-2xl font-bold text-primary">
-              {resultadosData.votos}
+              {dadosPoliticos.votosDeputado}
             </div>
             <div className="text-sm text-muted-foreground">Votos Recebidos</div>
           </div>
           
           <div className="text-center p-4 bg-muted rounded-lg">
             <div className="text-2xl font-bold text-primary">
-              {resultadosData.percentual}%
+              {dadosPoliticos.percentualDeputado.toFixed(2)}%
             </div>
             <div className="text-sm text-muted-foreground">Percentual</div>
           </div>
           
           <div className="text-center p-4 bg-muted rounded-lg">
             <div className="text-2xl font-bold text-primary">
-              {resultadosData.colocacao}ª
+              {dadosPoliticos.colocacaoDeputado}
             </div>
             <div className="text-sm text-muted-foreground">Colocação</div>
           </div>
