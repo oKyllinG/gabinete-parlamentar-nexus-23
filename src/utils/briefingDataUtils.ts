@@ -1,233 +1,383 @@
 
-// Utility functions to fetch briefing data from localStorage
-
-export interface Obra {
-  id: string
-  titulo: string
-  descricao: string
-  municipio: string
-  regiao: string
-  categoria: string
-  status: string
-  dataInicio: string
-  prazoExecucao: string
-  valor: number
-  observacoes?: string
-}
-
-export interface DestinacaoEmenda {
-  id: string
-  numero: string
-  objeto: string
-  municipio: string
-  valor: number
-  status: string
-  dataDestinacao: string
-  observacoes?: string
-  destinatario: string
-  areaAtuacao: string
-  gnd: string
-  pd: string
-  prazoInicio: string
-  prazoFim: string
-  cnpj?: string
-  projetosAnexados?: string[]
-}
-
-export const getObrasByMunicipio = (municipioNome: string): Obra[] => {
-  const savedObras = localStorage.getItem('obras')
-  if (!savedObras) return []
-  
-  const obras: Obra[] = JSON.parse(savedObras)
-  return obras.filter(obra => obra.municipio === municipioNome)
-}
-
-export const getDestinacoesByMunicipio = (municipioNome: string): DestinacaoEmenda[] => {
-  const savedEmendas = localStorage.getItem('emendas-parlamentares')
-  if (!savedEmendas) return []
-  
-  const emendas = JSON.parse(savedEmendas)
-  const destinacoes: DestinacaoEmenda[] = []
-  
-  emendas.forEach((emenda: any) => {
-    if (emenda.destinacoes && emenda.destinacoes.length > 0) {
-      emenda.destinacoes.forEach((destinacao: any) => {
-        if (destinacao.municipio === municipioNome) {
-          destinacoes.push({
-            id: destinacao.id,
-            numero: emenda.numero,
-            objeto: emenda.objeto,
-            municipio: destinacao.municipio,
-            valor: destinacao.valor,
-            status: destinacao.statusExecucao,
-            dataDestinacao: destinacao.dataDestinacao,
-            observacoes: destinacao.observacoes,
-            destinatario: destinacao.destinatario,
-            areaAtuacao: destinacao.areaAtuacao,
-            gnd: destinacao.gnd,
-            pd: destinacao.pd,
-            prazoInicio: destinacao.prazoInicio,
-            prazoFim: destinacao.prazoFim,
-            cnpj: destinacao.cnpj,
-            projetosAnexados: destinacao.projetosAnexados
-          })
-        }
-      })
-    }
-  })
-  
-  return destinacoes
-}
-
-// Manter compatibilidade com código existente - deprecated
-export const getEmendasByMunicipio = (municipioNome: string) => {
-  return getDestinacoesByMunicipio(municipioNome)
-}
-
-// Function to initialize mock data for Água Clara if no data exists
 export const initializeMockDataForAguaClara = () => {
-  const municipioNome = "Água Clara"
-  
-  // Check if we already have data for Água Clara
-  const existingObras = getObrasByMunicipio(municipioNome)
-  const existingDestinacoes = getDestinacoesByMunicipio(municipioNome)
-  
-  if (existingObras.length === 0) {
-    // Add mock obras data with different categories
-    const savedObras = localStorage.getItem('obras')
-    const allObras: Obra[] = savedObras ? JSON.parse(savedObras) : []
-    
-    const mockObras: Obra[] = [
-      {
-        id: `agua-clara-obra-1`,
-        titulo: "Reforma da Escola Municipal João Silva",
-        descricao: "Reforma completa da infraestrutura da escola municipal, incluindo salas de aula, biblioteca e laboratório de informática",
-        municipio: municipioNome,
-        regiao: "Fronteira",
-        categoria: "Educação",
-        status: "Em andamento",
-        dataInicio: "2024-03-15",
-        prazoExecucao: "2024-12-15",
-        valor: 850000,
-        observacoes: "Obra prioritária para melhoria da educação local"
-      },
-      {
-        id: `agua-clara-obra-2`,
-        titulo: "Pavimentação da Rua Principal",
-        descricao: "Pavimentação asfáltica da Rua Principal do centro da cidade, incluindo sinalização e drenagem",
-        municipio: municipioNome,
-        regiao: "Fronteira",
-        categoria: "Obras do PAC",
-        status: "Planejada",
-        dataInicio: "2024-06-01",
-        prazoExecucao: "2024-10-30",
-        valor: 1200000,
-        observacoes: "Melhoria do acesso ao centro comercial"
-      },
-      {
-        id: `agua-clara-obra-3`,
-        titulo: "Construção da Unidade Básica de Saúde",
-        descricao: "Nova UBS com consultórios médicos, sala de vacinas e farmácia básica para atender a população local",
-        municipio: municipioNome,
-        regiao: "Fronteira",
-        categoria: "Obras do PAC",
-        status: "Em andamento",
-        dataInicio: "2024-02-01",
-        prazoExecucao: "2024-11-30",
-        valor: 2500000,
-        observacoes: "Obra essencial para a saúde pública municipal"
-      },
-      {
-        id: `agua-clara-obra-4`,
-        titulo: "Aquisição de Equipamentos Agrícolas",
-        descricao: "Compra de tratores e implementos agrícolas para apoio aos produtores rurais do município",
-        municipio: municipioNome,
-        regiao: "Fronteira",
-        categoria: "Agricultura",
-        status: "Concluída",
-        dataInicio: "2024-01-15",
-        prazoExecucao: "2024-04-15",
-        valor: 450000,
-        observacoes: "Equipamentos entregues e em operação"
-      }
-    ]
-    
-    localStorage.setItem('obras', JSON.stringify([...allObras, ...mockObras]))
+  const municipioId = 1 // Água Clara
+
+  // Deputados Federais (10 mocks)
+  const deputadosFederais = [
+    {
+      id: "1",
+      nome: "Dep. Carlos Marun",
+      partido: "PSDB",
+      votos: 2845,
+      percentual: 23.2,
+      telefone: "(67) 99111-1111",
+      colocacao: 1
+    },
+    {
+      id: "2", 
+      nome: "Dep. Rose Modesto",
+      partido: "UNIÃO",
+      votos: 1950,
+      percentual: 15.9,
+      telefone: "(67) 99222-2222",
+      colocacao: 2
+    },
+    {
+      id: "3",
+      nome: "Dep. Beto Pereira",
+      partido: "PSDB",
+      votos: 1680,
+      percentual: 13.7,
+      telefone: "(67) 99333-3333",
+      colocacao: 3
+    },
+    {
+      id: "4",
+      nome: "Dep. Dagoberto Nogueira",
+      partido: "PDT",
+      votos: 1420,
+      percentual: 11.6,
+      telefone: "(67) 99444-4444",
+      colocacao: 4
+    },
+    {
+      id: "5",
+      nome: "Dep. Camila Jara",
+      partido: "PT",
+      votos: 1280,
+      percentual: 10.5,
+      telefone: "(67) 99555-5555",
+      colocacao: 5
+    },
+    {
+      id: "6",
+      nome: "Dep. Luiz Ovando",
+      partido: "PP",
+      votos: 980,
+      percentual: 8.0,
+      telefone: "(67) 99666-6666",
+      colocacao: 6
+    },
+    {
+      id: "7",
+      nome: "Dep. Geraldo Resende",
+      partido: "PL",
+      votos: 850,
+      percentual: 6.9,
+      telefone: "(67) 99777-7777",
+      colocacao: 7
+    },
+    {
+      id: "8",
+      nome: "Dep. Fábio Trad",
+      partido: "PSD",
+      votos: 720,
+      percentual: 5.9,
+      telefone: "(67) 99888-8888",
+      colocacao: 8
+    },
+    {
+      id: "9",
+      nome: "Dep. Marcos Pollon",
+      partido: "PL",
+      votos: 520,
+      percentual: 4.2,
+      telefone: "(67) 99999-9999",
+      colocacao: 9
+    },
+    {
+      id: "10",
+      nome: "Dep. Pedro Kemp",
+      partido: "PT",
+      votos: 280,
+      percentual: 2.3,
+      telefone: "(67) 99000-0000",
+      colocacao: 10
+    }
+  ]
+
+  // Deputados Estaduais (10 mocks)
+  const deputadosEstaduais = [
+    {
+      id: "1",
+      nome: "Dep. Paulo Corrêa",
+      partido: "PSDB",
+      votos: 3200,
+      percentual: 26.1,
+      telefone: "(67) 98111-1111",
+      colocacao: 1
+    },
+    {
+      id: "2",
+      nome: "Dep. Marçal Filho",
+      partido: "PSDB",
+      votos: 2100,
+      percentual: 17.1,
+      telefone: "(67) 98222-2222",
+      colocacao: 2
+    },
+    {
+      id: "3",
+      nome: "Dep. Renato Câmara",
+      partido: "MDB",
+      votos: 1850,
+      percentual: 15.1,
+      telefone: "(67) 98333-3333",
+      colocacao: 3
+    },
+    {
+      id: "4",
+      nome: "Dep. Evander Vendramini",
+      partido: "PP",
+      votos: 1520,
+      percentual: 12.4,
+      telefone: "(67) 98444-4444",
+      colocacao: 4
+    },
+    {
+      id: "5",
+      nome: "Dep. Antônio Vaz",
+      partido: "REPUBLICANOS",
+      votos: 1200,
+      percentual: 9.8,
+      telefone: "(67) 98555-5555",
+      colocacao: 5
+    },
+    {
+      id: "6",
+      nome: "Dep. Pedro Pedrossian",
+      partido: "PSD",
+      votos: 980,
+      percentual: 8.0,
+      telefone: "(67) 98666-6666",
+      colocacao: 6
+    },
+    {
+      id: "7",
+      nome: "Dep. Barbosinha",
+      partido: "PP",
+      votos: 750,
+      percentual: 6.1,
+      telefone: "(67) 98777-7777",
+      colocacao: 7
+    },
+    {
+      id: "8",
+      nome: "Dep. Mara Caseiro",
+      partido: "PSDB",
+      votos: 420,
+      percentual: 3.4,
+      telefone: "(67) 98888-8888",
+      colocacao: 8
+    },
+    {
+      id: "9",
+      nome: "Dep. Coronel David",
+      partido: "PL",
+      votos: 280,
+      percentual: 2.3,
+      telefone: "(67) 98999-9999",
+      colocacao: 9
+    },
+    {
+      id: "10",
+      nome: "Dep. Professor Rinaldo",
+      partido: "PODEMOS",
+      votos: 150,
+      percentual: 1.2,
+      telefone: "(67) 98000-0000",
+      colocacao: 10
+    }
+  ]
+
+  // Histórico do Deputado (20 ações em várias categorias)
+  const historicoAcoes = [
+    {
+      id: "hist-1",
+      categoria: "Emendas Parlamentares",
+      descricao: "Emenda para reforma da Unidade Básica de Saúde Central",
+      valor: 850000,
+      municipio: "Água Clara",
+      dataRegistro: "2023-03-15T10:00:00.000Z"
+    },
+    {
+      id: "hist-2",
+      categoria: "Emendas Parlamentares", 
+      descricao: "Recursos para aquisição de ambulância UTI móvel",
+      valor: 620000,
+      municipio: "Água Clara",
+      dataRegistro: "2023-05-22T14:30:00.000Z"
+    },
+    {
+      id: "hist-3",
+      categoria: "Obras e Equipamentos",
+      descricao: "Pavimentação asfáltica da Rua das Flores",
+      valor: 1200000,
+      municipio: "Água Clara",
+      dataRegistro: "2023-01-10T09:15:00.000Z"
+    },
+    {
+      id: "hist-4",
+      categoria: "Obras e Equipamentos",
+      descricao: "Construção de quadra poliesportiva no Bairro São José",
+      valor: 450000,
+      municipio: "Água Clara",
+      dataRegistro: "2023-07-08T16:20:00.000Z"
+    },
+    {
+      id: "hist-5",
+      categoria: "Recursos Obtidos",
+      descricao: "Verba federal para merenda escolar",
+      valor: 320000,
+      municipio: "Água Clara",
+      dataRegistro: "2023-02-28T11:45:00.000Z"
+    },
+    {
+      id: "hist-6",
+      categoria: "Recursos Obtidos",
+      descricao: "Programa Nacional de Alfabetização",
+      valor: 180000,
+      municipio: "Água Clara",
+      dataRegistro: "2023-08-14T13:00:00.000Z"
+    },
+    {
+      id: "hist-7",
+      categoria: "Indicações e Requerimentos",
+      descricao: "Solicitação de posto da Polícia Rodoviária Federal",
+      valor: 0,
+      municipio: "Água Clara",
+      dataRegistro: "2023-04-05T08:30:00.000Z"
+    },
+    {
+      id: "hist-8",
+      categoria: "Indicações e Requerimentos",
+      descricao: "Requerimento para melhorias na BR-262",
+      valor: 0,
+      municipio: "Água Clara",
+      dataRegistro: "2023-06-18T15:45:00.000Z"
+    },
+    {
+      id: "hist-9",
+      categoria: "Projetos de Lei",
+      descricao: "PL para incentivo ao agronegócio familiar",
+      valor: 0,
+      municipio: "Água Clara",
+      dataRegistro: "2023-09-03T10:20:00.000Z"
+    },
+    {
+      id: "hist-10",
+      categoria: "Emendas Parlamentares",
+      descricao: "Equipamentos para Centro de Referência da Assistência Social",
+      valor: 280000,
+      municipio: "Água Clara",
+      dataRegistro: "2023-10-12T14:15:00.000Z"
+    },
+    {
+      id: "hist-11",
+      categoria: "Obras e Equipamentos",
+      descricao: "Reforma do Centro Cultural Municipal",
+      valor: 380000,
+      municipio: "Água Clara",
+      dataRegistro: "2023-11-20T09:00:00.000Z"
+    },
+    {
+      id: "hist-12",
+      categoria: "Recursos Obtidos",
+      descricao: "Programa Mais Médicos - contratação de profissionais",
+      valor: 720000,
+      municipio: "Água Clara",
+      dataRegistro: "2023-12-08T16:30:00.000Z"
+    },
+    {
+      id: "hist-13",
+      categoria: "Emendas Parlamentares",
+      descricao: "Aquisição de equipamentos para laboratório de análises clínicas",
+      valor: 520000,
+      municipio: "Água Clara",
+      dataRegistro: "2024-01-15T11:20:00.000Z"
+    },
+    {
+      id: "hist-14",
+      categoria: "Obras e Equipamentos",
+      descricao: "Construção de creche no Bairro Jardim Primavera",
+      valor: 980000,
+      municipio: "Água Clara",
+      dataRegistro: "2024-02-22T08:45:00.000Z"
+    },
+    {
+      id: "hist-15",
+      categoria: "Indicações e Requerimentos",
+      descricao: "Solicitação de iluminação pública LED para zona rural",
+      valor: 0,
+      municipio: "Água Clara",
+      dataRegistro: "2024-03-10T14:00:00.000Z"
+    },
+    {
+      id: "hist-16",
+      categoria: "Recursos Obtidos",
+      descricao: "Programa de distribuição de cestas básicas",
+      valor: 150000,
+      municipio: "Água Clara",
+      dataRegistro: "2024-04-18T10:30:00.000Z"
+    },
+    {
+      id: "hist-17",
+      categoria: "Emendas Parlamentares",
+      descricao: "Reforma e ampliação da Escola Municipal José da Silva",
+      valor: 750000,
+      municipio: "Água Clara",
+      dataRegistro: "2024-05-25T15:15:00.000Z"
+    },
+    {
+      id: "hist-18",
+      categoria: "Obras e Equipamentos",
+      descricao: "Sistema de tratamento de água para distrito rural",
+      valor: 1100000,
+      municipio: "Água Clara",
+      dataRegistro: "2024-06-12T12:00:00.000Z"
+    },
+    {
+      id: "hist-19",
+      categoria: "Projetos de Lei",
+      descricao: "PL para criação de programa de microcrédito rural",
+      valor: 0,
+      municipio: "Água Clara",
+      dataRegistro: "2024-07-08T09:30:00.000Z"
+    },
+    {
+      id: "hist-20",
+      categoria: "Outros",
+      descricao: "Doação de medicamentos para farmácia municipal",
+      valor: 95000,
+      municipio: "Água Clara",
+      dataRegistro: "2024-08-14T13:45:00.000Z"
+    }
+  ]
+
+  // Salvar no localStorage se não existir
+  if (!localStorage.getItem(`municipio-${municipioId}-deputados-federais`)) {
+    localStorage.setItem(`municipio-${municipioId}-deputados-federais`, JSON.stringify(deputadosFederais))
   }
-  
-  if (existingDestinacoes.length === 0) {
-    // Add mock emendas with destinações data
-    const savedEmendas = localStorage.getItem('emendas-parlamentares')
-    const allEmendas = savedEmendas ? JSON.parse(savedEmendas) : []
-    
-    const mockEmendas = [
-      {
-        id: `agua-clara-emenda-1`,
-        numero: "EMD-2024-001",
-        autor: "Deputado Federal João Silva",
-        tipo: "individual",
-        ano: "2024",
-        programa: "Saúde Pública",
-        acao: "Equipamentos Médicos",
-        objeto: "Aquisição de equipamentos médicos para o Posto de Saúde",
-        orgao: "Ministério da Saúde",
-        localizador: "0001",
-        valor: 150000,
-        valorTotal: 150000,
-        valorDestinado: 150000,
-        dataCriacao: "2024-04-01",
-        destinacoes: [
-          {
-            id: "dest-agua-clara-1",
-            destinatario: "Prefeitura Municipal de Água Clara",
-            municipio: municipioNome,
-            areaAtuacao: "Saúde",
-            valor: 150000,
-            statusExecucao: "em_execucao",
-            dataDestinacao: "2024-04-10",
-            prazoInicio: "2024-04-15",
-            prazoFim: "2024-12-15",
-            gnd: "4 - Investimentos",
-            pd: "10.302.1220.20YM",
-            observacoes: "Equipamentos essenciais para atendimento da população",
-            cnpj: "01.234.567/0001-89"
-          }
-        ]
-      },
-      {
-        id: `agua-clara-emenda-2`,
-        numero: "EMD-2024-002",
-        autor: "Deputado Federal João Silva",
-        tipo: "individual",
-        ano: "2024",
-        programa: "Esporte e Lazer",
-        acao: "Infraestrutura Esportiva",
-        objeto: "Reforma e ampliação da quadra esportiva municipal",
-        orgao: "Ministério do Esporte",
-        localizador: "0002",
-        valor: 300000,
-        valorTotal: 300000,
-        valorDestinado: 300000,
-        dataCriacao: "2024-05-01",
-        destinacoes: [
-          {
-            id: "dest-agua-clara-2",
-            destinatario: "Secretaria Municipal de Esportes",
-            municipio: municipioNome,
-            areaAtuacao: "Esporte e Lazer",
-            valor: 300000,
-            statusExecucao: "planejamento",
-            dataDestinacao: "2024-05-20",
-            prazoInicio: "2024-06-01",
-            prazoFim: "2024-11-30",
-            gnd: "4 - Investimentos",
-            pd: "27.812.1365.20YN",
-            observacoes: "Fomento ao esporte e lazer da juventude"
-          }
-        ]
-      }
-    ]
-    
-    localStorage.setItem('emendas-parlamentares', JSON.stringify([...allEmendas, ...mockEmendas]))
+
+  if (!localStorage.getItem(`municipio-${municipioId}-deputados-estaduais`)) {
+    localStorage.setItem(`municipio-${municipioId}-deputados-estaduais`, JSON.stringify(deputadosEstaduais))
   }
+
+  if (!localStorage.getItem(`municipio-${municipioId}-historico-acoes`)) {
+    localStorage.setItem(`municipio-${municipioId}-historico-acoes`, JSON.stringify(historicoAcoes))
+  }
+
+  // Dados políticos atualizados
+  const dadosPoliticos = {
+    totalEleitores: 12244,
+    votosDeputado: 2845,
+    percentualDeputado: 23.2,
+    colocacaoDeputado: "1º"
+  }
+
+  if (!localStorage.getItem(`municipio-${municipioId}-dados-politicos`)) {
+    localStorage.setItem(`municipio-${municipioId}-dados-politicos`, JSON.stringify(dadosPoliticos))
+  }
+
+  console.log("Dados mock inicializados para Água Clara")
 }

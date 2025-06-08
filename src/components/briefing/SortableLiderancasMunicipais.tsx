@@ -1,5 +1,6 @@
+
 import { useState } from "react"
-import { Plus, Edit3, Trash2, Check, X, GripVertical } from "lucide-react"
+import { Plus, Edit3, Trash2, Check, X, GripVertical, Phone } from "lucide-react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
@@ -86,7 +87,7 @@ const SortableLiderancaItem = ({
     <div 
       ref={setNodeRef} 
       style={style} 
-      className="flex items-center gap-4 p-4 border rounded-lg bg-background"
+      className="flex items-center gap-6 p-6 border rounded-lg bg-background"
     >
       <div 
         {...attributes} 
@@ -96,16 +97,16 @@ const SortableLiderancaItem = ({
         <GripVertical className="h-5 w-5 text-muted-foreground" />
       </div>
       
-      <Avatar className="h-16 w-16">
+      <Avatar className="h-20 w-20">
         <AvatarImage src={lideranca.foto} alt={lideranca.nome} />
-        <AvatarFallback>
+        <AvatarFallback className="text-lg font-semibold">
           {lideranca.nome.split(' ').map(n => n[0]).join('')}
         </AvatarFallback>
       </Avatar>
       
-      <div className="flex-1">
+      <div className="flex-1 space-y-2">
         {isEditing ? (
-          <div className="grid grid-cols-2 gap-2">
+          <div className="grid grid-cols-2 gap-3">
             <Input
               value={editData.nome || ""}
               onChange={(e) => onEditDataChange({...editData, nome: e.target.value})}
@@ -139,17 +140,26 @@ const SortableLiderancaItem = ({
             />
           </div>
         ) : (
-          <>
-            <div className="flex items-center gap-2">
-              <h4 className="font-semibold">{lideranca.nome}</h4>
-              <Badge variant="secondary">{lideranca.partido}</Badge>
+          <div className="flex items-center justify-between">
+            <div className="space-y-1">
+              <div className="flex items-center gap-3">
+                <h4 className="text-xl font-bold">{lideranca.nome}</h4>
+                <Badge variant="secondary" className="text-base px-3 py-1">{lideranca.partido}</Badge>
+              </div>
+              <p className="text-lg text-muted-foreground font-medium">{lideranca.cargo}</p>
+              {lideranca.votos && (
+                <div className="text-left">
+                  <p className="text-sm text-muted-foreground font-medium">Votos</p>
+                  <p className="text-lg font-semibold">{lideranca.votos.toLocaleString()}</p>
+                </div>
+              )}
             </div>
-            <p className="text-sm text-muted-foreground">{lideranca.cargo}</p>
-            <p className="text-sm text-muted-foreground">{lideranca.telefone}</p>
-            {lideranca.votos && (
-              <p className="text-sm text-muted-foreground">Votos: {lideranca.votos.toLocaleString()}</p>
-            )}
-          </>
+            
+            <div className="flex items-center gap-2 text-lg">
+              <Phone className="h-5 w-5 text-muted-foreground" />
+              <span className="font-medium">{lideranca.telefone}</span>
+            </div>
+          </div>
         )}
       </div>
       
@@ -184,7 +194,7 @@ const SortableLiderancaItem = ({
 }
 
 export const SortableLiderancasMunicipais = ({ municipio }: LiderancasMunicipaisProps) => {
-  // Carregar dados do localStorage
+  // Carregar dados do localStorage com dados mock para Água Clara
   const loadLiderancas = (): Lideranca[] => {
     const saved = localStorage.getItem(`municipio-${municipio.id}-liderancas`)
     if (saved) {
@@ -194,6 +204,157 @@ export const SortableLiderancasMunicipais = ({ municipio }: LiderancasMunicipais
         ordem: l.ordem !== undefined ? l.ordem : index
       })).sort((a: Lideranca, b: Lideranca) => a.ordem - b.ordem)
     }
+    
+    // Mock data para Água Clara (id: 1)
+    if (municipio.id === 1) {
+      return [
+        {
+          id: 1,
+          nome: "Carlos Eduardo Silva",
+          cargo: "Prefeito",
+          partido: "PSDB",
+          telefone: "(67) 99988-7766",
+          votos: 8245,
+          ordem: 0
+        },
+        {
+          id: 2,
+          nome: "Ana Maria Santos",
+          cargo: "Vice-Prefeita",
+          partido: "PSDB",
+          telefone: "(67) 99977-8855",
+          votos: 8245,
+          ordem: 1
+        },
+        {
+          id: 3,
+          nome: "Dr. Roberto Oliveira",
+          cargo: "Secretário de Saúde",
+          partido: "PDT",
+          telefone: "(67) 99966-9944",
+          votos: 0,
+          ordem: 2
+        },
+        {
+          id: 4,
+          nome: "José da Silva",
+          cargo: "Vereador",
+          partido: "PT",
+          telefone: "(67) 99955-1122",
+          votos: 1850,
+          ordem: 3
+        },
+        {
+          id: 5,
+          nome: "Maria das Graças",
+          cargo: "Vereadora",
+          partido: "PP",
+          telefone: "(67) 99944-3344",
+          votos: 1620,
+          ordem: 4
+        },
+        {
+          id: 6,
+          nome: "João Pedro Costa",
+          cargo: "Vereador",
+          partido: "MDB",
+          telefone: "(67) 99933-5566",
+          votos: 1480,
+          ordem: 5
+        },
+        {
+          id: 7,
+          nome: "Antônio Carlos",
+          cargo: "Vereador",
+          partido: "PL",
+          telefone: "(67) 99922-7788",
+          votos: 1320,
+          ordem: 6
+        },
+        {
+          id: 8,
+          nome: "Luciana Fernandes",
+          cargo: "Vereadora",
+          partido: "UNIÃO",
+          telefone: "(67) 99911-9900",
+          votos: 1280,
+          ordem: 7
+        },
+        {
+          id: 9,
+          nome: "Fernando Almeida",
+          cargo: "Vereador",
+          partido: "REPUBLICANOS",
+          telefone: "(67) 99900-1122",
+          votos: 1150,
+          ordem: 8
+        },
+        {
+          id: 10,
+          nome: "Sandra Regina",
+          cargo: "Vereadora",
+          partido: "PSB",
+          telefone: "(67) 99888-3344",
+          votos: 1080,
+          ordem: 9
+        },
+        {
+          id: 11,
+          nome: "Ricardo Mendes",
+          cargo: "Vereador",
+          partido: "PODE",
+          telefone: "(67) 99877-5566",
+          votos: 980,
+          ordem: 10
+        },
+        {
+          id: 12,
+          nome: "Patrícia Lima",
+          cargo: "Vereadora",
+          partido: "PV",
+          telefone: "(67) 99866-7788",
+          votos: 920,
+          ordem: 11
+        },
+        {
+          id: 13,
+          nome: "Marcos Vinícius",
+          cargo: "Vereador",
+          partido: "CIDADANIA",
+          telefone: "(67) 99855-9900",
+          votos: 880,
+          ordem: 12
+        },
+        {
+          id: 14,
+          nome: "Cláudia Souza",
+          cargo: "Vereadora",
+          partido: "SOLIDARIEDADE",
+          telefone: "(67) 99844-1122",
+          votos: 850,
+          ordem: 13
+        },
+        {
+          id: 15,
+          nome: "Rafael Rodrigues",
+          cargo: "Vereador",
+          partido: "AVANTE",
+          telefone: "(67) 99833-3344",
+          votos: 800,
+          ordem: 14
+        },
+        {
+          id: 16,
+          nome: "Vanessa Castro",
+          cargo: "Vereadora",
+          partido: "PROS",
+          telefone: "(67) 99822-5566",
+          votos: 750,
+          ordem: 15
+        }
+      ]
+    }
+    
     return [
       {
         id: 1,
