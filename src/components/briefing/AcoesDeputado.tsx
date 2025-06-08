@@ -1,4 +1,3 @@
-
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Calendar, MapPin, DollarSign, FileText, Wrench, Building, Target } from "lucide-react"
@@ -11,6 +10,16 @@ interface AcoesDeputadoProps {
 export const AcoesDeputado = ({ municipioNome }: AcoesDeputadoProps) => {
   const obras = getObrasByMunicipio(municipioNome)
   const destinacoes = getDestinacoesByMunicipio(municipioNome)
+
+  // Agrupar obras por categoria
+  const obrasPorCategoria = obras.reduce((acc, obra) => {
+    const categoria = obra.categoria || 'Outras'
+    if (!acc[categoria]) {
+      acc[categoria] = []
+    }
+    acc[categoria].push(obra)
+    return acc
+  }, {} as Record<string, Obra[]>)
 
   const getStatusColor = (status: string) => {
     switch (status.toLowerCase()) {
@@ -88,7 +97,7 @@ export const AcoesDeputado = ({ municipioNome }: AcoesDeputadoProps) => {
         </div>
       </CardHeader>
       <CardContent className="p-6 space-y-6">
-        {/* Obras Section */}
+        {/* Obras Section - Agrupadas por Categoria */}
         {obras.length > 0 && (
           <div>
             <div className="flex items-center gap-2 mb-4">
@@ -96,52 +105,58 @@ export const AcoesDeputado = ({ municipioNome }: AcoesDeputadoProps) => {
               <h3 className="text-lg font-semibold text-gray-800">Obras e Equipamentos</h3>
               <Badge variant="outline" className="ml-2">{obras.length}</Badge>
             </div>
-            <div className="grid gap-4 md:grid-cols-2">
-              {obras.map((obra) => (
-                <div key={obra.id} className="border border-gray-200 rounded-lg p-4 bg-white shadow-sm">
-                  <div className="flex items-start justify-between mb-3">
-                    <h4 className="font-semibold text-gray-900 text-sm leading-tight flex-1">
-                      {obra.titulo}
-                    </h4>
-                    <Badge className={`ml-2 text-xs ${getStatusColor(obra.status)} flex-shrink-0`}>
-                      {obra.status}
-                    </Badge>
-                  </div>
-                  
-                  <p className="text-gray-600 text-sm mb-3 line-clamp-2">
-                    {obra.descricao}
-                  </p>
-                  
-                  <div className="space-y-2">
-                    <div className="flex items-center gap-2 text-sm text-gray-600">
-                      <Wrench className="h-4 w-4 text-blue-500" />
-                      <span className="font-medium">{obra.categoria}</span>
-                    </div>
-                    
-                    <div className="flex items-center gap-2 text-sm text-gray-600">
-                      <DollarSign className="h-4 w-4 text-green-500" />
-                      <span className="font-semibold text-green-700">{formatCurrency(obra.valor)}</span>
-                    </div>
-                    
-                    <div className="flex items-center gap-2 text-sm text-gray-600">
-                      <Calendar className="h-4 w-4 text-orange-500" />
-                      <span>Início: {formatDate(obra.dataInicio)}</span>
-                    </div>
-                    
-                    <div className="flex items-center gap-2 text-sm text-gray-600">
-                      <Calendar className="h-4 w-4 text-red-500" />
-                      <span>Prazo: {formatDate(obra.prazoExecucao)}</span>
-                    </div>
-                  </div>
-                  
-                  {obra.observacoes && (
-                    <div className="mt-3 p-2 bg-gray-50 rounded text-xs text-gray-600">
-                      <strong>Obs:</strong> {obra.observacoes}
-                    </div>
-                  )}
+
+            {Object.entries(obrasPorCategoria).map(([categoria, obrasCategoria]) => (
+              <div key={categoria} className="mb-6">
+                <div className="flex items-center gap-2 mb-3">
+                  <Wrench className="h-4 w-4 text-blue-600" />
+                  <h4 className="text-md font-semibold text-gray-700">{categoria}</h4>
+                  <Badge variant="secondary" className="text-xs">{obrasCategoria.length}</Badge>
                 </div>
-              ))}
-            </div>
+                
+                <div className="grid gap-4 md:grid-cols-2">
+                  {obrasCategoria.map((obra) => (
+                    <div key={obra.id} className="border border-gray-200 rounded-lg p-4 bg-white shadow-sm">
+                      <div className="flex items-start justify-between mb-3">
+                        <h5 className="font-semibold text-gray-900 text-sm leading-tight flex-1">
+                          {obra.titulo}
+                        </h5>
+                        <Badge className={`ml-2 text-xs ${getStatusColor(obra.status)} flex-shrink-0`}>
+                          {obra.status}
+                        </Badge>
+                      </div>
+                      
+                      <p className="text-gray-600 text-sm mb-3 line-clamp-2">
+                        {obra.descricao}
+                      </p>
+                      
+                      <div className="space-y-2">
+                        <div className="flex items-center gap-2 text-sm text-gray-600">
+                          <DollarSign className="h-4 w-4 text-green-500" />
+                          <span className="font-semibold text-green-700">{formatCurrency(obra.valor)}</span>
+                        </div>
+                        
+                        <div className="flex items-center gap-2 text-sm text-gray-600">
+                          <Calendar className="h-4 w-4 text-orange-500" />
+                          <span>Início: {formatDate(obra.dataInicio)}</span>
+                        </div>
+                        
+                        <div className="flex items-center gap-2 text-sm text-gray-600">
+                          <Calendar className="h-4 w-4 text-red-500" />
+                          <span>Prazo: {formatDate(obra.prazoExecucao)}</span>
+                        </div>
+                      </div>
+                      
+                      {obra.observacoes && (
+                        <div className="mt-3 p-2 bg-gray-50 rounded text-xs text-gray-600">
+                          <strong>Obs:</strong> {obra.observacoes}
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ))}
           </div>
         )}
 

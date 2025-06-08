@@ -93,7 +93,7 @@ export const initializeMockDataForAguaClara = () => {
   const existingDestinacoes = getDestinacoesByMunicipio(municipioNome)
   
   if (existingObras.length === 0) {
-    // Add mock obras data
+    // Add mock obras data with different categories
     const savedObras = localStorage.getItem('obras')
     const allObras: Obra[] = savedObras ? JSON.parse(savedObras) : []
     
@@ -117,12 +117,38 @@ export const initializeMockDataForAguaClara = () => {
         descricao: "Pavimentação asfáltica da Rua Principal do centro da cidade, incluindo sinalização e drenagem",
         municipio: municipioNome,
         regiao: "Fronteira",
-        categoria: "Infraestrutura",
+        categoria: "Obras do PAC",
         status: "Planejada",
         dataInicio: "2024-06-01",
         prazoExecucao: "2024-10-30",
         valor: 1200000,
         observacoes: "Melhoria do acesso ao centro comercial"
+      },
+      {
+        id: `agua-clara-obra-3`,
+        titulo: "Construção da Unidade Básica de Saúde",
+        descricao: "Nova UBS com consultórios médicos, sala de vacinas e farmácia básica para atender a população local",
+        municipio: municipioNome,
+        regiao: "Fronteira",
+        categoria: "Obras do PAC",
+        status: "Em andamento",
+        dataInicio: "2024-02-01",
+        prazoExecucao: "2024-11-30",
+        valor: 2500000,
+        observacoes: "Obra essencial para a saúde pública municipal"
+      },
+      {
+        id: `agua-clara-obra-4`,
+        titulo: "Aquisição de Equipamentos Agrícolas",
+        descricao: "Compra de tratores e implementos agrícolas para apoio aos produtores rurais do município",
+        municipio: municipioNome,
+        regiao: "Fronteira",
+        categoria: "Agricultura",
+        status: "Concluída",
+        dataInicio: "2024-01-15",
+        prazoExecucao: "2024-04-15",
+        valor: 450000,
+        observacoes: "Equipamentos entregues e em operação"
       }
     ]
     

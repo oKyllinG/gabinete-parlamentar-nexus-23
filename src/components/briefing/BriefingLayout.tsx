@@ -1,4 +1,3 @@
-
 import { MapPin } from "lucide-react"
 import { AcoesDeputado } from "./AcoesDeputado"
 import { ResultadosEleitoraisManager } from "./ResultadosEleitoraisManager"
@@ -103,16 +102,16 @@ export const BriefingLayout = ({
           deputadosEstaduais={deputadosEstaduais}
           onSave={onSaveDeputadosEstaduais}
         />
+
+        {/* Lideranças Municipais - Movido para após os deputados */}
+        <LiderancasManager 
+          liderancas={liderancas}
+          onSave={onSaveLiderancas}
+        />
       </div>
 
       {/* Ações do Deputado */}
       <AcoesDeputado municipioNome={municipio.nome} />
-
-      {/* Lideranças Municipais */}
-      <LiderancasManager 
-        liderancas={liderancas}
-        onSave={onSaveLiderancas}
-      />
     </div>
   )
 }
