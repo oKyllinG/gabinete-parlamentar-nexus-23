@@ -7,6 +7,7 @@ import Oficios from "@/pages/Oficios"
 import Contatos from "@/pages/Contatos"
 import Emendas from "@/pages/Emendas"
 import ObrasEquipamentos from "@/pages/ObrasEquipamentos"
+import PainelControle from "@/pages/PainelControle"
 import { useLocation } from "react-router-dom"
 
 const Index = () => {
@@ -15,6 +16,8 @@ const Index = () => {
   // Determine which content to show based on route
   const getPageContent = () => {
     switch (location.pathname) {
+      case '/painel-controle':
+        return <PainelControle />
       case '/oficios':
         return <Oficios />
       case '/contatos':
@@ -30,6 +33,8 @@ const Index = () => {
   
   const getPageTitle = () => {
     switch (location.pathname) {
+      case '/painel-controle':
+        return 'Painel de Controle'
       case '/oficios':
         return 'Ofícios'
       case '/contatos':

@@ -7,7 +7,8 @@ import {
   Building,
   DollarSign,
   Settings,
-  User
+  User,
+  LayoutDashboard
 } from "lucide-react"
 
 import {
@@ -24,6 +25,11 @@ import {
 } from "@/components/ui/sidebar"
 
 const menuItems = [
+  {
+    title: "Painel de Controle",
+    url: "/painel-controle",
+    icon: LayoutDashboard,
+  },
   {
     title: "Agenda",
     url: "/agenda",
