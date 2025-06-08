@@ -1,8 +1,7 @@
 import { useState, useEffect } from "react"
-import { useParams, useNavigate } from "react-router-dom"
-import { ArrowLeft } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { useParams } from "react-router-dom"
+import { BriefingHeader } from "@/components/briefing/BriefingHeader"
+import { BriefingSection } from "@/components/briefing/BriefingSection"
 import { ResultadosEleitorais } from "@/components/briefing/ResultadosEleitorais"
 import { DeputadosTable } from "@/components/briefing/DeputadosTable"
 import { SortableLiderancasMunicipais } from "@/components/briefing/SortableLiderancasMunicipais"
@@ -140,7 +139,6 @@ const municipiosMS: Municipio[] = [
 
 const MunicipioBriefing = () => {
   const { municipioId } = useParams()
-  const navigate = useNavigate()
   
   // Debug logs
   console.log("MunicipioBriefing renderizado")
@@ -227,13 +225,13 @@ const MunicipioBriefing = () => {
   
   if (!municipio) {
     return (
-      <div className="p-6">
-        <div className="text-center">
-          <h2 className="text-2xl font-bold text-foreground mb-4">Município não encontrado</h2>
-          <p className="text-muted-foreground mb-4">
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center space-y-4">
+          <h2 className="text-2xl font-bold text-foreground">Município não encontrado</h2>
+          <p className="text-muted-foreground">
             Tentando encontrar município com ID: {finalMunicipioId}
           </p>
-          <p className="text-muted-foreground mb-4">
+          <p className="text-muted-foreground">
             URL atual: {window.location.pathname}
           </p>
           <Button onClick={() => navigate('/briefing')}>
@@ -245,74 +243,64 @@ const MunicipioBriefing = () => {
   }
 
   return (
-    <div className="p-6 space-y-6">
-      <div className="flex items-center gap-4 mb-6">
-        <Button
-          variant="ghost"
-          onClick={() => navigate('/briefing')}
-          className="flex items-center gap-2"
-        >
-          <ArrowLeft className="h-4 w-4" />
-          Voltar
-        </Button>
-        <div className="flex-1">
-          <h1 className="text-3xl font-bold text-foreground">{municipio.nome}</h1>
-          <p className="text-muted-foreground">
-            {municipio.regiao} • Mato Grosso do Sul
-          </p>
+    <div className="min-h-screen bg-gradient-to-br from-background to-muted/30">
+      <BriefingHeader municipio={municipio} />
+      
+      <div className="container mx-auto p-6 space-y-8 max-w-7xl">
+        {/* Seção de Performance Eleitoral */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <BriefingSection title="Votação do Deputado Geraldo Resende">
+            <VotacaoDeputado 
+              municipio={municipio} 
+              dadosPoliticos={dadosPoliticos}
+              onSave={handleSaveDadosPoliticos}
+            />
+          </BriefingSection>
+          
+          <BriefingSection title="Resumo Eleitoral 2022">
+            <ResultadosEleitorais 
+              municipio={municipio} 
+              dadosPoliticos={dadosPoliticos}
+              onSave={handleSaveDadosPoliticos}
+            />
+          </BriefingSection>
         </div>
-      </div>
 
-      {/* Conteúdo político unificado */}
-      <div className="space-y-6">
-        {/* Votação do Deputado - agora editável */}
-        <VotacaoDeputado 
-          municipio={municipio} 
-          dadosPoliticos={dadosPoliticos}
-          onSave={handleSaveDadosPoliticos}
-        />
-        
-        {/* Resultados Eleitorais - agora editável */}
-        <ResultadosEleitorais 
-          municipio={municipio} 
-          dadosPoliticos={dadosPoliticos}
-          onSave={handleSaveDadosPoliticos}
-        />
-        
-        {/* Deputados Federais */}
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between">
-            <CardTitle>Deputados Federais</CardTitle>
-            <GerenciarDeputados 
-              tipo="federal"
-              municipio={municipio}
-              deputados={deputadosFederais}
-              onSave={handleSaveDeputadosFederais}
-            />
-          </CardHeader>
-          <CardContent>
+        {/* Seção de Representação Legislativa */}
+        <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
+          <BriefingSection 
+            title="Deputados Federais"
+            headerActions={
+              <GerenciarDeputados 
+                tipo="federal"
+                municipio={municipio}
+                deputados={deputadosFederais}
+                onSave={handleSaveDeputadosFederais}
+              />
+            }
+          >
             <DeputadosTable tipo="federal" municipio={municipio} deputados={deputadosFederais} />
-          </CardContent>
-        </Card>
-        
-        {/* Deputados Estaduais */}
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between">
-            <CardTitle>Deputados Estaduais</CardTitle>
-            <GerenciarDeputados 
-              tipo="estadual"
-              municipio={municipio}
-              deputados={deputadosEstaduais}
-              onSave={handleSaveDeputadosEstaduais}
-            />
-          </CardHeader>
-          <CardContent>
+          </BriefingSection>
+          
+          <BriefingSection 
+            title="Deputados Estaduais"
+            headerActions={
+              <GerenciarDeputados 
+                tipo="estadual"
+                municipio={municipio}
+                deputados={deputadosEstaduais}
+                onSave={handleSaveDeputadosEstaduais}
+              />
+            }
+          >
             <DeputadosTable tipo="estadual" municipio={municipio} deputados={deputadosEstaduais} />
-          </CardContent>
-        </Card>
+          </BriefingSection>
+        </div>
         
-        {/* Lideranças Municipais */}
-        <SortableLiderancasMunicipais municipio={municipio} />
+        {/* Seção de Lideranças Locais */}
+        <BriefingSection title="Lideranças Municipais" className="col-span-full">
+          <SortableLiderancasMunicipais municipio={municipio} />
+        </BriefingSection>
       </div>
     </div>
   )
