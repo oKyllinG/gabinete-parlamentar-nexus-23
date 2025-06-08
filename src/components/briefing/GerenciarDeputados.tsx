@@ -14,6 +14,7 @@ interface Deputado {
   votos: number
   percentual: number
   telefone: string
+  colocacao?: number
 }
 
 interface GerenciarDeputadosProps {
@@ -31,7 +32,8 @@ export const GerenciarDeputados = ({ tipo, municipio, deputados, onSave }: Geren
     partido: "",
     votos: 0,
     percentual: 0,
-    telefone: ""
+    telefone: "",
+    colocacao: undefined
   })
 
   const handleAddDeputado = () => {
@@ -40,7 +42,7 @@ export const GerenciarDeputados = ({ tipo, municipio, deputados, onSave }: Geren
       ...formData
     }
     onSave([...deputados, newDeputado])
-    setFormData({ nome: "", partido: "", votos: 0, percentual: 0, telefone: "" })
+    setFormData({ nome: "", partido: "", votos: 0, percentual: 0, telefone: "", colocacao: undefined })
   }
 
   const handleEditDeputado = (deputado: Deputado) => {
@@ -50,7 +52,8 @@ export const GerenciarDeputados = ({ tipo, municipio, deputados, onSave }: Geren
       partido: deputado.partido,
       votos: deputado.votos,
       percentual: deputado.percentual,
-      telefone: deputado.telefone
+      telefone: deputado.telefone,
+      colocacao: deputado.colocacao
     })
   }
 
@@ -64,12 +67,22 @@ export const GerenciarDeputados = ({ tipo, municipio, deputados, onSave }: Geren
     )
     onSave(updatedDeputados)
     setEditingDeputado(null)
-    setFormData({ nome: "", partido: "", votos: 0, percentual: 0, telefone: "" })
+    setFormData({ nome: "", partido: "", votos: 0, percentual: 0, telefone: "", colocacao: undefined })
   }
 
   const handleDeleteDeputado = (id: string) => {
     onSave(deputados.filter(dep => dep.id !== id))
   }
+
+  // Ordenar deputados por colocação para exibição
+  const deputadosOrdenados = [...deputados].sort((a, b) => {
+    if (a.colocacao && b.colocacao) {
+      return a.colocacao - b.colocacao
+    }
+    if (a.colocacao && !b.colocacao) return -1
+    if (!a.colocacao && b.colocacao) return 1
+    return 0
+  })
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -93,6 +106,19 @@ export const GerenciarDeputados = ({ tipo, municipio, deputados, onSave }: Geren
               {editingDeputado ? "Editar" : "Adicionar"} Deputado
             </h3>
             <div className="grid grid-cols-2 gap-4">
+              <div>
+                <Label htmlFor="colocacao">Colocação</Label>
+                <Input
+                  id="colocacao"
+                  type="number"
+                  value={formData.colocacao || ""}
+                  onChange={(e) => setFormData(prev => ({ 
+                    ...prev, 
+                    colocacao: e.target.value ? Number(e.target.value) : undefined 
+                  }))}
+                  placeholder="Ex: 1, 2, 3..."
+                />
+              </div>
               <div>
                 <Label htmlFor="nome">Nome</Label>
                 <Input
@@ -128,7 +154,7 @@ export const GerenciarDeputados = ({ tipo, municipio, deputados, onSave }: Geren
                   onChange={(e) => setFormData(prev => ({ ...prev, percentual: Number(e.target.value) }))}
                 />
               </div>
-              <div className="col-span-2">
+              <div>
                 <Label htmlFor="telefone">Telefone</Label>
                 <Input
                   id="telefone"
@@ -143,7 +169,7 @@ export const GerenciarDeputados = ({ tipo, municipio, deputados, onSave }: Geren
                   <Button onClick={handleUpdateDeputado}>Atualizar</Button>
                   <Button variant="outline" onClick={() => {
                     setEditingDeputado(null)
-                    setFormData({ nome: "", partido: "", votos: 0, percentual: 0, telefone: "" })
+                    setFormData({ nome: "", partido: "", votos: 0, percentual: 0, telefone: "", colocacao: undefined })
                   }}>
                     Cancelar
                   </Button>
@@ -159,6 +185,7 @@ export const GerenciarDeputados = ({ tipo, municipio, deputados, onSave }: Geren
             <Table>
               <TableHeader>
                 <TableRow>
+                  <TableHead>Colocação</TableHead>
                   <TableHead>Nome</TableHead>
                   <TableHead>Partido</TableHead>
                   <TableHead>Votos</TableHead>
@@ -168,8 +195,9 @@ export const GerenciarDeputados = ({ tipo, municipio, deputados, onSave }: Geren
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {deputados.map((deputado) => (
+                {deputadosOrdenados.map((deputado) => (
                   <TableRow key={deputado.id}>
+                    <TableCell>{deputado.colocacao ? `${deputado.colocacao}°` : "-"}</TableCell>
                     <TableCell>{deputado.nome}</TableCell>
                     <TableCell>{deputado.partido}</TableCell>
                     <TableCell>{deputado.votos.toLocaleString()}</TableCell>
@@ -198,7 +226,7 @@ export const GerenciarDeputados = ({ tipo, municipio, deputados, onSave }: Geren
                 ))}
                 {deputados.length === 0 && (
                   <TableRow>
-                    <TableCell colSpan={6} className="text-center text-muted-foreground">
+                    <TableCell colSpan={7} className="text-center text-muted-foreground">
                       Nenhum deputado cadastrado
                     </TableCell>
                   </TableRow>

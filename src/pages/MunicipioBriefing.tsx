@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { ResultadosEleitorais } from "@/components/briefing/ResultadosEleitorais"
 import { DeputadosTable } from "@/components/briefing/DeputadosTable"
-import { EditableLiderancasMunicipais } from "@/components/briefing/EditableLiderancasMunicipais"
+import { SortableLiderancasMunicipais } from "@/components/briefing/SortableLiderancasMunicipais"
 import { VotacaoDeputado } from "@/components/briefing/VotacaoDeputado"
 import { GerenciarDeputados } from "@/components/briefing/GerenciarDeputados"
 
@@ -52,6 +52,7 @@ interface Deputado {
   votos: number
   percentual: number
   telefone: string
+  colocacao?: number
 }
 
 // ... keep existing code (municipiosMS array)
@@ -311,7 +312,7 @@ const MunicipioBriefing = () => {
         </Card>
         
         {/* Lideranças Municipais */}
-        <EditableLiderancasMunicipais municipio={municipio} />
+        <SortableLiderancasMunicipais municipio={municipio} />
       </div>
     </div>
   )
