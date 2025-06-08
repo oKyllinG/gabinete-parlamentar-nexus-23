@@ -4,6 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Plus, Search, FileText, Download, Building, Construction, Pause, CheckCircle } from "lucide-react"
 import { ObraForm } from "@/components/obras/ObraForm"
 import { CategoriaManager } from "@/components/obras/CategoriaManager"
@@ -13,7 +14,8 @@ interface Obra {
   id: string
   nome: string
   municipio: string
-  categoria: string
+  categoria: string // Programa (PAC, etc.)
+  area: string // Saúde, Infraestrutura, etc.
   status: "Em Planejamento" | "Em Execução" | "Paralisada" | "Concluída"
   valorTotal: number
   percentualExecucao: number
@@ -27,7 +29,8 @@ const mockObras: Obra[] = [
     id: "1",
     nome: "Construção do Centro de Saúde Municipal",
     municipio: "São Paulo",
-    categoria: "Saúde",
+    categoria: "PAC",
+    area: "Saúde",
     status: "Em Execução",
     valorTotal: 2500000,
     percentualExecucao: 65,
@@ -39,7 +42,8 @@ const mockObras: Obra[] = [
     id: "2", 
     nome: "Revitalização da Praça Central",
     municipio: "Campinas",
-    categoria: "Infraestrutura",
+    categoria: "Emenda Parlamentar",
+    area: "Infraestrutura",
     status: "Concluída",
     valorTotal: 800000,
     percentualExecucao: 100,
@@ -51,7 +55,8 @@ const mockObras: Obra[] = [
     id: "3",
     nome: "Ampliação da Escola Municipal",
     municipio: "Santos",
-    categoria: "Educação",
+    categoria: "FNDE",
+    area: "Educação",
     status: "Paralisada",
     valorTotal: 1200000,
     percentualExecucao: 30,
@@ -62,7 +67,8 @@ const mockObras: Obra[] = [
     id: "4",
     nome: "Ponte sobre o Rio Verde",
     municipio: "Ribeirão Preto",
-    categoria: "Infraestrutura",
+    categoria: "PAC",
+    area: "Infraestrutura",
     status: "Em Planejamento",
     valorTotal: 5000000,
     percentualExecucao: 0,
@@ -74,6 +80,8 @@ const ObrasEquipamentos = () => {
   const [obras, setObras] = useState<Obra[]>(mockObras)
   const [searchTerm, setSearchTerm] = useState("")
   const [statusFilter, setStatusFilter] = useState<string>("all")
+  const [categoriaFilter, setCategoriaFilter] = useState<string>("all")
+  const [areaFilter, setAreaFilter] = useState<string>("all")
   const [showObraForm, setShowObraForm] = useState(false)
   const [showCategoriaManager, setShowCategoriaManager] = useState(false)
   const [showExportDialog, setShowExportDialog] = useState(false)
@@ -83,7 +91,9 @@ const ObrasEquipamentos = () => {
     const matchesSearch = obra.nome.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          obra.municipio.toLowerCase().includes(searchTerm.toLowerCase())
     const matchesStatus = statusFilter === "all" || obra.status === statusFilter
-    return matchesSearch && matchesStatus
+    const matchesCategoria = categoriaFilter === "all" || obra.categoria === categoriaFilter
+    const matchesArea = areaFilter === "all" || obra.area === areaFilter
+    return matchesSearch && matchesStatus && matchesCategoria && matchesArea
   })
 
   const stats = {
@@ -130,6 +140,10 @@ const ObrasEquipamentos = () => {
     setEditingObra(null)
     setShowObraForm(true)
   }
+
+  // Get unique values for filters
+  const categorias = [...new Set(obras.map(obra => obra.categoria))].sort()
+  const areas = [...new Set(obras.map(obra => obra.area))].sort()
 
   return (
     <div className="p-6 space-y-6">
@@ -225,17 +239,43 @@ const ObrasEquipamentos = () => {
             className="pl-10"
           />
         </div>
-        <select
-          value={statusFilter}
-          onChange={(e) => setStatusFilter(e.target.value)}
-          className="px-3 py-2 border border-input bg-background rounded-md text-sm"
-        >
-          <option value="all">Todos os Status</option>
-          <option value="Em Planejamento">Em Planejamento</option>
-          <option value="Em Execução">Em Execução</option>
-          <option value="Paralisada">Paralisada</option>
-          <option value="Concluída">Concluída</option>
-        </select>
+        
+        <Select value={statusFilter} onValueChange={setStatusFilter}>
+          <SelectTrigger className="w-[200px]">
+            <SelectValue placeholder="Status" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">Todos os Status</SelectItem>
+            <SelectItem value="Em Planejamento">Em Planejamento</SelectItem>
+            <SelectItem value="Em Execução">Em Execução</SelectItem>
+            <SelectItem value="Paralisada">Paralisada</SelectItem>
+            <SelectItem value="Concluída">Concluída</SelectItem>
+          </SelectContent>
+        </Select>
+
+        <Select value={categoriaFilter} onValueChange={setCategoriaFilter}>
+          <SelectTrigger className="w-[200px]">
+            <SelectValue placeholder="Categoria" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">Todas as Categorias</SelectItem>
+            {categorias.map(categoria => (
+              <SelectItem key={categoria} value={categoria}>{categoria}</SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+
+        <Select value={areaFilter} onValueChange={setAreaFilter}>
+          <SelectTrigger className="w-[200px]">
+            <SelectValue placeholder="Área" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">Todas as Áreas</SelectItem>
+            {areas.map(area => (
+              <SelectItem key={area} value={area}>{area}</SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
       </div>
 
       {/* Obras List */}
@@ -249,6 +289,7 @@ const ObrasEquipamentos = () => {
                   <div className="flex flex-wrap gap-2 mb-3">
                     <Badge variant="outline">{obra.municipio}</Badge>
                     <Badge variant="outline">{obra.categoria}</Badge>
+                    <Badge variant="outline">{obra.area}</Badge>
                     <Badge className={getStatusColor(obra.status)}>
                       {getStatusIcon(obra.status)}
                       <span className="ml-1">{obra.status}</span>
@@ -310,11 +351,11 @@ const ObrasEquipamentos = () => {
             <Building className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
             <h3 className="text-lg font-medium text-foreground mb-2">Nenhuma obra encontrada</h3>
             <p className="text-muted-foreground mb-4">
-              {searchTerm || statusFilter !== "all" 
+              {searchTerm || statusFilter !== "all" || categoriaFilter !== "all" || areaFilter !== "all"
                 ? "Tente ajustar os filtros ou fazer uma nova busca" 
                 : "Comece cadastrando sua primeira obra"}
             </p>
-            {!searchTerm && statusFilter === "all" && (
+            {!searchTerm && statusFilter === "all" && categoriaFilter === "all" && areaFilter === "all" && (
               <Button onClick={handleNewObra}>
                 <Plus className="w-4 h-4 mr-2" />
                 Nova Obra
@@ -341,6 +382,7 @@ const ObrasEquipamentos = () => {
               nome: novaObraData.nome,
               municipio: novaObraData.municipio,
               categoria: novaObraData.categoria,
+              area: novaObraData.area || novaObraData.categoria, // Fallback para compatibilidade
               status: novaObraData.status,
               valorTotal: valorTotal,
               percentualExecucao: novaObraData.percentualExecucao,
