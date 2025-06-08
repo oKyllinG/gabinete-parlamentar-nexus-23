@@ -3,6 +3,7 @@ import { useParams, useNavigate } from "react-router-dom"
 import { ArrowLeft } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { BriefingLayout } from "@/components/briefing/BriefingLayout"
+import { initializeMockDataForAguaClara } from "@/utils/briefingDataUtils"
 
 interface Municipio {
   id: number
@@ -139,7 +140,7 @@ const MunicipioBriefing = () => {
   }
   
   const municipio = municipiosMS.find(m => m.id === Number(finalMunicipioId))
-  
+
   // Estados para dados
   const [dadosPoliticos, setDadosPoliticos] = useState<DadosPoliticos>({
     totalEleitores: 12244,
@@ -162,9 +163,14 @@ const MunicipioBriefing = () => {
     }
   ])
 
-  // Carregar dados do localStorage
+  // Carregar dados do localStorage e inicializar dados mock se necessário
   useEffect(() => {
     if (municipio) {
+      // Initialize mock data for Água Clara if it doesn't exist
+      if (municipio.nome === "Água Clara") {
+        initializeMockDataForAguaClara()
+      }
+
       const savedData = localStorage.getItem(`municipio-${municipio.id}-dados-politicos`)
       if (savedData) {
         setDadosPoliticos(JSON.parse(savedData))

@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Label } from "@/components/ui/label"
+import { AcoesDeputado } from "./AcoesDeputado"
 
 interface Municipio {
   id: number
@@ -848,6 +849,9 @@ export const BriefingLayout = ({
           </CardContent>
         </Card>
       </div>
+
+      {/* Ações do Deputado - New Section */}
+      <AcoesDeputado municipioNome={municipio.nome} />
 
       {/* Lideranças Municipais */}
       <Card className="border-gray-300">
