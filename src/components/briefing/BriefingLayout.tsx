@@ -81,159 +81,93 @@ export const BriefingLayout = ({
     const printContent = document.querySelector('.print-container')
     if (!printContent) return
 
-    // CSS específico para impressão
-    const printCSS = `
-      <style>
-        * {
-          margin: 0;
-          padding: 0;
-          box-sizing: border-box;
+    // Obter todas as folhas de estilo da página atual
+    const styleSheets = Array.from(document.styleSheets)
+    let allCSS = ''
+
+    try {
+      styleSheets.forEach(sheet => {
+        try {
+          if (sheet.href || sheet.ownerNode) {
+            const rules = Array.from(sheet.cssRules || sheet.rules || [])
+            rules.forEach(rule => {
+              allCSS += rule.cssText + '\n'
+            })
+          }
+        } catch (e) {
+          console.log('Could not access stylesheet:', e)
         }
-        
-        body {
-          font-family: Arial, sans-serif;
-          font-size: 12px;
-          line-height: 1.4;
-          color: #000;
-          background: white;
-        }
-        
-        .print-container {
-          max-width: 100%;
-          padding: 20px;
-        }
-        
-        .bg-primary {
-          background-color: #1e40af !important;
-          color: white !important;
-          padding: 16px;
-          border-radius: 8px;
-          margin-bottom: 16px;
-        }
-        
-        .text-primary-foreground {
-          color: white !important;
-        }
-        
-        .bg-card {
-          background-color: white !important;
-          border: 1px solid #e5e7eb;
-          border-radius: 8px;
-          margin-bottom: 16px;
-        }
-        
-        .bg-muted {
-          background-color: #f3f4f6 !important;
-          padding: 12px;
-          border-radius: 6px;
-        }
-        
-        .text-lg {
-          font-size: 16px;
-          font-weight: bold;
-        }
-        
-        .text-sm {
-          font-size: 11px;
-        }
-        
-        .text-xs {
-          font-size: 10px;
-        }
-        
-        .grid {
-          display: grid;
-        }
-        
-        .flex {
-          display: flex;
-        }
-        
-        .items-center {
-          align-items: center;
-        }
-        
-        .justify-between {
-          justify-content: space-between;
-        }
-        
-        .gap-2 {
-          gap: 8px;
-        }
-        
-        .gap-4 {
-          gap: 16px;
-        }
-        
-        .space-y-4 > * + * {
-          margin-top: 16px;
-        }
-        
-        .space-y-6 > * + * {
-          margin-top: 24px;
-        }
-        
-        .border {
-          border: 1px solid #e5e7eb;
-        }
-        
-        .rounded-lg {
-          border-radius: 8px;
-        }
-        
-        .p-4 {
-          padding: 16px;
-        }
-        
-        .p-6 {
-          padding: 24px;
-        }
-        
-        .mb-4 {
-          margin-bottom: 16px;
-        }
-        
-        .font-bold {
-          font-weight: bold;
-        }
-        
-        .font-semibold {
-          font-weight: 600;
-        }
-        
-        .no-print {
-          display: none !important;
-        }
-        
-        button {
-          display: none !important;
-        }
-        
-        .badge {
-          display: inline-block;
-          padding: 4px 8px;
-          border: 1px solid #3b82f6;
-          border-radius: 4px;
-          font-size: 10px;
-          background-color: rgba(59, 130, 246, 0.1);
-        }
-        
-        .w-20 {
-          width: 80px;
-        }
-        
-        .h-20 {
-          height: 80px;
-        }
-        
-        .rounded-full {
-          border-radius: 50%;
-        }
-        
-        .object-cover {
-          object-fit: cover;
-        }
-      </style>
+      })
+    } catch (e) {
+      console.log('Error reading stylesheets:', e)
+    }
+
+    // CSS adicional específico para impressão com cores forçadas
+    const additionalCSS = `
+      body {
+        font-family: Arial, sans-serif !important;
+        font-size: 12px !important;
+        line-height: 1.4 !important;
+        color: #000 !important;
+        background: white !important;
+        margin: 0 !important;
+        padding: 20px !important;
+      }
+      
+      .print-container {
+        max-width: 100% !important;
+        padding: 0 !important;
+        margin: 0 !important;
+      }
+      
+      /* Forçar cores dos headers */
+      .bg-primary, [class*="bg-primary"] {
+        background-color: #1e40af !important;
+        color: white !important;
+        -webkit-print-color-adjust: exact !important;
+        color-adjust: exact !important;
+        print-color-adjust: exact !important;
+      }
+      
+      .text-primary-foreground {
+        color: white !important;
+      }
+      
+      /* Forçar cores dos cards */
+      .bg-muted, [class*="bg-muted"] {
+        background-color: #f3f4f6 !important;
+        -webkit-print-color-adjust: exact !important;
+        color-adjust: exact !important;
+        print-color-adjust: exact !important;
+      }
+      
+      /* Esconder elementos não printáveis */
+      .no-print, button, [class*="no-print"] {
+        display: none !important;
+        visibility: hidden !important;
+      }
+      
+      /* Forçar bordas visíveis */
+      .border, [class*="border"] {
+        border: 1px solid #e5e7eb !important;
+      }
+      
+      /* Badges */
+      .badge, [class*="badge"] {
+        border: 1px solid #3b82f6 !important;
+        background-color: rgba(59, 130, 246, 0.1) !important;
+        color: #3b82f6 !important;
+        padding: 4px 8px !important;
+        border-radius: 4px !important;
+        display: inline-block !important;
+      }
+      
+      /* Garantir que todas as cores sejam forçadas */
+      * {
+        -webkit-print-color-adjust: exact !important;
+        color-adjust: exact !important;
+        print-color-adjust: exact !important;
+      }
     `
 
     // Escrever o HTML completo na nova janela
@@ -243,16 +177,17 @@ export const BriefingLayout = ({
         <head>
           <title>Briefing Municipal - ${municipio.nome}</title>
           <meta charset="utf-8">
-          ${printCSS}
+          <style>
+            ${allCSS}
+            ${additionalCSS}
+          </style>
         </head>
         <body>
-          <div class="print-container">
-            <div style="text-align: center; margin-bottom: 20px;">
-              <h1>Briefing Municipal - ${municipio.nome}</h1>
-              <p>Gerado em ${new Date().toLocaleDateString('pt-BR')}</p>
-            </div>
-            ${printContent.innerHTML}
+          <div style="text-align: center; margin-bottom: 20px;">
+            <h1 style="font-size: 24px; font-weight: bold; margin-bottom: 8px;">Briefing Municipal - ${municipio.nome}</h1>
+            <p style="color: #666; font-size: 14px;">Gerado em ${new Date().toLocaleDateString('pt-BR')}</p>
           </div>
+          ${printContent.innerHTML}
         </body>
       </html>
     `)
@@ -263,7 +198,7 @@ export const BriefingLayout = ({
     setTimeout(() => {
       printWindow.print()
       printWindow.close()
-    }, 500)
+    }, 1000)
   }
 
   return (
