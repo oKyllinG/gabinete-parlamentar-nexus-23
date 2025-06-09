@@ -1,6 +1,6 @@
 
 import { useState } from "react"
-import { Plus, Edit, Trash2, Check, X } from "lucide-react"
+import { Plus, Edit, Trash2, Check, X, Phone } from "lucide-react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -129,12 +129,11 @@ export const LiderancasManager = ({ liderancas, onSave }: LiderancasManagerProps
               <div>
                 <div className="flex items-center gap-3 mb-1">
                   <h4 className="font-bold text-gray-900 text-lg">{lideranca.nome}</h4>
-                  <Badge variant="outline" className="border-blue-300 text-blue-700 bg-blue-50">
+                  <Badge variant="outline" className="border-blue-300 text-blue-700 bg-blue-50 text-lg px-3 py-1">
                     {lideranca.partido}
                   </Badge>
                 </div>
                 <p className="text-gray-600 font-medium">{lideranca.cargo}</p>
-                <p className="text-gray-500 text-sm">{lideranca.telefone}</p>
               </div>
               
               {lideranca.votos && lideranca.votos > 0 && (
@@ -150,26 +149,33 @@ export const LiderancasManager = ({ liderancas, onSave }: LiderancasManagerProps
         )}
       </div>
       
-      <div className="flex items-center gap-2">
-        {editingId === lideranca.id ? (
-          <>
-            <Button size="sm" onClick={handleSaveEdit} className="bg-green-600 hover:bg-green-700 text-white">
-              <Check className="h-4 w-4" />
-            </Button>
-            <Button size="sm" onClick={() => setEditingId(null)} className="bg-gray-600 hover:bg-gray-700 text-white">
-              <X className="h-4 w-4" />
-            </Button>
-          </>
-        ) : (
-          <>
-            <Button size="sm" onClick={() => handleEdit(lideranca)} className="bg-blue-600 hover:bg-blue-700 text-white">
-              <Edit className="h-4 w-4" />
-            </Button>
-            <Button size="sm" onClick={() => handleDelete(lideranca.id)} className="bg-red-600 hover:bg-red-700 text-white">
-              <Trash2 className="h-4 w-4" />
-            </Button>
-          </>
-        )}
+      <div className="flex items-center gap-3">
+        <div className="flex items-center gap-1 text-gray-600">
+          <Phone className="h-4 w-4" />
+          <span className="text-base font-medium">{lideranca.telefone}</span>
+        </div>
+        
+        <div className="flex items-center gap-2">
+          {editingId === lideranca.id ? (
+            <>
+              <Button size="sm" onClick={handleSaveEdit} className="bg-green-600 hover:bg-green-700 text-white">
+                <Check className="h-4 w-4" />
+              </Button>
+              <Button size="sm" onClick={() => setEditingId(null)} className="bg-gray-600 hover:bg-gray-700 text-white">
+                <X className="h-4 w-4" />
+              </Button>
+            </>
+          ) : (
+            <>
+              <Button size="sm" onClick={() => handleEdit(lideranca)} className="bg-blue-600 hover:bg-blue-700 text-white">
+                <Edit className="h-4 w-4" />
+              </Button>
+              <Button size="sm" onClick={() => handleDelete(lideranca.id)} className="bg-red-600 hover:bg-red-700 text-white">
+                <Trash2 className="h-4 w-4" />
+              </Button>
+            </>
+          )}
+        </div>
       </div>
     </div>
   )

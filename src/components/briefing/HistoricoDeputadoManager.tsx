@@ -84,10 +84,6 @@ export const HistoricoDeputadoManager = ({ acoes, municipioNome, onSave }: Histo
     }).format(value)
   }
 
-  // Separar categorias com uma única ação das que têm múltiplas ações
-  const categoriasComUmaAcao = Object.entries(acoesAgrupadas).filter(([, acoes]) => acoes.length === 1)
-  const categoriasComMultiplasAcoes = Object.entries(acoesAgrupadas).filter(([, acoes]) => acoes.length > 1)
-
   return (
     <Card>
       <CardHeader className="bg-cyan-600 text-white rounded-t-lg">
@@ -114,52 +110,8 @@ export const HistoricoDeputadoManager = ({ acoes, municipioNome, onSave }: Histo
           </div>
         ) : (
           <>
-            {/* Categorias com uma única ação - mostrar lado a lado */}
-            {categoriasComUmaAcao.length > 0 && (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {categoriasComUmaAcao.map(([categoria, acoesDaCategoria]) => {
-                  const acao = acoesDaCategoria[0]
-                  return (
-                    <div key={categoria} className="space-y-3">
-                      <div className="flex items-center justify-between border-b pb-2">
-                        <h3 className="text-lg font-semibold text-primary">{categoria}</h3>
-                        <span className="text-lg font-bold text-green-600">
-                          {formatCurrency(calcularTotalCategoria(acoesDaCategoria))}
-                        </span>
-                      </div>
-                      
-                      <div className="flex items-center justify-between p-3 bg-muted rounded-lg">
-                        <div className="flex-1">
-                          <p className="font-medium">{acao.descricao}</p>
-                          <p className="text-sm text-muted-foreground font-medium">
-                            {formatCurrency(acao.valor)}
-                          </p>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            onClick={() => handleEditAcao(acao)}
-                          >
-                            <Edit className="h-4 w-4" />
-                          </Button>
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            onClick={() => handleDeleteAcao(acao.id)}
-                          >
-                            <Trash2 className="h-4 w-4" />
-                          </Button>
-                        </div>
-                      </div>
-                    </div>
-                  )
-                })}
-              </div>
-            )}
-
-            {/* Categorias com múltiplas ações - mostrar verticalmente */}
-            {categoriasComMultiplasAcoes.map(([categoria, acoesDaCategoria]) => (
+            {/* Todas as categorias exibidas verticalmente */}
+            {Object.entries(acoesAgrupadas).map(([categoria, acoesDaCategoria]) => (
               <div key={categoria} className="space-y-3">
                 <div className="flex items-center justify-between border-b pb-2">
                   <h3 className="text-lg font-semibold text-primary">{categoria}</h3>
