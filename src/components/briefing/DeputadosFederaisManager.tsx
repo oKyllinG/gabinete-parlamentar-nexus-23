@@ -1,4 +1,3 @@
-
 import { useState } from "react"
 import { Plus, Edit, Trash2, Check, X } from "lucide-react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
@@ -76,7 +75,7 @@ export const DeputadosFederaisManager = ({ deputadosFederais, onSave }: Deputado
   })
 
   return (
-    <Card className="border-gray-300">
+    <Card className="border-gray-300 h-full">
       <CardHeader className="bg-cyan-600 text-white border-b border-gray-300">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
@@ -85,7 +84,7 @@ export const DeputadosFederaisManager = ({ deputadosFederais, onSave }: Deputado
           </div>
           <Button 
             size="sm" 
-            className="bg-blue-600 hover:bg-blue-700 text-white"
+            className="bg-blue-600 hover:bg-blue-700 text-white no-print"
             onClick={() => setShowAddForm(true)}
           >
             <Plus className="h-4 w-4" />
@@ -93,9 +92,9 @@ export const DeputadosFederaisManager = ({ deputadosFederais, onSave }: Deputado
           </Button>
         </div>
       </CardHeader>
-      <CardContent className="p-4">
+      <CardContent className="p-4 print-card-content">
         {showAddForm && (
-          <div className="p-4 border rounded-lg bg-gray-50 mb-4">
+          <div className="p-4 border rounded-lg bg-gray-50 mb-4 no-print">
             <h4 className="font-semibold mb-3">Novo Deputado Federal</h4>
             <div className="grid grid-cols-5 gap-3 mb-3">
               <div>
@@ -170,7 +169,7 @@ export const DeputadosFederaisManager = ({ deputadosFederais, onSave }: Deputado
                 <th className="text-left p-3 border border-gray-300 font-semibold">Partido</th>
                 <th className="text-left p-3 border border-gray-300 font-semibold">Votos</th>
                 <th className="text-left p-3 border border-gray-300 font-semibold">%</th>
-                <th className="text-left p-3 border border-gray-300 font-semibold">Ações</th>
+                <th className="text-left p-3 border border-gray-300 font-semibold no-print">Ações</th>
               </tr>
             </thead>
             <tbody>
@@ -220,7 +219,7 @@ export const DeputadosFederaisManager = ({ deputadosFederais, onSave }: Deputado
                             onChange={(e) => setEditData({...editData, percentual: Number(e.target.value)})}
                           />
                         </td>
-                        <td className="p-3 border border-gray-300">
+                        <td className="p-3 border border-gray-300 no-print">
                           <div className="flex gap-1">
                             <Button size="sm" onClick={handleSaveEdit} className="bg-green-600 hover:bg-green-700 text-white">
                               <Check className="h-4 w-4" />
@@ -240,7 +239,7 @@ export const DeputadosFederaisManager = ({ deputadosFederais, onSave }: Deputado
                         </td>
                         <td className="p-3 border border-gray-300">{deputado.votos.toLocaleString()}</td>
                         <td className="p-3 border border-gray-300">{deputado.percentual.toFixed(2)}%</td>
-                        <td className="p-3 border border-gray-300">
+                        <td className="p-3 border border-gray-300 no-print">
                           <div className="flex gap-1">
                             <Button size="sm" onClick={() => handleEdit(deputado)} className="bg-blue-600 hover:bg-blue-700 text-white">
                               <Edit className="h-4 w-4" />
