@@ -86,80 +86,107 @@
 /* === FINAL PRINT STYLES === */
 @media print {
   @page {
-    size: A4 portrait;
+    size: A4;
     margin: 1cm;
   }
 
+  /* General Print Resets */
   body {
     background: white !important;
     color: black !important;
     font-size: 9pt !important;
+    line-height: 1.2 !important;
     -webkit-print-color-adjust: exact !important;
     print-color-adjust: exact !important;
   }
+  
+  body, #root, .main-container {
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    display: block !important;
+  }
 
+  main {
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    display: block !important;
+  }
+
+  /* Visibility Control */
   .no-print {
     display: none !important;
   }
-
   .print-only {
     display: block !important;
   }
-  
+
+  /* Layout and Spacing */
   .print-container {
     padding: 0 !important;
     margin: 0 !important;
-    width: 100% !important;
   }
-
-  .print-section, .card {
-    border: 1px solid #ddd !important;
-    box-shadow: none !important;
+  .print-section {
     page-break-inside: avoid !important;
-    margin-top: 1rem;
+    margin-top: 1rem !important;
+    border: 1px solid #e5e7eb !important;
   }
-  
-  .print-deputies-grid {
-    display: grid !important;
-    grid-template-columns: 1fr 1fr;
-    gap: 1rem;
+  .card, table, thead, tbody, tr, td, th, .lideranca-card {
+    page-break-inside: avoid !important;
   }
-  
   .print-first-page-group {
-    page-break-inside: avoid !important;
+      page-break-after: avoid;
   }
 
-  .card-header.bg-cyan-600, .votacao-historica-header tr {
-    background-color: #0891b2 !important;
+  /* Header Styles */
+  .print-header {
+    background-color: #1e40af !important; /* A darker blue for better contrast */
+    color: white !important;
+    padding: 0.75rem !important;
+    border-radius: 0.5rem !important;
   }
-
-  .card-header.bg-cyan-600 *, .votacao-historica-header th, .votacao-historica-header * {
+  .print-header h1, .print-header span, .print-header svg {
     color: white !important;
   }
+  .votacao-historica-header tr {
+      background-color: #0891b2 !important;
+  }
+  .votacao-historica-header th {
+      color: white !important;
+  }
   
+  /* Table Styles */
   table {
-    width: 100% !important;
-    table-layout: fixed;
-    border-collapse: collapse;
+      width: 100% !important;
+      border-collapse: collapse !important;
+      table-layout: fixed; /* Helps with column widths */
   }
-
   th, td {
-    border: 1px solid #dee2e6 !important;
-    padding: 3px 5px !important;
-    font-size: 8pt !important;
-    word-wrap: break-word;
+      border: 1px solid #e5e7eb !important;
+      padding: 4px !important;
+      font-size: 8pt !important;
+      word-wrap: break-word;
+  }
+  th {
+    background-color: #f8fafc !important;
+    font-weight: 600 !important;
   }
   
-  th {
-     background-color: #f8fafc !important;
-     font-weight: 600;
-  }
-
   .deputies-table .pos-col { width: 6%; }
   .deputies-table .name-col { width: 50%; }
   .deputies-table .party-col { width: 14%; }
   .deputies-table .votes-col { width: 15%; }
   .deputies-table .percent-col { width: 15%; }
+
+
+  /* Grid layout for deputies */
+  .print-deputies-grid {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    align-items: start;
+  }
 }
 
 @media screen {
