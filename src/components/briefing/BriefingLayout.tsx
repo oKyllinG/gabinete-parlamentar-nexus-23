@@ -73,22 +73,12 @@ export const BriefingLayout = ({
   onSaveHistoricoAcoes
 }: BriefingLayoutProps) => {
 
-  const navigate = useNavigate()
   const handlePrint = () => {
     window.print()
   }
 
   return (
     <div className="print-container space-y-4 bg-background p-6">
-       <Button
-        variant="ghost"
-        onClick={() => navigate('/briefing')}
-        className="flex items-center gap-2 mb-6 no-print"
-      >
-        <ArrowLeft className="h-4 w-4" />
-        Voltar
-      </Button>
-      
       {/* Header */}
       <div className="print-header bg-blue-600 text-white rounded-lg p-6 border border-border">
         <div className="flex items-center justify-between">
