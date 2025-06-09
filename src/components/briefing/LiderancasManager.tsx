@@ -145,11 +145,11 @@ export const LiderancasManager = ({ liderancas, onSave }: LiderancasManagerProps
   }
 
   return (
-    <Card className="border-gray-300 print-friendly">
-      <CardHeader className="bg-cyan-600 text-white border-b border-gray-300 print:bg-gray-100 print:text-black print:border-gray-400">
+    <Card className="border-gray-300 print-section">
+      <CardHeader className="bg-cyan-600 text-white border-b border-gray-300 print:bg-cyan-600 print:text-white print:border-gray-400">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <div className="w-1 h-6 bg-white rounded print:bg-gray-600"></div>
+            <div className="w-1 h-6 bg-white rounded print:bg-white"></div>
             <CardTitle className="text-lg font-bold">Lideranças Municipais</CardTitle>
           </div>
           <Button
@@ -181,7 +181,7 @@ export const LiderancasManager = ({ liderancas, onSave }: LiderancasManagerProps
           <div className="space-y-6">
             {Object.entries(liderancasPorCategoria).map(([categoria, liderancasCategoria]) => (
               <div key={categoria} className="space-y-4">
-                <h3 className="text-lg font-semibold text-cyan-700 border-b border-gray-200 pb-2 print:text-gray-800">
+                <h3 className="text-lg font-semibold text-cyan-700 border-b border-gray-200 pb-2 print:text-cyan-700">
                   {categoria}
                 </h3>
                 <div className="grid gap-4">
@@ -189,7 +189,7 @@ export const LiderancasManager = ({ liderancas, onSave }: LiderancasManagerProps
                     const formattedVotes = formatVotes(lideranca.votos)
                     
                     return (
-                      <div key={lideranca.id} className="border rounded-lg p-4 bg-gray-50 print:bg-white print:border-gray-300">
+                      <div key={lideranca.id} className="border rounded-lg p-4 bg-gray-50 print:bg-gray-50 print:border-gray-300">
                         <div className="grid grid-cols-1 md:grid-cols-12 gap-4 items-center">
                           {/* Avatar */}
                           <div className="md:col-span-1 flex justify-center md:justify-start">
@@ -208,8 +208,12 @@ export const LiderancasManager = ({ liderancas, onSave }: LiderancasManagerProps
                           
                           {/* Nome e Cargo */}
                           <div className="md:col-span-4 text-center md:text-left">
-                            <h4 className="font-semibold text-gray-900">{lideranca.nome}</h4>
-                            <p className="text-sm text-gray-600">{lideranca.cargo}</p>
+                            <h4 className="font-semibold text-gray-900">
+                              {lideranca.nome}
+                            </h4>
+                            <p className="text-sm text-gray-600">
+                              {lideranca.cargo}
+                            </p>
                           </div>
                           
                           {/* Partido */}
@@ -223,7 +227,9 @@ export const LiderancasManager = ({ liderancas, onSave }: LiderancasManagerProps
                           <div className="md:col-span-3 text-center md:text-left">
                             <div className="flex items-center justify-center md:justify-start gap-2">
                               <Phone className="h-4 w-4 text-gray-500 flex-shrink-0" />
-                              <span className="text-sm text-gray-700">{lideranca.telefone}</span>
+                              <span className="text-sm text-gray-700">
+                                {lideranca.telefone}
+                              </span>
                             </div>
                           </div>
                           
@@ -231,7 +237,9 @@ export const LiderancasManager = ({ liderancas, onSave }: LiderancasManagerProps
                           <div className="md:col-span-2 text-center">
                             {formattedVotes && (
                               <div className="text-sm">
-                                <span className="font-semibold text-green-700">{formattedVotes}</span>
+                                <span className="font-semibold text-green-700">
+                                  {formattedVotes}
+                                </span>
                                 <span className="text-gray-500 block text-xs">votos</span>
                               </div>
                             )}
