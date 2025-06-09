@@ -60,7 +60,7 @@ const SortableObraItem = ({ obra, onEdit, onDelete }: SortableObraItemProps) => 
   }
 
   return (
-    <div ref={setNodeRef} style={style} {...attributes}>
+    <div ref={setNodeRef} style={style} {...attributes} className="drag-item">
       <Card className="mb-3 hover:shadow-md transition-shadow">
         <CardContent className="p-4">
           <div className="flex items-start gap-3">
