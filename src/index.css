@@ -2,48 +2,32 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Design system for Gabinete Management System */
-
 @layer base {
   :root {
     --background: 0 0% 100%;
     --foreground: 210 11% 15%;
-
     --card: 0 0% 100%;
     --card-foreground: 210 11% 15%;
-
     --popover: 0 0% 100%;
     --popover-foreground: 210 11% 15%;
-
-    /* Primary - Navy Blue */
     --primary: 210 100% 20%;
     --primary-foreground: 0 0% 98%;
-
-    /* Secondary - Medium Blue */
     --secondary: 213 93% 60%;
     --secondary-foreground: 0 0% 98%;
-
     --muted: 210 40% 96%;
     --muted-foreground: 215 16% 47%;
-
     --accent: 210 40% 96%;
     --accent-foreground: 210 11% 15%;
-
     --destructive: 0 84% 60%;
     --destructive-foreground: 210 40% 98%;
-
     --success: 142 76% 36%;
     --success-foreground: 0 0% 98%;
-
     --warning: 45 93% 47%;
     --warning-foreground: 210 11% 15%;
-
     --border: 214 32% 91%;
     --input: 214 32% 91%;
     --ring: 210 100% 20%;
-
     --radius: 0.5rem;
-
     --sidebar-background: 210 100% 20%;
     --sidebar-foreground: 0 0% 98%;
     --sidebar-primary: 213 93% 60%;
@@ -57,38 +41,27 @@
   .dark {
     --background: 210 11% 15%;
     --foreground: 0 0% 98%;
-
     --card: 210 11% 15%;
     --card-foreground: 0 0% 98%;
-
     --popover: 210 11% 15%;
     --popover-foreground: 0 0% 98%;
-
     --primary: 213 93% 60%;
     --primary-foreground: 210 11% 15%;
-
     --secondary: 210 60% 25%;
     --secondary-foreground: 0 0% 98%;
-
     --muted: 210 60% 25%;
     --muted-foreground: 215 20% 65%;
-
     --accent: 210 60% 25%;
     --accent-foreground: 0 0% 98%;
-
     --destructive: 0 84% 60%;
-    --destructive-foreground: 210 40% 98%;
-
+    --destructive-foreground: 0 0% 98%;
     --success: 142 76% 36%;
     --success-foreground: 0 0% 98%;
-
     --warning: 45 93% 47%;
     --warning-foreground: 210 11% 15%;
-
     --border: 210 60% 25%;
     --input: 210 60% 25%;
     --ring: 213 93% 60%;
-
     --sidebar-background: 210 100% 12%;
     --sidebar-foreground: 0 0% 98%;
     --sidebar-primary: 213 93% 60%;
@@ -113,107 +86,80 @@
 /* === FINAL PRINT STYLES === */
 @media print {
   @page {
-    size: A4;
+    size: A4 portrait;
     margin: 1cm;
   }
 
-  /* General Print Resets */
   body {
     background: white !important;
     color: black !important;
     font-size: 9pt !important;
-    line-height: 1.2 !important;
     -webkit-print-color-adjust: exact !important;
     print-color-adjust: exact !important;
   }
-  
-  body, #root, .main-container {
-    width: 100% !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    display: block !important;
-  }
 
-  main {
-    width: 100% !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    display: block !important;
-  }
-
-  /* Visibility Control */
   .no-print {
     display: none !important;
   }
+
   .print-only {
     display: block !important;
   }
-
-  /* Layout and Spacing */
+  
   .print-container {
     padding: 0 !important;
     margin: 0 !important;
-  }
-  .print-section {
-    page-break-inside: avoid !important;
-    margin-top: 1rem !important;
-    border: 1px solid #e5e7eb !important;
-  }
-  .card, table, thead, tbody, tr, td, th, .lideranca-card {
-    page-break-inside: avoid !important;
-  }
-  .print-first-page-group {
-      page-break-after: avoid;
+    width: 100% !important;
   }
 
-  /* Header Styles */
-  .print-header {
-    background-color: #1e40af !important;
-    color: white !important;
-    padding: 0.75rem !important;
-    border-radius: 0.5rem !important;
-  }
-  .print-header h1, .print-header span, .print-header svg {
-    color: white !important;
-  }
-  .bg-cyan-600, .votacao-historica-header tr {
-      background-color: #0891b2 !important;
-  }
-  .bg-cyan-600 *, .votacao-historica-header th {
-      color: white !important;
+  .print-section, .card {
+    border: 1px solid #ddd !important;
+    box-shadow: none !important;
+    page-break-inside: avoid !important;
+    margin-top: 1rem;
   }
   
-  /* Table Styles */
-  table {
-      width: 100% !important;
-      border-collapse: collapse !important;
-      table-layout: fixed; /* Helps with column widths */
-  }
-  th, td {
-      border: 1px solid #e5e7eb !important;
-      padding: 4px !important;
-      font-size: 8pt !important;
-      word-wrap: break-word;
-  }
-  th {
-    background-color: #f8fafc !important;
-    font-weight: 600 !important;
-  }
-  
-  .deputies-table .pos-col { width: 5%; }
-  .deputies-table .name-col { width: 50%; }
-  .deputies-table .party-col { width: 15%; }
-  .deputies-table .votes-col { width: 15%; }
-  .deputies-table .percent-col { width: 15%; }
-
-
-  /* Grid layout for deputies */
   .print-deputies-grid {
     display: grid !important;
     grid-template-columns: 1fr 1fr;
     gap: 1rem;
-    align-items: start;
   }
+  
+  .print-first-page-group {
+    page-break-inside: avoid !important;
+  }
+
+  .card-header.bg-cyan-600, .votacao-historica-header tr {
+    background-color: #0891b2 !important;
+  }
+
+  .card-header.bg-cyan-600 *, .votacao-historica-header th, .votacao-historica-header * {
+    color: white !important;
+  }
+  
+  table {
+    width: 100% !important;
+    table-layout: fixed;
+    border-collapse: collapse;
+  }
+
+  th, td {
+    border: 1px solid #dee2e6 !important;
+    padding: 3px 5px !important;
+    font-size: 8pt !important;
+    word-wrap: break-word;
+  }
+  
+  th {
+     background-color: #f8fafc !important;
+     font-weight: 600;
+  }
+
+  .deputies-table .pos-col { width: 6%; }
+  .deputies-table .name-col { width: 50%; }
+  .deputies-table .party-col { width: 14%; }
+  .deputies-table .votes-col { width: 15%; }
+  .deputies-table .percent-col { width: 15%; }
 }
 
 @media screen {
