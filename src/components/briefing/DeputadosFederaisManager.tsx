@@ -112,11 +112,11 @@ export const DeputadosFederaisManager = ({ deputadosFederais, onSave }: Deputado
           <table className="w-full border-collapse deputies-table">
             <thead>
               <tr className="bg-gray-100">
-                <th className="text-left p-2 border font-semibold print:w-[5%] print:text-[7pt]">Pos.</th>
-                <th className="text-left p-2 border font-semibold print:w-[50%]">Nome</th>
-                <th className="text-left p-2 border font-semibold print:w-[15%] print:text-[7pt]">Partido</th>
-                <th className="text-left p-2 border font-semibold print:w-[15%] print:text-[7pt]">Votos</th>
-                <th className="text-left p-2 border font-semibold print:w-[15%] print:text-[7pt]">%</th>
+                <th className="text-left p-2 border font-semibold pos-col">Pos.</th>
+                <th className="text-left p-2 border font-semibold name-col">Nome</th>
+                <th className="text-left p-2 border font-semibold party-col">Partido</th>
+                <th className="text-left p-2 border font-semibold votes-col">Votos</th>
+                <th className="text-left p-2 border font-semibold percent-col">%</th>
                 <th className="text-left p-2 border font-semibold no-print">Ações</th>
               </tr>
             </thead>
