@@ -2,6 +2,7 @@
 import { MapPin } from "lucide-react"
 import { SortableObras } from "./SortableObras"
 import { SortableEmendas } from "./SortableEmendas"
+import { AcoesDeputado } from "./AcoesDeputado"
 import { ResultadosEleitoraisManager } from "./ResultadosEleitoraisManager"
 import { VotacaoHistoricaManager } from "./VotacaoHistoricaManager"
 import { DeputadosFederaisManager } from "./DeputadosFederaisManager"
@@ -207,6 +208,13 @@ export const BriefingLayout = ({
         onAdd={handleAddEmenda}
         onEdit={handleEditEmenda}
         onDelete={handleDeleteEmenda}
+      />
+
+      {/* Painel de Resumo - AcoesDeputado */}
+      <AcoesDeputado 
+        acoes={historicoAcoes}
+        municipioNome={municipio.nome}
+        onSave={onSaveHistoricoAcoes}
       />
 
       {/* Histórico do Deputado - Movido para o final */}

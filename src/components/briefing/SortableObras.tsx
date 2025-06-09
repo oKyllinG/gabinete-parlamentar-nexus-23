@@ -181,6 +181,18 @@ export const SortableObras = ({ obras, onSave, onAdd, onEdit, onDelete }: Sortab
     }).format(value)
   }
 
+  // Separar obras por categoria
+  const obrasPorCategoria = items.reduce((acc, obra) => {
+    const categoria = obra.categoria || 'Outras'
+    if (!acc[categoria]) {
+      acc[categoria] = []
+    }
+    acc[categoria].push(obra)
+    return acc
+  }, {} as Record<string, Obra[]>)
+
+  const categorias = Object.keys(obrasPorCategoria).sort()
+
   return (
     <Card className="border-gray-300">
       <CardHeader className="bg-cyan-600 text-white border-b border-gray-300">
@@ -211,22 +223,31 @@ export const SortableObras = ({ obras, onSave, onAdd, onEdit, onDelete }: Sortab
             <p>Nenhuma obra cadastrada</p>
           </div>
         ) : (
-          <DndContext
-            sensors={sensors}
-            collisionDetection={closestCenter}
-            onDragEnd={handleDragEnd}
-          >
-            <SortableContext items={items.map(item => item.id)} strategy={verticalListSortingStrategy}>
-              {items.map((obra) => (
-                <SortableObraItem
-                  key={obra.id}
-                  obra={obra}
-                  onEdit={onEdit}
-                  onDelete={onDelete}
-                />
-              ))}
-            </SortableContext>
-          </DndContext>
+          <div className="space-y-6">
+            {categorias.map((categoria) => (
+              <div key={categoria}>
+                <h3 className="text-lg font-semibold text-gray-800 mb-3 border-b pb-2">
+                  {categoria} ({obrasPorCategoria[categoria].length} obra{obrasPorCategoria[categoria].length !== 1 ? 's' : ''})
+                </h3>
+                <DndContext
+                  sensors={sensors}
+                  collisionDetection={closestCenter}
+                  onDragEnd={handleDragEnd}
+                >
+                  <SortableContext items={obrasPorCategoria[categoria].map(item => item.id)} strategy={verticalListSortingStrategy}>
+                    {obrasPorCategoria[categoria].map((obra) => (
+                      <SortableObraItem
+                        key={obra.id}
+                        obra={obra}
+                        onEdit={onEdit}
+                        onDelete={onDelete}
+                      />
+                    ))}
+                  </SortableContext>
+                </DndContext>
+              </div>
+            ))}
+          </div>
         )}
       </CardContent>
     </Card>

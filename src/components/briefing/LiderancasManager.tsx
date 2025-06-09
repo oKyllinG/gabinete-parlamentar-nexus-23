@@ -1,4 +1,3 @@
-
 import { useState } from "react"
 import { Plus, Edit, Trash2, Check, X, Phone } from "lucide-react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
@@ -212,13 +211,15 @@ export const LiderancasManager = ({ liderancas, onSave }: LiderancasManagerProps
               <div className="min-w-0 flex-1">
                 <div className="flex items-center gap-3 mb-1">
                   <h4 className="font-bold text-gray-900 text-lg">{lideranca.nome}</h4>
-                  <div className="min-w-[100px] text-center">
-                    <Badge variant="outline" className="border-gray-400 text-gray-700 bg-gray-100 text-lg px-3 py-1">
-                      {lideranca.partido}
-                    </Badge>
-                  </div>
                 </div>
                 <p className="text-gray-600 font-medium">{lideranca.cargo}</p>
+              </div>
+              
+              {/* Partido alinhado com largura fixa */}
+              <div className="text-center min-w-[100px]">
+                <Badge variant="outline" className="border-gray-400 text-gray-700 bg-gray-100 text-lg px-3 py-1">
+                  {lideranca.partido}
+                </Badge>
               </div>
               
               {/* Votos alinhados à direita com largura fixa */}
