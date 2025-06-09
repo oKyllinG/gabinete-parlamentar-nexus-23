@@ -132,8 +132,8 @@
   body {
     font-size: 12px !important;
     line-height: 1.4 !important;
-    color: #000000 !important;
-    background: #ffffff !important;
+    color: black !important;
+    background: white !important;
     margin: 0 !important;
     padding: 0 !important;
   }
@@ -143,9 +143,7 @@
   button:not(.print-allow),
   .sidebar,
   nav,
-  [data-lov-id],
-  .cursor-grab,
-  .cursor-grabbing {
+  [data-lov-id] {
     display: none !important;
     visibility: hidden !important;
   }
@@ -160,15 +158,25 @@
   .print-container {
     padding: 0 !important;
     margin: 0 !important;
-    background: #ffffff !important;
+    background: white !important;
     width: 100% !important;
     max-width: none !important;
+  }
+
+  /* Ensure all print sections are visible */
+  .print-section {
+    display: block !important;
+    visibility: visible !important;
+    page-break-inside: avoid !important;
+    margin-bottom: 20px !important;
+    background: white !important;
+    color: black !important;
   }
 
   /* Header styling for print */
   .print-header {
     background: #0891b2 !important;
-    color: #ffffff !important;
+    color: white !important;
     border-radius: 4px !important;
     margin-bottom: 20px !important;
     page-break-inside: avoid !important;
@@ -176,42 +184,45 @@
     color-adjust: exact !important;
     print-color-adjust: exact !important;
     padding: 24px !important;
-  }
-
-  /* Section styling for print */
-  .print-section {
-    page-break-inside: avoid !important;
-    margin-bottom: 20px !important;
     display: block !important;
     visibility: visible !important;
-    background: #ffffff !important;
+  }
+
+  /* Force visibility of all text elements */
+  h1, h2, h3, h4, h5, h6, p, div, span, td, th, li {
+    display: block !important;
+    visibility: visible !important;
+    color: black !important;
   }
 
   /* Card styling for print */
   .print-section .border,
   .print-section [class*="border"] {
     border: 1px solid #d1d5db !important;
+    background: white !important;
+    color: black !important;
   }
 
-  .print-section .bg-cyan-600,
-  .print-section [class*="bg-cyan-600"] {
+  /* Override all background and text colors for print */
+  .bg-cyan-600,
+  [class*="bg-cyan-600"] {
     background: #0891b2 !important;
-    color: #ffffff !important;
+    color: white !important;
     -webkit-print-color-adjust: exact !important;
     color-adjust: exact !important;
     print-color-adjust: exact !important;
   }
 
-  .print-section .bg-gray-50,
-  .print-section [class*="bg-gray-50"] {
+  .bg-gray-50,
+  [class*="bg-gray-50"] {
     background: #f9fafb !important;
     -webkit-print-color-adjust: exact !important;
     color-adjust: exact !important;
     print-color-adjust: exact !important;
   }
 
-  .print-section .bg-gray-100,
-  .print-section [class*="bg-gray-100"] {
+  .bg-gray-100,
+  [class*="bg-gray-100"] {
     background: #f3f4f6 !important;
     -webkit-print-color-adjust: exact !important;
     color-adjust: exact !important;
@@ -219,182 +230,161 @@
   }
 
   /* Text colors for print */
-  .print-section .text-white,
-  .print-section [class*="text-white"] {
-    color: #ffffff !important;
+  .text-white,
+  [class*="text-white"] {
+    color: white !important;
   }
 
-  .print-section .text-gray-900,
-  .print-section [class*="text-gray-900"] {
+  .text-gray-900,
+  [class*="text-gray-900"] {
     color: #111827 !important;
   }
 
-  .print-section .text-gray-600,
-  .print-section [class*="text-gray-600"] {
+  .text-gray-600,
+  [class*="text-gray-600"] {
     color: #4b5563 !important;
   }
 
-  .print-section .text-gray-700,
-  .print-section [class*="text-gray-700"] {
+  .text-gray-700,
+  [class*="text-gray-700"] {
     color: #374151 !important;
   }
 
-  .print-section .text-green-700,
-  .print-section [class*="text-green-700"] {
+  .text-green-700,
+  [class*="text-green-700"] {
     color: #15803d !important;
   }
 
-  .print-section .text-blue-600,
-  .print-section [class*="text-blue-600"] {
+  .text-blue-600,
+  [class*="text-blue-600"] {
     color: #2563eb !important;
   }
 
-  .print-section .text-purple-600,
-  .print-section [class*="text-purple-600"] {
+  .text-purple-600,
+  [class*="text-purple-600"] {
     color: #9333ea !important;
   }
 
-  .print-section .text-orange-600,
-  .print-section [class*="text-orange-600"] {
+  .text-orange-600,
+  [class*="text-orange-600"] {
     color: #ea580c !important;
   }
 
-  .print-section .text-cyan-700,
-  .print-section [class*="text-cyan-700"] {
+  .text-cyan-700,
+  [class*="text-cyan-700"] {
     color: #0e7490 !important;
   }
 
-  /* Card and layout adjustments */
-  .print-section .rounded-lg {
-    border-radius: 4px !important;
-  }
-
-  .print-section .shadow-sm {
-    box-shadow: none !important;
-  }
-
   /* Grid adjustments for print */
-  .print-section .grid-cols-1 {
+  .grid-cols-1 {
     grid-template-columns: repeat(1, minmax(0, 1fr)) !important;
   }
 
-  .print-section .md\:grid-cols-2 {
+  .md\:grid-cols-2 {
     grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
   }
 
-  .print-section .md\:grid-cols-12 {
+  .md\:grid-cols-12 {
     grid-template-columns: repeat(12, minmax(0, 1fr)) !important;
   }
 
-  .print-section .lg\:grid-cols-3 {
+  .lg\:grid-cols-3 {
     grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
   }
 
-  /* Ensure items don't break across pages */
-  .print-section .border.rounded-lg.p-4,
-  .print-section [class*="border"][class*="rounded-lg"][class*="p-4"] {
-    page-break-inside: avoid !important;
-    break-inside: avoid !important;
-  }
-
-  /* Table adjustments for print */
-  .print-section table {
-    page-break-inside: auto !important;
-  }
-
-  .print-section tr {
-    page-break-inside: avoid !important;
-    page-break-after: auto !important;
-  }
-
   /* Badge styling for print */
-  .print-section .border-green-300,
-  .print-section [class*="border-green-300"] {
+  .border-green-300,
+  [class*="border-green-300"] {
     border-color: #86efac !important;
     background: #dcfce7 !important;
     color: #166534 !important;
   }
 
-  .print-section .border-yellow-300,
-  .print-section [class*="border-yellow-300"] {
+  .border-yellow-300,
+  [class*="border-yellow-300"] {
     border-color: #fde047 !important;
     background: #fefce8 !important;
     color: #a16207 !important;
   }
 
-  .print-section .border-blue-300,
-  .print-section [class*="border-blue-300"] {
+  .border-blue-300,
+  [class*="border-blue-300"] {
     border-color: #93c5fd !important;
     background: #dbeafe !important;
     color: #1e40af !important;
   }
 
-  .print-section .border-gray-300,
-  .print-section [class*="border-gray-300"] {
+  .border-gray-300,
+  [class*="border-gray-300"] {
     border-color: #d1d5db !important;
     background: #f9fafb !important;
     color: #374151 !important;
   }
 
-  /* Spacing adjustments */
-  .print-section .space-y-6 > * + * {
-    margin-top: 16px !important;
-  }
-
-  .print-section .space-y-4 > * + * {
-    margin-top: 12px !important;
-  }
-
-  .print-section .space-y-3 > * + * {
-    margin-top: 8px !important;
-  }
-
-  .print-section .space-y-2 > * + * {
-    margin-top: 6px !important;
-  }
-
-  /* Force visibility of essential elements */
-  .print-section h1,
-  .print-section h2,
-  .print-section h3,
-  .print-section h4,
-  .print-section p,
-  .print-section div,
-  .print-section span {
-    display: block !important;
-    visibility: visible !important;
-  }
-
-  /* Ensure cards are visible */
-  .print-section .bg-card,
-  .print-section [class*="bg-card"] {
-    background: #ffffff !important;
-    color: #000000 !important;
-  }
-
   /* Force column display rules */
-  .print-section .md\:col-span-1 { grid-column: span 1 / span 1 !important; }
-  .print-section .md\:col-span-2 { grid-column: span 2 / span 2 !important; }
-  .print-section .md\:col-span-3 { grid-column: span 3 / span 3 !important; }
-  .print-section .md\:col-span-4 { grid-column: span 4 / span 4 !important; }
+  .md\:col-span-1 { grid-column: span 1 / span 1 !important; }
+  .md\:col-span-2 { grid-column: span 2 / span 2 !important; }
+  .md\:col-span-3 { grid-column: span 3 / span 3 !important; }
+  .md\:col-span-4 { grid-column: span 4 / span 4 !important; }
 
   /* Avatar and image handling */
-  .print-section img {
+  img {
     max-width: 100% !important;
     height: auto !important;
     display: block !important;
   }
 
   /* Ensure proper text alignment */
-  .print-section .text-center {
+  .text-center {
     text-align: center !important;
   }
 
-  .print-section .text-left {
+  .text-left {
     text-align: left !important;
   }
 
-  .print-section .md\:text-left {
+  .md\:text-left {
     text-align: left !important;
+  }
+
+  /* Force all important elements to be visible */
+  .space-y-6 > * {
+    margin-bottom: 16px !important;
+    display: block !important;
+    visibility: visible !important;
+  }
+
+  .space-y-4 > * {
+    margin-bottom: 12px !important;
+    display: block !important;
+    visibility: visible !important;
+  }
+
+  .space-y-3 > * {
+    margin-bottom: 8px !important;
+    display: block !important;
+    visibility: visible !important;
+  }
+
+  .space-y-2 > * {
+    margin-bottom: 6px !important;
+    display: block !important;
+    visibility: visible !important;
+  }
+
+  /* Ensure flex layouts work in print */
+  .flex {
+    display: flex !important;
+  }
+
+  .grid {
+    display: grid !important;
+  }
+
+  /* Remove any transforms or filters that might hide content */
+  * {
+    transform: none !important;
+    filter: none !important;
+    opacity: 1 !important;
   }
 }

@@ -1,4 +1,3 @@
-
 import { useState } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -146,10 +145,10 @@ export const LiderancasManager = ({ liderancas, onSave }: LiderancasManagerProps
 
   return (
     <Card className="border-gray-300 print-section">
-      <CardHeader className="bg-cyan-600 text-white border-b border-gray-300 print:bg-cyan-600 print:text-white print:border-gray-400">
+      <CardHeader className="bg-cyan-600 text-white border-b border-gray-300">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <div className="w-1 h-6 bg-white rounded print:bg-white"></div>
+            <div className="w-1 h-6 bg-white rounded"></div>
             <CardTitle className="text-lg font-bold">Lideranças Municipais</CardTitle>
           </div>
           <Button
@@ -163,7 +162,7 @@ export const LiderancasManager = ({ liderancas, onSave }: LiderancasManagerProps
           </Button>
         </div>
       </CardHeader>
-      <CardContent className="p-6 print:p-4">
+      <CardContent className="p-6">
         {liderancasComCategoria.length === 0 ? (
           <div className="text-center py-8 text-gray-500">
             <Users className="h-12 w-12 mx-auto mb-4 text-gray-400" />
@@ -181,7 +180,7 @@ export const LiderancasManager = ({ liderancas, onSave }: LiderancasManagerProps
           <div className="space-y-6">
             {Object.entries(liderancasPorCategoria).map(([categoria, liderancasCategoria]) => (
               <div key={categoria} className="space-y-4">
-                <h3 className="text-lg font-semibold text-cyan-700 border-b border-gray-200 pb-2 print:text-cyan-700">
+                <h3 className="text-lg font-semibold text-cyan-700 border-b border-gray-200 pb-2">
                   {categoria}
                 </h3>
                 <div className="grid gap-4">
@@ -189,7 +188,7 @@ export const LiderancasManager = ({ liderancas, onSave }: LiderancasManagerProps
                     const formattedVotes = formatVotes(lideranca.votos)
                     
                     return (
-                      <div key={lideranca.id} className="border rounded-lg p-4 bg-gray-50 print:bg-gray-50 print:border-gray-300">
+                      <div key={lideranca.id} className="border rounded-lg p-4 bg-gray-50">
                         <div className="grid grid-cols-1 md:grid-cols-12 gap-4 items-center">
                           {/* Avatar */}
                           <div className="md:col-span-1 flex justify-center md:justify-start">
