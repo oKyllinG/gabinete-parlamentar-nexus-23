@@ -31,6 +31,16 @@
     --chart-4: 43 74% 66%;
     --chart-5: 27 87% 67%;
     --radius: 0.5rem;
+    
+    /* Sidebar colors - voltando para azul */
+    --sidebar-background: 217.2 91.2% 97.7%;
+    --sidebar-foreground: 222.2 84% 4.9%;
+    --sidebar-primary: 221.2 83.2% 53.3%;
+    --sidebar-primary-foreground: 210 40% 98%;
+    --sidebar-accent: 217.2 32.6% 17.5%;
+    --sidebar-accent-foreground: 210 40% 98%;
+    --sidebar-border: 214.3 31.8% 91.4%;
+    --sidebar-ring: 222.2 84% 4.9%;
   }
 
   .dark {
@@ -120,19 +130,19 @@
   }
 
   .deputies-table .name-col {
-    width: 50% !important;
+    width: 55% !important;
   }
 
   .deputies-table .party-col {
-    width: 14% !important;
+    width: 12% !important;
   }
 
   .deputies-table .votes-col {
-    width: 15% !important;
+    width: 13% !important;
   }
 
   .deputies-table .percent-col {
-    width: 15% !important;
+    width: 14% !important;
   }
 
   .deputies-table th,
@@ -147,6 +157,18 @@
     font-weight: 600 !important;
     -webkit-print-color-adjust: exact !important;
     print-color-adjust: exact !important;
+  }
+
+  /* Remove badge circular styling and reduce font size for parties in print */
+  .deputies-table .party-col .badge,
+  .deputies-table .party-col [class*="badge"] {
+    background: none !important;
+    border: none !important;
+    border-radius: 0 !important;
+    padding: 0 !important;
+    font-size: 7pt !important;
+    color: inherit !important;
+    display: inline !important;
   }
 
   .print-header {
