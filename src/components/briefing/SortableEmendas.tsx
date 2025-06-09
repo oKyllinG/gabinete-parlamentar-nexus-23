@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react"
 import { DndContext, closestCenter, KeyboardSensor, PointerSensor, useSensor, useSensors } from '@dnd-kit/core'
 import { arrayMove, SortableContext, sortableKeyboardCoordinates, verticalListSortingStrategy } from '@dnd-kit/sortable'
@@ -74,7 +75,11 @@ const SortableEmendaItem = ({ emenda, onEdit, onDelete }: SortableEmendaItemProp
               <div className="flex justify-between items-start mb-2">
                 <div className="flex items-center gap-2">
                   <h4 className="font-semibold text-gray-900">Emenda {emenda.numero}</h4>
-                  <Badge variant="outline">{emenda.gnd}</Badge>
+                  <div className="min-w-[60px] text-center">
+                    <Badge variant="outline" className="border-gray-400 text-gray-700 bg-gray-100">
+                      {emenda.gnd}
+                    </Badge>
+                  </div>
                 </div>
                 <div className="flex gap-2">
                   <Button size="sm" variant="ghost" onClick={() => onEdit(emenda)}>
@@ -94,7 +99,11 @@ const SortableEmendaItem = ({ emenda, onEdit, onDelete }: SortableEmendaItemProp
               <p className="text-sm text-gray-600 mb-3">{emenda.objeto}</p>
               
               <div className="flex flex-wrap gap-2 mb-3">
-                <Badge variant="outline">{emenda.areaAtuacao}</Badge>
+                <div className="min-w-[120px] text-center">
+                  <Badge variant="outline" className="border-gray-400 text-gray-700 bg-gray-100">
+                    {emenda.areaAtuacao}
+                  </Badge>
+                </div>
                 <Badge className={getStatusColor(emenda.status)}>
                   {getStatusIcon(emenda.status)}
                   <span className="ml-1">{emenda.status}</span>

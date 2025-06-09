@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react"
 import { DndContext, closestCenter, KeyboardSensor, PointerSensor, useSensor, useSensors } from '@dnd-kit/core'
 import { arrayMove, SortableContext, sortableKeyboardCoordinates, verticalListSortingStrategy } from '@dnd-kit/sortable'
@@ -91,7 +92,11 @@ const SortableObraItem = ({ obra, onEdit, onDelete }: SortableObraItemProps) => 
               <p className="text-sm text-gray-600 mb-3">{obra.descricao}</p>
               
               <div className="flex flex-wrap gap-2 mb-3">
-                <Badge variant="outline">{obra.categoria}</Badge>
+                <div className="min-w-[120px] text-center">
+                  <Badge variant="outline" className="border-gray-400 text-gray-700 bg-gray-100">
+                    {obra.categoria}
+                  </Badge>
+                </div>
                 <Badge className={getStatusColor(obra.status)}>
                   {getStatusIcon(obra.status)}
                   <span className="ml-1">{obra.status}</span>

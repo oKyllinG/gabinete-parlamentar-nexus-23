@@ -1,6 +1,7 @@
 
 import { MapPin } from "lucide-react"
-import { AcoesDeputado } from "./AcoesDeputado"
+import { SortableObras } from "./SortableObras"
+import { SortableEmendas } from "./SortableEmendas"
 import { ResultadosEleitoraisManager } from "./ResultadosEleitoraisManager"
 import { VotacaoHistoricaManager } from "./VotacaoHistoricaManager"
 import { DeputadosFederaisManager } from "./DeputadosFederaisManager"
@@ -8,6 +9,8 @@ import { DeputadosEstaduaisManager } from "./DeputadosEstaduaisManager"
 import { LiderancasManager } from "./LiderancasManager"
 import { HistoricoDeputadoManager } from "./HistoricoDeputadoManager"
 import { AcaoDeputado } from "@/types/historicoDeputado"
+import { getObrasByMunicipio, getDestinacoesByMunicipio, Obra, DestinacaoEmenda } from "@/utils/briefingDataUtils"
+import { useState, useEffect } from "react"
 
 interface Municipio {
   id: number
@@ -70,6 +73,77 @@ export const BriefingLayout = ({
   onSaveLiderancas,
   onSaveHistoricoAcoes
 }: BriefingLayoutProps) => {
+  const [obras, setObras] = useState<Obra[]>([])
+  const [emendas, setEmendas] = useState<DestinacaoEmenda[]>([])
+
+  // Carregar obras e emendas do localStorage
+  useEffect(() => {
+    const obrasData = getObrasByMunicipio(municipio.nome)
+    const emendasData = getDestinacoesByMunicipio(municipio.nome)
+    setObras(obrasData)
+    setEmendas(emendasData)
+  }, [municipio.nome])
+
+  const handleSaveObras = (newObras: Obra[]) => {
+    setObras(newObras)
+    localStorage.setItem(`obras-${municipio.nome}`, JSON.stringify(newObras))
+  }
+
+  const handleSaveEmendas = (newEmendas: DestinacaoEmenda[]) => {
+    setEmendas(newEmendas)
+    localStorage.setItem(`destinacoes-${municipio.nome}`, JSON.stringify(newEmendas))
+  }
+
+  const handleAddObra = () => {
+    const newObra: Obra = {
+      id: `obra-${Date.now()}`,
+      titulo: "Nova Obra",
+      descricao: "Descrição da obra",
+      valor: 0,
+      status: "Planejada",
+      categoria: "Infraestrutura",
+      dataInicio: new Date().toISOString().split('T')[0],
+      prazoExecucao: new Date().toISOString().split('T')[0],
+      municipio: municipio.nome
+    }
+    handleSaveObras([...obras, newObra])
+  }
+
+  const handleEditObra = (obra: Obra) => {
+    console.log("Edit obra:", obra)
+    // Implementar modal de edição futuramente
+  }
+
+  const handleDeleteObra = (id: string) => {
+    handleSaveObras(obras.filter(o => o.id !== id))
+  }
+
+  const handleAddEmenda = () => {
+    const newEmenda: DestinacaoEmenda = {
+      id: `emenda-${Date.now()}`,
+      numero: `${Date.now()}`,
+      objeto: "Nova emenda parlamentar",
+      destinatario: "Prefeitura Municipal",
+      areaAtuacao: "Saúde",
+      valor: 0,
+      status: "Pendente",
+      prazoInicio: new Date().toISOString().split('T')[0],
+      prazoFim: new Date().toISOString().split('T')[0],
+      gnd: "4",
+      municipio: municipio.nome
+    }
+    handleSaveEmendas([...emendas, newEmenda])
+  }
+
+  const handleEditEmenda = (emenda: DestinacaoEmenda) => {
+    console.log("Edit emenda:", emenda)
+    // Implementar modal de edição futuramente
+  }
+
+  const handleDeleteEmenda = (id: string) => {
+    handleSaveEmendas(emendas.filter(e => e.id !== id))
+  }
+
   return (
     <div className="space-y-6 bg-background p-6">
       {/* Header */}
@@ -117,8 +191,23 @@ export const BriefingLayout = ({
         />
       </div>
 
-      {/* Ações do Deputado */}
-      <AcoesDeputado municipioNome={municipio.nome} />
+      {/* Obras e Equipamentos com Drag and Drop */}
+      <SortableObras
+        obras={obras}
+        onSave={handleSaveObras}
+        onAdd={handleAddObra}
+        onEdit={handleEditObra}
+        onDelete={handleDeleteObra}
+      />
+
+      {/* Emendas Parlamentares com Drag and Drop */}
+      <SortableEmendas
+        emendas={emendas}
+        onSave={handleSaveEmendas}
+        onAdd={handleAddEmenda}
+        onEdit={handleEditEmenda}
+        onDelete={handleDeleteEmenda}
+      />
 
       {/* Histórico do Deputado - Movido para o final */}
       <HistoricoDeputadoManager
