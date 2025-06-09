@@ -93,167 +93,40 @@ export const DeputadosEstaduaisManager = ({ deputadosEstaduais, onSave }: Deputa
         </div>
       </CardHeader>
       <CardContent className="p-4 print-card-content">
-        {showAddForm && (
-          <div className="p-4 border rounded-lg bg-gray-50 mb-4 no-print">
-            <h4 className="font-semibold mb-3">Novo Deputado Estadual</h4>
-            <div className="grid grid-cols-5 gap-3 mb-3">
-              <div>
-                <Label htmlFor="est-pos">Posição</Label>
-                <Input
-                  id="est-pos"
-                  type="number"
-                  placeholder="1"
-                  value={newDeputado.colocacao}
-                  onChange={(e) => setNewDeputado({...newDeputado, colocacao: Number(e.target.value)})}
-                />
-              </div>
-              <div>
-                <Label htmlFor="est-nome">Nome</Label>
-                <Input
-                  id="est-nome"
-                  placeholder="Nome"
-                  value={newDeputado.nome}
-                  onChange={(e) => setNewDeputado({...newDeputado, nome: e.target.value})}
-                />
-              </div>
-              <div>
-                <Label htmlFor="est-partido">Partido</Label>
-                <Input
-                  id="est-partido"
-                  placeholder="Partido"
-                  value={newDeputado.partido}
-                  onChange={(e) => setNewDeputado({...newDeputado, partido: e.target.value})}
-                />
-              </div>
-              <div>
-                <Label htmlFor="est-votos">Votos</Label>
-                <Input
-                  id="est-votos"
-                  type="number"
-                  placeholder="Votos"
-                  value={newDeputado.votos}
-                  onChange={(e) => setNewDeputado({...newDeputado, votos: Number(e.target.value)})}
-                />
-              </div>
-              <div>
-                <Label htmlFor="est-percentual">%</Label>
-                <Input
-                  id="est-percentual"
-                  type="number"
-                  step="0.01"
-                  placeholder="Percentual"
-                  value={newDeputado.percentual}
-                  onChange={(e) => setNewDeputado({...newDeputado, percentual: Number(e.target.value)})}
-                />
-              </div>
-            </div>
-            <div className="flex gap-2">
-              <Button size="sm" onClick={handleAdd} className="bg-green-600 hover:bg-green-700 text-white">
-                <Check className="h-4 w-4 mr-1" />
-                Salvar
-              </Button>
-              <Button size="sm" onClick={() => setShowAddForm(false)} className="bg-gray-600 hover:bg-gray-700 text-white">
-                <X className="h-4 w-4 mr-1" />
-                Cancelar
-              </Button>
-            </div>
-          </div>
-        )}
-
         <div className="overflow-x-auto">
           <table className="w-full border border-gray-300">
             <thead>
               <tr className="bg-gray-100">
-                <th className="text-left p-3 border border-gray-300 font-semibold">Pos.</th>
-                <th className="text-left p-3 border border-gray-300 font-semibold">Nome</th>
-                <th className="text-left p-3 border border-gray-300 font-semibold">Partido</th>
-                <th className="text-left p-3 border border-gray-300 font-semibold">Votos</th>
-                <th className="text-left p-3 border border-gray-300 font-semibold">%</th>
+                <th className="text-left p-3 border border-gray-300 font-semibold print:text-[7pt]">Pos.</th>
+                <th className="text-left p-3 border border-gray-300 font-semibold print:w-[40%]">Nome</th>
+                <th className="text-left p-3 border border-gray-300 font-semibold print:text-[7pt]">Partido</th>
+                <th className="text-left p-3 border border-gray-300 font-semibold print:text-[7pt]">Votos</th>
+                <th className="text-left p-3 border border-gray-300 font-semibold print:text-[7pt]">%</th>
                 <th className="text-left p-3 border border-gray-300 font-semibold no-print">Ações</th>
               </tr>
             </thead>
             <tbody>
-              {deputadosOrdenados.length === 0 ? (
-                <tr>
-                  <td colSpan={6} className="text-center py-8 text-gray-500 border border-gray-300">
-                    Nenhum deputado cadastrado
+              {deputadosOrdenados.map((deputado) => (
+                <tr key={deputado.id} className="border-b border-gray-200">
+                  <td className="p-3 border border-gray-300 font-medium print:text-[7pt]">{deputado.colocacao || "-"}</td>
+                  <td className="p-3 border border-gray-300">{deputado.nome}</td>
+                  <td className="p-3 border border-gray-300 print:text-[7pt]">
+                    <Badge variant="outline" className="text-xs">{deputado.partido}</Badge>
+                  </td>
+                  <td className="p-3 border border-gray-300 print:text-[7pt]">{deputado.votos.toLocaleString()}</td>
+                  <td className="p-3 border border-gray-300 print:text-[7pt]">{deputado.percentual.toFixed(2)}%</td>
+                  <td className="p-3 border border-gray-300 no-print">
+                    <div className="flex gap-1">
+                      <Button size="sm" onClick={() => handleEdit(deputado)} className="bg-blue-600 hover:bg-blue-700 text-white">
+                        <Edit className="h-4 w-4" />
+                      </Button>
+                      <Button size="sm" onClick={() => handleDelete(deputado.id)} className="bg-red-600 hover:bg-red-700 text-white">
+                        <Trash2 className="h-4 w-4" />
+                      </Button>
+                    </div>
                   </td>
                 </tr>
-              ) : (
-                deputadosOrdenados.map((deputado) => (
-                  <tr key={deputado.id} className="border-b border-gray-200">
-                    {editingId === deputado.id ? (
-                      <>
-                        <td className="p-3 border border-gray-300">
-                          <Input
-                            type="number"
-                            value={editData.colocacao || ""}
-                            onChange={(e) => setEditData({...editData, colocacao: Number(e.target.value)})}
-                            className="w-16"
-                          />
-                        </td>
-                        <td className="p-3 border border-gray-300">
-                          <Input
-                            value={editData.nome || ""}
-                            onChange={(e) => setEditData({...editData, nome: e.target.value})}
-                          />
-                        </td>
-                        <td className="p-3 border border-gray-300">
-                          <Input
-                            value={editData.partido || ""}
-                            onChange={(e) => setEditData({...editData, partido: e.target.value})}
-                          />
-                        </td>
-                        <td className="p-3 border border-gray-300">
-                          <Input
-                            type="number"
-                            value={editData.votos || ""}
-                            onChange={(e) => setEditData({...editData, votos: Number(e.target.value)})}
-                          />
-                        </td>
-                        <td className="p-3 border border-gray-300">
-                          <Input
-                            type="number"
-                            step="0.01"
-                            value={editData.percentual || ""}
-                            onChange={(e) => setEditData({...editData, percentual: Number(e.target.value)})}
-                          />
-                        </td>
-                        <td className="p-3 border border-gray-300 no-print">
-                          <div className="flex gap-1">
-                            <Button size="sm" onClick={handleSaveEdit} className="bg-green-600 hover:bg-green-700 text-white">
-                              <Check className="h-4 w-4" />
-                            </Button>
-                            <Button size="sm" onClick={() => setEditingId(null)} className="bg-gray-600 hover:bg-gray-700 text-white">
-                              <X className="h-4 w-4" />
-                            </Button>
-                          </div>
-                        </td>
-                      </>
-                    ) : (
-                      <>
-                        <td className="p-3 border border-gray-300 font-medium">{deputado.colocacao || "-"}</td>
-                        <td className="p-3 border border-gray-300">{deputado.nome}</td>
-                        <td className="p-3 border border-gray-300">
-                          <Badge variant="outline" className="text-xs">{deputado.partido}</Badge>
-                        </td>
-                        <td className="p-3 border border-gray-300">{deputado.votos.toLocaleString()}</td>
-                        <td className="p-3 border border-gray-300">{deputado.percentual.toFixed(2)}%</td>
-                        <td className="p-3 border border-gray-300 no-print">
-                          <div className="flex gap-1">
-                            <Button size="sm" onClick={() => handleEdit(deputado)} className="bg-blue-600 hover:bg-blue-700 text-white">
-                              <Edit className="h-4 w-4" />
-                            </Button>
-                            <Button size="sm" onClick={() => handleDelete(deputado.id)} className="bg-red-600 hover:bg-red-700 text-white">
-                              <Trash2 className="h-4 w-4" />
-                            </Button>
-                          </div>
-                        </td>
-                      </>
-                    )}
-                  </tr>
-                ))
-              )}
+              ))}
             </tbody>
           </table>
         </div>
