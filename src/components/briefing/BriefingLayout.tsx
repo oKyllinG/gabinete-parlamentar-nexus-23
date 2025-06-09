@@ -1,4 +1,4 @@
-import { MapPin, Printer } from "lucide-react"
+import { ArrowLeft, MapPin, Printer } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { BriefingComponentsManager } from "./BriefingComponentsManager"
 import { ResultadosEleitoraisManager } from "./ResultadosEleitoraisManager"
@@ -8,6 +8,8 @@ import { DeputadosEstaduaisManager } from "./DeputadosEstaduaisManager"
 import { LiderancasManager } from "./LiderancasManager"
 import { HistoricoDeputadoManager } from "./HistoricoDeputadoManager"
 import { AcaoDeputado } from "@/types/historicoDeputado"
+import { useNavigate } from "react-router-dom"
+
 
 interface Municipio {
   id: number
@@ -71,14 +73,24 @@ export const BriefingLayout = ({
   onSaveHistoricoAcoes
 }: BriefingLayoutProps) => {
 
+  const navigate = useNavigate()
   const handlePrint = () => {
     window.print()
   }
 
   return (
     <div className="print-container space-y-4 bg-background p-6">
+      <Button
+        variant="ghost"
+        onClick={() => navigate('/briefing')}
+        className="flex items-center gap-2 mb-6 no-print"
+      >
+        <ArrowLeft className="h-4 w-4" />
+        Voltar
+      </Button>
+
       {/* Header */}
-      <div className="print-header bg-blue-600 text-white rounded-lg p-6 border border-border no-print">
+      <div className="print-header bg-blue-600 text-white rounded-lg p-6 border border-border">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3 mb-2">
             <h1 className="text-2xl font-bold">{municipio.nome}</h1>
@@ -99,22 +111,20 @@ export const BriefingLayout = ({
         </div>
       </div>
 
-      {/* Print date header - only visible when printing */}
       <div className="print-only text-center text-sm text-muted-foreground mb-4">
         Briefing Municipal de {municipio.nome} - Gerado em {new Date().toLocaleDateString('pt-BR')}
       </div>
 
-      {/* Grouping elements for the first page */}
       <div className="print-first-page-group">
         <div className="print-section">
-          <ResultadosEleitoraisManager 
+          <ResultadosEleitoraisManager
             dadosPoliticos={dadosPoliticos}
             onSave={onSaveDadosPoliticos}
           />
         </div>
 
         <div className="print-section">
-          <VotacaoHistoricaManager 
+          <VotacaoHistoricaManager
             municipioId={municipio.id}
             dadosPoliticos={dadosPoliticos}
             onUpdateDados={onSaveDadosPoliticos}
@@ -122,11 +132,11 @@ export const BriefingLayout = ({
         </div>
 
         <div className="print-deputies-grid print-section">
-            <DeputadosFederaisManager 
+            <DeputadosFederaisManager
               deputadosFederais={deputadosFederais}
               onSave={onSaveDeputadosFederais}
             />
-            <DeputadosEstaduaisManager 
+            <DeputadosEstaduaisManager
               deputadosEstaduais={deputadosEstaduais}
               onSave={onSaveDeputadosEstaduais}
             />
@@ -135,14 +145,14 @@ export const BriefingLayout = ({
 
 
       <div className="print-section">
-          <LiderancasManager 
+          <LiderancasManager
             liderancas={liderancas}
             onSave={onSaveLiderancas}
           />
       </div>
 
       <div className="print-section">
-        <BriefingComponentsManager 
+        <BriefingComponentsManager
           municipio={municipio}
         />
       </div>
