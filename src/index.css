@@ -120,8 +120,9 @@
   display: block;
 }
 
-/* Print styles */
+/* === SIMPLIFIED PRINT STYLES === */
 @media print {
+  /* Page setup */
   @page {
     size: A4;
     margin: 1.5cm;
@@ -140,8 +141,6 @@
     color: black !important;
     font-size: 12pt !important;
     line-height: 1.4 !important;
-    margin: 0 !important;
-    padding: 0 !important;
   }
 
   /* Show print-only elements */
@@ -149,15 +148,17 @@
     display: block !important;
   }
 
-  /* Hide interactive elements and drag handles */
+  /* Hide interactive elements */
   .no-print,
   button,
-  [data-radix-menu-content],
-  [data-radix-popover-content],
-  [role="button"]:not([tabindex="-1"]),
-  .cursor-grab,
-  .cursor-grabbing,
-  [class*="grip"] {
+  input[type="button"],
+  input[type="submit"],
+  [role="button"]:not([role="button"][tabindex="-1"]),
+  .edit-button,
+  .add-button,
+  .delete-button,
+  .save-button,
+  .cancel-button {
     display: none !important;
   }
 
@@ -166,7 +167,6 @@
     max-width: none !important;
     margin: 0 !important;
     padding: 0 !important;
-    background: white !important;
   }
 
   /* Header with blue background */
@@ -185,58 +185,13 @@
     margin: 0 !important;
   }
 
-  .print-header * {
-    color: white !important;
-  }
-
   /* Card styles */
   .print-section {
     page-break-inside: avoid !important;
     margin-bottom: 20px !important;
-    background: white !important;
     border: 1px solid #e5e7eb !important;
     border-radius: 8px !important;
     overflow: visible !important;
-  }
-
-  /* Card headers with blue background */
-  .bg-cyan-600,
-  .bg-blue-600 {
-    background: #1d4ed8 !important;
-    color: white !important;
-    padding: 15px !important;
-  }
-
-  .bg-cyan-600 *,
-  .bg-blue-600 * {
-    color: white !important;
-  }
-
-  /* Card content */
-  [class*="CardContent"] {
-    padding: 15px !important;
-    background: white !important;
-  }
-
-  /* Typography */
-  h1 { 
-    font-size: 20pt !important; 
-    margin-bottom: 10px !important;
-  }
-  
-  h2 { 
-    font-size: 16pt !important; 
-    margin-bottom: 8px !important;
-  }
-  
-  h3 { 
-    font-size: 14pt !important; 
-    margin-bottom: 6px !important;
-  }
-  
-  h4 {
-    font-size: 12pt !important;
-    margin-bottom: 4px !important;
   }
 
   /* Table styles */
@@ -244,14 +199,13 @@
     width: 100% !important;
     border-collapse: collapse !important;
     margin: 10px 0 !important;
-    font-size: 10pt !important;
+    font-size: 11pt !important;
   }
 
   th, td {
     border: 1px solid #d1d5db !important;
-    padding: 6px !important;
+    padding: 8px !important;
     text-align: left !important;
-    background: white !important;
   }
 
   th {
@@ -259,53 +213,45 @@
     font-weight: bold !important;
   }
 
-  /* Badge styles */
-  [class*="badge"],
-  .badge {
-    display: inline-block !important;
-    padding: 2px 6px !important;
-    border-radius: 4px !important;
-    font-size: 9pt !important;
-    border: 1px solid #d1d5db !important;
-    background: #f9fafb !important;
+  /* Typography */
+  h1 { font-size: 20pt !important; }
+  h2 { font-size: 16pt !important; }
+  h3 { font-size: 14pt !important; }
+
+  /* Ensure text is visible */
+  * {
+    color: black !important;
   }
 
-  /* Grid layouts - convert to block for print */
+  /* Keep blue backgrounds for headers */
+  .bg-blue-600,
+  .bg-cyan-600 {
+    background: #1d4ed8 !important;
+    color: white !important;
+  }
+
+  .bg-blue-600 *,
+  .bg-cyan-600 * {
+    color: white !important;
+  }
+
+  /* Grid layouts */
   .grid {
     display: block !important;
   }
 
   .grid > * {
     display: block !important;
-    margin-bottom: 8px !important;
+    margin-bottom: 10px !important;
   }
 
-  /* Flex layouts - keep simple flex for headers */
+  /* Flex layouts */
   .flex {
-    display: flex !important;
-  }
-
-  /* Force text to be visible */
-  * {
-    color: black !important;
-  }
-
-  /* Keep header text white */
-  .print-header *,
-  .bg-blue-600 *,
-  .bg-cyan-600 * {
-    color: white !important;
+    display: block !important;
   }
 
   /* Page breaks */
   .avoid-break {
     page-break-inside: avoid !important;
-  }
-
-  /* Ensure drag and drop items are visible */
-  [class*="sortable"] > div,
-  [class*="dnd"] > div {
-    display: block !important;
-    margin-bottom: 10px !important;
   }
 }

@@ -8,10 +8,7 @@ import { DeputadosFederaisManager } from "./DeputadosFederaisManager"
 import { DeputadosEstaduaisManager } from "./DeputadosEstaduaisManager"
 import { LiderancasManager } from "./LiderancasManager"
 import { HistoricoDeputadoManager } from "./HistoricoDeputadoManager"
-import { SortableObras } from "./SortableObras"
-import { SortableEmendas } from "./SortableEmendas"
 import { AcaoDeputado } from "@/types/historicoDeputado"
-import { Obra, DestinacaoEmenda } from "@/utils/briefingDataUtils"
 
 interface Municipio {
   id: number
@@ -54,15 +51,11 @@ interface BriefingLayoutProps {
   deputadosEstaduais: Deputado[]
   liderancas: Lideranca[]
   historicoAcoes: AcaoDeputado[]
-  obras: Obra[]
-  emendas: DestinacaoEmenda[]
   onSaveDadosPoliticos: (dados: DadosPoliticos) => void
   onSaveDeputadosFederais: (deputados: Deputado[]) => void
   onSaveDeputadosEstaduais: (deputados: Deputado[]) => void
   onSaveLiderancas: (liderancas: Lideranca[]) => void
   onSaveHistoricoAcoes: (acoes: AcaoDeputado[]) => void
-  onSaveObras: (obras: Obra[]) => void
-  onSaveEmendas: (emendas: DestinacaoEmenda[]) => void
 }
 
 export const BriefingLayout = ({ 
@@ -72,67 +65,15 @@ export const BriefingLayout = ({
   deputadosEstaduais,
   liderancas,
   historicoAcoes,
-  obras,
-  emendas,
   onSaveDadosPoliticos,
   onSaveDeputadosFederais,
   onSaveDeputadosEstaduais,
   onSaveLiderancas,
-  onSaveHistoricoAcoes,
-  onSaveObras,
-  onSaveEmendas
+  onSaveHistoricoAcoes
 }: BriefingLayoutProps) => {
 
   const handlePrint = () => {
     window.print()
-  }
-
-  const handleAddObra = () => {
-    const newObra: Obra = {
-      id: `obra-${Date.now()}`,
-      titulo: "Nova Obra",
-      descricao: "Descrição da obra",
-      valor: 0,
-      status: "Planejada",
-      categoria: "Infraestrutura",
-      dataInicio: new Date().toISOString(),
-      prazoExecucao: new Date().toISOString(),
-      municipio: municipio.nome
-    }
-    onSaveObras([...obras, newObra])
-  }
-
-  const handleEditObra = (obra: Obra) => {
-    console.log("Edit obra:", obra)
-  }
-
-  const handleDeleteObra = (id: string) => {
-    onSaveObras(obras.filter(o => o.id !== id))
-  }
-
-  const handleAddEmenda = () => {
-    const newEmenda: DestinacaoEmenda = {
-      id: `emenda-${Date.now()}`,
-      numero: `${Date.now()}`,
-      objeto: "Nova emenda parlamentar",
-      destinatario: "Prefeitura Municipal",
-      areaAtuacao: "Saúde",
-      valor: 0,
-      status: "Pendente",
-      prazoInicio: new Date().toISOString(),
-      prazoFim: new Date().toISOString(),
-      gnd: "4",
-      municipio: municipio.nome
-    }
-    onSaveEmendas([...emendas, newEmenda])
-  }
-
-  const handleEditEmenda = (emenda: DestinacaoEmenda) => {
-    console.log("Edit emenda:", emenda)
-  }
-
-  const handleDeleteEmenda = (id: string) => {
-    onSaveEmendas(emendas.filter(e => e.id !== id))
   }
 
   return (
@@ -178,28 +119,6 @@ export const BriefingLayout = ({
           municipioId={municipio.id}
           dadosPoliticos={dadosPoliticos}
           onUpdateDados={onSaveDadosPoliticos}
-        />
-      </div>
-
-      {/* Obras e Equipamentos */}
-      <div className="print-section avoid-break">
-        <SortableObras
-          obras={obras}
-          onSave={onSaveObras}
-          onAdd={handleAddObra}
-          onEdit={handleEditObra}
-          onDelete={handleDeleteObra}
-        />
-      </div>
-
-      {/* Emendas Parlamentares */}
-      <div className="print-section avoid-break">
-        <SortableEmendas
-          emendas={emendas}
-          onSave={onSaveEmendas}
-          onAdd={handleAddEmenda}
-          onEdit={handleEditEmenda}
-          onDelete={handleDeleteEmenda}
         />
       </div>
 

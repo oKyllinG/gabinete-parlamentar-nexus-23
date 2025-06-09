@@ -1,9 +1,10 @@
+
 import { useState, useEffect } from "react"
 import { useParams, useNavigate } from "react-router-dom"
 import { ArrowLeft } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { BriefingLayout } from "@/components/briefing/BriefingLayout"
-import { initializeMockDataForAguaClara, getObrasByMunicipio, getDestinacoesByMunicipio, Obra, DestinacaoEmenda } from "@/utils/briefingDataUtils"
+import { initializeMockDataForAguaClara } from "@/utils/briefingDataUtils"
 import { getHistoricoByMunicipio, saveHistoricoMunicipio } from "@/utils/historicoDeputadoUtils"
 import { AcaoDeputado } from "@/types/historicoDeputado"
 
@@ -295,100 +296,6 @@ const initializeHistoricoAguaClara = () => {
   }
 }
 
-// Mock data for Água Clara obras
-const initializeObrasAguaClara = () => {
-  const mockObras: Obra[] = [
-    {
-      id: 'obra-1',
-      titulo: 'Construção do Centro de Saúde',
-      descricao: 'Nova unidade básica de saúde no bairro Centro',
-      valor: 850000,
-      status: 'Em andamento',
-      categoria: 'Saúde',
-      dataInicio: '2024-01-15',
-      prazoExecucao: '2024-12-31',
-      municipio: 'Água Clara'
-    },
-    {
-      id: 'obra-2',
-      titulo: 'Pavimentação da Rua das Flores',
-      descricao: 'Asfaltamento de 2,5 km da via principal',
-      valor: 320000,
-      status: 'Concluída',
-      categoria: 'Infraestrutura',
-      dataInicio: '2023-11-01',
-      prazoExecucao: '2024-03-30',
-      municipio: 'Água Clara'
-    },
-    {
-      id: 'obra-3',
-      titulo: 'Quadra Poliesportiva Coberta',
-      descricao: 'Construção de quadra esportiva no complexo educacional',
-      valor: 380000,
-      status: 'Planejada',
-      categoria: 'Esporte e Lazer',
-      dataInicio: '2024-07-01',
-      prazoExecucao: '2025-02-28',
-      municipio: 'Água Clara'
-    }
-  ]
-
-  const existingObras = getObrasByMunicipio('Água Clara')
-  if (existingObras.length === 0) {
-    localStorage.setItem('obras-Água Clara', JSON.stringify(mockObras))
-  }
-}
-
-// Mock data for Água Clara emendas
-const initializeEmendasAguaClara = () => {
-  const mockEmendas: DestinacaoEmenda[] = [
-    {
-      id: 'emenda-1',
-      numero: '2024001',
-      objeto: 'Aquisição de ambulância para o município',
-      destinatario: 'Secretaria Municipal de Saúde',
-      areaAtuacao: 'Saúde',
-      valor: 180000,
-      status: 'Aprovada',
-      prazoInicio: '2024-03-01',
-      prazoFim: '2024-08-31',
-      gnd: '4',
-      municipio: 'Água Clara'
-    },
-    {
-      id: 'emenda-2',
-      numero: '2024002',
-      objeto: 'Equipamentos odontológicos para UBS',
-      destinatario: 'Prefeitura Municipal',
-      areaAtuacao: 'Saúde',
-      valor: 95000,
-      status: 'Em execução',
-      prazoInicio: '2024-05-01',
-      prazoFim: '2024-10-31',
-      gnd: '4',
-      municipio: 'Água Clara'
-    },
-    {
-      id: 'emenda-3',
-      numero: '2024003',
-      objeto: 'Veículo para transporte escolar',
-      destinatario: 'Secretaria Municipal de Educação',
-      areaAtuacao: 'Educação',
-      valor: 220000,
-      status: 'Pendente',
-      prazoInicio: '2024-06-01',
-      prazoFim: '2024-12-31',
-      gnd: '4',
-      municipio: 'Água Clara'
-    }
-  ]
-
-  const existingEmendas = getDestinacoesByMunicipio('Água Clara')
-  if (existingEmendas.length === 0) {
-    localStorage.setItem('destinacoes-Água Clara', JSON.stringify(mockEmendas))
-  }
-}
-
 const MunicipioBriefing = () => {
   const { municipioId } = useParams()
   const navigate = useNavigate()
@@ -438,9 +345,6 @@ const MunicipioBriefing = () => {
 
   const [historicoAcoes, setHistoricoAcoes] = useState<AcaoDeputado[]>([])
 
-  const [obras, setObras] = useState<Obra[]>([])
-  const [emendas, setEmendas] = useState<DestinacaoEmenda[]>([])
-
   // Carregar dados do localStorage e inicializar dados mock se necessário
   useEffect(() => {
     console.log("useEffect triggered, municipio:", municipio)
@@ -452,8 +356,6 @@ const MunicipioBriefing = () => {
       if (municipio.nome === "Água Clara") {
         initializeMockDataForAguaClara()
         initializeHistoricoAguaClara()
-        initializeObrasAguaClara()
-        initializeEmendasAguaClara()
       }
 
       const savedData = localStorage.getItem(`municipio-${municipio.id}-dados-politicos`)
@@ -476,12 +378,9 @@ const MunicipioBriefing = () => {
         setLiderancas(JSON.parse(savedLiderancas))
       }
 
-      // Load obras and emendas
-      const obrasMunicipio = getObrasByMunicipio(municipio.nome)
-      setObras(obrasMunicipio)
-
-      const emendasMunicipio = getDestinacoesByMunicipio(municipio.nome)
-      setEmendas(emendasMunicipio)
+      // Load histórico actions
+      const historicoData = getHistoricoByMunicipio(municipio.id)
+      setHistoricoAcoes(historicoData)
     }
   }, [municipio])
 
@@ -517,20 +416,6 @@ const MunicipioBriefing = () => {
     setHistoricoAcoes(acoes)
     if (municipio) {
       saveHistoricoMunicipio(municipio.id, acoes)
-    }
-  }
-
-  const handleSaveObras = (novasObras: Obra[]) => {
-    setObras(novasObras)
-    if (municipio) {
-      localStorage.setItem(`obras-${municipio.nome}`, JSON.stringify(novasObras))
-    }
-  }
-
-  const handleSaveEmendas = (novasEmendas: DestinacaoEmenda[]) => {
-    setEmendas(novasEmendas)
-    if (municipio) {
-      localStorage.setItem(`destinacoes-${municipio.nome}`, JSON.stringify(novasEmendas))
     }
   }
   
@@ -569,15 +454,11 @@ const MunicipioBriefing = () => {
           deputadosEstaduais={deputadosEstaduais}
           liderancas={liderancas}
           historicoAcoes={historicoAcoes}
-          obras={obras}
-          emendas={emendas}
           onSaveDadosPoliticos={handleSaveDadosPoliticos}
           onSaveDeputadosFederais={handleSaveDeputadosFederais}
           onSaveDeputadosEstaduais={handleSaveDeputadosEstaduais}
           onSaveLiderancas={handleSaveLiderancas}
           onSaveHistoricoAcoes={handleSaveHistoricoAcoes}
-          onSaveObras={handleSaveObras}
-          onSaveEmendas={handleSaveEmendas}
         />
       </div>
     </div>
