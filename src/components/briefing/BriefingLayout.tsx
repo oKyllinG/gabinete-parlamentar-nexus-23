@@ -77,9 +77,9 @@ export const BriefingLayout = ({
   }
 
   return (
-    <div className="space-y-6 bg-background p-6 print-container">
+    <div className="print-container space-y-6 bg-background p-6">
       {/* Header */}
-      <div className="bg-blue-600 text-white rounded-lg p-6 border border-border print-header">
+      <div className="print-header bg-blue-600 text-white rounded-lg p-6 border border-border">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3 mb-2">
             <h1 className="text-2xl font-bold">{municipio.nome}</h1>
@@ -106,7 +106,7 @@ export const BriefingLayout = ({
       </div>
 
       {/* Resultados Eleitorais */}
-      <div className="print-section">
+      <div className="print-section avoid-break">
         <ResultadosEleitoraisManager 
           dadosPoliticos={dadosPoliticos}
           onSave={onSaveDadosPoliticos}
@@ -114,7 +114,7 @@ export const BriefingLayout = ({
       </div>
 
       {/* Votação Histórica */}
-      <div className="print-section">
+      <div className="print-section avoid-break">
         <VotacaoHistoricaManager 
           municipioId={municipio.id}
           dadosPoliticos={dadosPoliticos}
@@ -125,7 +125,7 @@ export const BriefingLayout = ({
       {/* Deputados */}
       <div className="space-y-6">
         {/* Deputados Federais */}
-        <div className="print-section">
+        <div className="print-section avoid-break">
           <DeputadosFederaisManager 
             deputadosFederais={deputadosFederais}
             onSave={onSaveDeputadosFederais}
@@ -133,7 +133,7 @@ export const BriefingLayout = ({
         </div>
 
         {/* Deputados Estaduais */}
-        <div className="print-section">
+        <div className="print-section avoid-break">
           <DeputadosEstaduaisManager 
             deputadosEstaduais={deputadosEstaduais}
             onSave={onSaveDeputadosEstaduais}
@@ -141,7 +141,7 @@ export const BriefingLayout = ({
         </div>
 
         {/* Lideranças Municipais */}
-        <div className="print-section">
+        <div className="print-section avoid-break">
           <LiderancasManager 
             liderancas={liderancas}
             onSave={onSaveLiderancas}
@@ -150,14 +150,14 @@ export const BriefingLayout = ({
       </div>
 
       {/* Painel de Resumo - AcoesDeputado */}
-      <div className="print-section">
+      <div className="print-section avoid-break">
         <AcoesDeputado 
           municipioNome={municipio.nome}
         />
       </div>
 
       {/* Histórico do Deputado - Movido para o final */}
-      <div className="print-section">
+      <div className="print-section avoid-break">
         <HistoricoDeputadoManager
           acoes={historicoAcoes}
           municipioNome={municipio.nome}

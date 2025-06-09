@@ -120,436 +120,138 @@
   display: block;
 }
 
-/* === COMPREHENSIVE PRINT STYLES FOR A4 AND PDF === */
+/* === SIMPLIFIED PRINT STYLES === */
 @media print {
-  /* === FORCE COLOR PRINTING === */
-  * {
-    -webkit-print-color-adjust: exact !important;
-    color-adjust: exact !important;
-    print-color-adjust: exact !important;
-    box-sizing: border-box !important;
-  }
-
-  /* === PAGE SETUP === */
+  /* Page setup */
   @page {
     size: A4;
-    margin: 1.5cm 1cm 1.5cm 1cm;
+    margin: 1.5cm;
   }
 
-  /* === GLOBAL RESET === */
-  html, body {
+  /* Force colors */
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    color-adjust: exact !important;
+  }
+
+  /* Basic body setup */
+  body {
     background: white !important;
-    color: #000 !important;
-    font-family: Arial, sans-serif !important;
+    color: black !important;
     font-size: 12pt !important;
     line-height: 1.4 !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    width: 100% !important;
-    height: auto !important;
   }
 
-  /* === HIDE ALL INTERACTIVE ELEMENTS === */
-  button,
+  /* Show print-only elements */
+  .print-only {
+    display: block !important;
+  }
+
+  /* Hide interactive elements */
   .no-print,
-  [class*="no-print"],
-  nav,
-  .sidebar,
-  [data-lov-id],
+  button,
   input[type="button"],
   input[type="submit"],
-  input[type="reset"],
-  textarea,
-  select,
-  form,
-  /* Hide all DND Kit elements */
-  [data-dnd-kit-context],
-  [data-dnd-kit-draggable],
-  [data-dnd-kit-droppable],
-  [data-dnd-kit-sortable],
-  [data-dnd-kit-drag-overlay],
-  [role="button"]:not(th):not(td),
-  [role="tooltip"],
-  [role="dialog"],
-  .tooltip,
-  .popover,
-  /* Hide edit controls */
+  [role="button"]:not([role="button"][tabindex="-1"]),
   .edit-button,
   .add-button,
   .delete-button,
   .save-button,
   .cancel-button {
     display: none !important;
-    visibility: hidden !important;
-    opacity: 0 !important;
-    height: 0 !important;
-    width: 0 !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    border: none !important;
-    overflow: hidden !important;
   }
 
-  /* === SHOW PRINT-ONLY ELEMENTS === */
-  .print-only {
-    display: block !important;
-    visibility: visible !important;
-  }
-
-  /* === CONTAINER STYLES === */
+  /* Container styles */
   .print-container {
-    padding: 0 !important;
-    margin: 0 !important;
-    background: white !important;
-    width: 100% !important;
     max-width: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
   }
 
-  /* === HEADER STYLES WITH BLUE BACKGROUND === */
-  .print-header,
-  .bg-primary,
-  .bg-blue-600,
-  .bg-cyan-600,
-  [class*="bg-blue"],
-  [class*="bg-cyan"] {
-    background: #2563eb !important;
+  /* Header with blue background */
+  .print-header {
+    background: #1d4ed8 !important;
     color: white !important;
-    padding: 20px 24px !important;
-    border-radius: 8px !important;
+    padding: 20px !important;
     margin-bottom: 20px !important;
+    border-radius: 8px !important;
     page-break-inside: avoid !important;
   }
 
-  .text-primary-foreground,
-  .text-white {
+  .print-header h1 {
     color: white !important;
+    font-size: 24pt !important;
+    margin: 0 !important;
   }
 
-  /* === CARD STYLES === */
-  .print-section,
-  .card {
-    display: block !important;
-    visibility: visible !important;
+  /* Card styles */
+  .print-section {
     page-break-inside: avoid !important;
-    margin-bottom: 24px !important;
-    background: white !important;
-    border: 2px solid #e5e7eb !important;
+    margin-bottom: 20px !important;
+    border: 1px solid #e5e7eb !important;
     border-radius: 8px !important;
     overflow: visible !important;
-    box-shadow: none !important;
   }
 
-  /* Card headers with blue background */
-  .card .bg-blue-600,
-  .card .bg-cyan-600,
-  .card [class*="bg-blue"],
-  .card [class*="bg-cyan"],
-  .card-header {
-    background: #2563eb !important;
-    color: white !important;
-    padding: 16px 24px !important;
-    margin: -2px -2px 16px -2px !important;
-    border-radius: 6px 6px 0 0 !important;
-  }
-
-  /* === CARD CONTENT === */
-  .card-content,
-  [class*="CardContent"] {
-    padding: 24px !important;
-    background: white !important;
-    color: #000 !important;
-  }
-
-  /* === TABLE STYLES === */
+  /* Table styles */
   table {
     width: 100% !important;
     border-collapse: collapse !important;
-    margin: 16px 0 !important;
-    page-break-inside: auto !important;
+    margin: 10px 0 !important;
     font-size: 11pt !important;
-    background: white !important;
-  }
-
-  thead {
-    display: table-header-group !important;
-    background: #f8fafc !important;
-  }
-
-  tbody {
-    display: table-row-group !important;
-  }
-
-  tr {
-    page-break-inside: avoid !important;
-    page-break-after: auto !important;
   }
 
   th, td {
     border: 1px solid #d1d5db !important;
-    padding: 8px 12px !important;
+    padding: 8px !important;
     text-align: left !important;
-    vertical-align: top !important;
-    font-size: 11pt !important;
-    line-height: 1.3 !important;
-    background: white !important;
   }
 
   th {
-    background: #f8fafc !important;
+    background: #f3f4f6 !important;
     font-weight: bold !important;
-    color: #000 !important;
-    text-transform: uppercase !important;
-    font-size: 10pt !important;
   }
 
-  td {
-    color: #000 !important;
+  /* Typography */
+  h1 { font-size: 20pt !important; }
+  h2 { font-size: 16pt !important; }
+  h3 { font-size: 14pt !important; }
+
+  /* Ensure text is visible */
+  * {
+    color: black !important;
   }
 
-  /* === GRID LAYOUTS === */
+  /* Keep blue backgrounds for headers */
+  .bg-blue-600,
+  .bg-cyan-600 {
+    background: #1d4ed8 !important;
+    color: white !important;
+  }
+
+  .bg-blue-600 *,
+  .bg-cyan-600 * {
+    color: white !important;
+  }
+
+  /* Grid layouts */
   .grid {
     display: block !important;
   }
 
   .grid > * {
     display: block !important;
-    margin-bottom: 12px !important;
-    width: 100% !important;
+    margin-bottom: 10px !important;
   }
 
-  /* Special handling for Lideranças grid */
-  .grid.md\\:grid-cols-12 {
-    display: flex !important;
-    flex-wrap: wrap !important;
-    align-items: center !important;
-    gap: 12px !important;
-    padding: 12px !important;
-    border: 1px solid #e5e7eb !important;
-    border-radius: 6px !important;
-    margin-bottom: 8px !important;
-  }
-
-  .grid.md\\:grid-cols-12 > * {
-    display: inline-block !important;
-    margin: 0 !important;
-    vertical-align: middle !important;
-  }
-
-  /* === FLEX LAYOUTS === */
+  /* Flex layouts */
   .flex {
     display: block !important;
   }
 
-  .flex.print-keep-flex {
-    display: flex !important;
-  }
-
-  /* === SPACING === */
-  .space-y-6 > * + * {
-    margin-top: 24px !important;
-  }
-
-  .space-y-4 > * + * {
-    margin-top: 16px !important;
-  }
-
-  .space-y-3 > * + * {
-    margin-top: 12px !important;
-  }
-
-  .space-y-2 > * + * {
-    margin-top: 8px !important;
-  }
-
-  /* === TYPOGRAPHY === */
-  h1, h2, h3, h4, h5, h6 {
-    page-break-after: avoid !important;
-    color: #000 !important;
-    font-weight: bold !important;
-    margin-top: 0 !important;
-  }
-
-  h1 { 
-    font-size: 20pt !important; 
-    margin-bottom: 16px !important;
-    text-align: center !important;
-  }
-  h2 { 
-    font-size: 16pt !important; 
-    margin-bottom: 12px !important;
-    color: #2563eb !important;
-    border-bottom: 2px solid #2563eb !important;
-    padding-bottom: 4px !important;
-  }
-  h3 { 
-    font-size: 14pt !important; 
-    margin-bottom: 8px !important;
-    color: #2563eb !important;
-  }
-  h4 { 
-    font-size: 13pt !important; 
-    margin-bottom: 6px !important;
-  }
-
-  p, div, span {
-    color: #000 !important;
-    orphans: 3 !important;
-    widows: 3 !important;
-  }
-
-  .text-sm { font-size: 11pt !important; }
-  .text-xs { font-size: 10pt !important; }
-  .text-lg { font-size: 13pt !important; }
-  .text-xl { font-size: 15pt !important; }
-  .text-2xl { font-size: 18pt !important; }
-
-  .font-bold { font-weight: bold !important; }
-  .font-semibold { font-weight: 600 !important; }
-
-  /* === BADGE STYLES === */
-  .badge,
-  [class*="badge"] {
-    display: inline-block !important;
-    padding: 4px 8px !important;
-    border: 1px solid #2563eb !important;
-    border-radius: 4px !important;
-    background: rgba(37, 99, 235, 0.1) !important;
-    color: #2563eb !important;
-    font-size: 10pt !important;
-    font-weight: bold !important;
-  }
-
-  /* === BACKGROUND COLORS === */
-  .bg-muted,
-  .bg-gray-50 {
-    background: #f9f9f9 !important;
-    color: #000 !important;
-    border: 1px solid #e5e5e5 !important;
-    padding: 12px !important;
-    border-radius: 6px !important;
-  }
-
-  /* === SECTION TITLES === */
-  .card-title,
-  [class*="CardTitle"] {
-    color: white !important;
-    font-size: 14pt !important;
-    font-weight: bold !important;
-    margin: 0 !important;
-  }
-
-  /* === VALUE HIGHLIGHTING === */
-  .text-success {
-    color: #16a34a !important;
-    font-weight: bold !important;
-  }
-
-  .text-primary {
-    color: #2563eb !important;
-    font-weight: bold !important;
-  }
-
-  /* === AVATAR AND IMAGES === */
-  img {
-    max-width: 60px !important;
-    height: 60px !important;
-    display: block !important;
+  /* Page breaks */
+  .avoid-break {
     page-break-inside: avoid !important;
-    border-radius: 50% !important;
-  }
-
-  .w-20 { width: 60px !important; }
-  .h-20 { height: 60px !important; }
-  .rounded-full { border-radius: 50% !important; }
-
-  /* === SUMMARY SECTIONS === */
-  .text-center {
-    text-align: center !important;
-  }
-
-  /* Large numbers in summary */
-  .text-2xl,
-  .text-xl {
-    font-size: 18pt !important;
-    font-weight: bold !important;
-    color: #000 !important;
-  }
-
-  /* === PAGE BREAKS === */
-  .page-break {
-    page-break-before: always !important;
-  }
-
-  .avoid-break,
-  .card,
-  .print-section,
-  table,
-  .deputado-card,
-  .lideranca-card {
-    page-break-inside: avoid !important;
-  }
-
-  /* === BORDER STYLES === */
-  .border,
-  .border-border {
-    border: 1px solid #d1d5db !important;
-  }
-
-  .border-b {
-    border-bottom: 1px solid #d1d5db !important;
-  }
-
-  .rounded,
-  .rounded-lg {
-    border-radius: 6px !important;
-  }
-
-  /* === PRINT HEADER STYLING === */
-  .print-header h1 {
-    color: white !important;
-    margin: 0 !important;
-  }
-
-  .print-header .flex {
-    display: flex !important;
-    align-items: center !important;
-    gap: 8px !important;
-  }
-
-  /* === DATE AND METADATA === */
-  .print-only {
-    text-align: center !important;
-    font-size: 10pt !important;
-    color: #666 !important;
-    margin: 16px 0 !important;
-    border-bottom: 1px solid #ddd !important;
-    padding-bottom: 8px !important;
-  }
-
-  /* === UTILITY CLASSES === */
-  .print-hide { display: none !important; }
-  .print-show { display: block !important; }
-  
-  /* === FINAL CLEANUP === */
-  *:hover,
-  *:focus,
-  *:active {
-    background: inherit !important;
-    color: inherit !important;
-    transform: none !important;
-    box-shadow: none !important;
-  }
-
-  * {
-    user-select: text !important;
-    -webkit-user-select: text !important;
-    opacity: 1 !important;
-    visibility: visible !important;
-  }
-
-  *[class*="sr-only"],
-  .sr-only,
-  [aria-hidden="true"] {
-    display: none !important;
   }
 }
