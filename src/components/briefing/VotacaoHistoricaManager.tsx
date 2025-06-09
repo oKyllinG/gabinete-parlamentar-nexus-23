@@ -1,4 +1,3 @@
-
 import { useState } from "react"
 import { Edit3, Check, X } from "lucide-react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
@@ -67,9 +66,9 @@ export const VotacaoHistoricaManager = ({ municipioId, dadosPoliticos, onUpdateD
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <div className="w-1 h-6 bg-white rounded"></div>
-            <CardTitle className="text-lg font-bold">Votação Histórica - Geraldo Resende</CardTitle>
+            <CardTitle className="text-lg font-bold text-white">Votação Histórica - Geraldo Resende</CardTitle>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 no-print">
             {isEditing ? (
               <>
                 <Button size="sm" onClick={handleSave} className="bg-green-600 hover:bg-green-700 text-white">
@@ -94,7 +93,7 @@ export const VotacaoHistoricaManager = ({ municipioId, dadosPoliticos, onUpdateD
           </div>
         </div>
       </CardHeader>
-      <CardContent className="p-6">
+      <CardContent className="p-6 print-card-content">
         <div className="overflow-x-auto">
           <table className="w-full border border-gray-300">
             <thead>
