@@ -161,7 +161,3 @@ export const DeputadosFederaisManager = ({ deputadosFederais, onSave }: Deputado
     </Card>
   )
 }
-
-    </Card>
-  )
-}
