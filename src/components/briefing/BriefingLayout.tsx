@@ -57,9 +57,9 @@ interface BriefingLayoutProps {
   onSaveHistoricoAcoes: (acoes: AcaoDeputado[]) => void
 }
 
-export const BriefingLayout = ({ 
-  municipio, 
-  dadosPoliticos, 
+export const BriefingLayout = ({
+  municipio,
+  dadosPoliticos,
   deputadosFederais,
   deputadosEstaduais,
   liderancas,
@@ -104,31 +104,35 @@ export const BriefingLayout = ({
         Briefing Municipal de {municipio.nome} - Gerado em {new Date().toLocaleDateString('pt-BR')}
       </div>
 
-      <div className="print-section">
-        <ResultadosEleitoraisManager 
-          dadosPoliticos={dadosPoliticos}
-          onSave={onSaveDadosPoliticos}
-        />
+      {/* Grouping elements for the first page */}
+      <div className="print-first-page-group">
+        <div className="print-section">
+          <ResultadosEleitoraisManager 
+            dadosPoliticos={dadosPoliticos}
+            onSave={onSaveDadosPoliticos}
+          />
+        </div>
+
+        <div className="print-section">
+          <VotacaoHistoricaManager 
+            municipioId={municipio.id}
+            dadosPoliticos={dadosPoliticos}
+            onUpdateDados={onSaveDadosPoliticos}
+          />
+        </div>
+
+        <div className="print-deputies-grid print-section">
+            <DeputadosFederaisManager 
+              deputadosFederais={deputadosFederais}
+              onSave={onSaveDeputadosFederais}
+            />
+            <DeputadosEstaduaisManager 
+              deputadosEstaduais={deputadosEstaduais}
+              onSave={onSaveDeputadosEstaduais}
+            />
+        </div>
       </div>
 
-      <div className="print-section">
-        <VotacaoHistoricaManager 
-          municipioId={municipio.id}
-          dadosPoliticos={dadosPoliticos}
-          onUpdateDados={onSaveDadosPoliticos}
-        />
-      </div>
-
-      <div className="print-deputies-grid print-section">
-          <DeputadosFederaisManager 
-            deputadosFederais={deputadosFederais}
-            onSave={onSaveDeputadosFederais}
-          />
-          <DeputadosEstaduaisManager 
-            deputadosEstaduais={deputadosEstaduais}
-            onSave={onSaveDeputadosEstaduais}
-          />
-      </div>
 
       <div className="print-section">
           <LiderancasManager 
