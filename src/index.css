@@ -1,3 +1,4 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -119,7 +120,7 @@
   display: block;
 }
 
-/* COMPREHENSIVE PRINT STYLES FOR A4 AND PDF */
+/* === COMPREHENSIVE PRINT STYLES FOR A4 AND PDF === */
 @media print {
   /* === FORCE COLOR PRINTING === */
   * {
@@ -148,8 +149,7 @@
     height: auto !important;
   }
 
-  /* === HIDE ALL INTERACTIVE AND DND ELEMENTS === */
-  /* Hide buttons and interactive elements */
+  /* === HIDE ALL INTERACTIVE ELEMENTS === */
   button,
   .no-print,
   [class*="no-print"],
@@ -162,34 +162,23 @@
   textarea,
   select,
   form,
-  /* Hide all DND Kit elements and instructions */
+  /* Hide all DND Kit elements */
   [data-dnd-kit-context],
   [data-dnd-kit-draggable],
   [data-dnd-kit-droppable],
   [data-dnd-kit-sortable],
   [data-dnd-kit-drag-overlay],
-  .dnd-overlay,
-  .sortable-item,
   [role="button"]:not(th):not(td),
-  /* Hide drag and drop instruction text */
-  [aria-describedby*="DndDescribedBy"],
-  [id*="DndContext"],
-  [id*="DndDescribedBy"],
+  [role="tooltip"],
+  [role="dialog"],
+  .tooltip,
+  .popover,
   /* Hide edit controls */
   .edit-button,
   .add-button,
   .delete-button,
   .save-button,
-  .cancel-button,
-  /* Hide tooltips and popovers */
-  [role="tooltip"],
-  [role="dialog"],
-  .tooltip,
-  .popover,
-  /* Hide specific text patterns that appear in DND */
-  *:contains("To pick up a draggable item"),
-  *:contains("While dragging, use the arrow keys"),
-  *:contains("Press space again to drop") {
+  .cancel-button {
     display: none !important;
     visibility: hidden !important;
     opacity: 0 !important;
@@ -199,13 +188,6 @@
     padding: 0 !important;
     border: none !important;
     overflow: hidden !important;
-  }
-
-  /* Additional selector for hiding DND instruction text */
-  p:contains("To pick up a draggable item"),
-  div:contains("To pick up a draggable item"),
-  span:contains("To pick up a draggable item") {
-    display: none !important;
   }
 
   /* === SHOW PRINT-ONLY ELEMENTS === */
@@ -223,14 +205,16 @@
     max-width: none !important;
   }
 
-  /* === HEADERS WITH PROPER COLORS === */
+  /* === HEADER STYLES WITH BLUE BACKGROUND === */
   .print-header,
   .bg-primary,
   .bg-blue-600,
-  [class*="bg-blue"] {
-    background: #1e40af !important;
+  .bg-cyan-600,
+  [class*="bg-blue"],
+  [class*="bg-cyan"] {
+    background: #2563eb !important;
     color: white !important;
-    padding: 16px 24px !important;
+    padding: 20px 24px !important;
     border-radius: 8px !important;
     margin-bottom: 20px !important;
     page-break-inside: avoid !important;
@@ -257,9 +241,11 @@
 
   /* Card headers with blue background */
   .card .bg-blue-600,
+  .card .bg-cyan-600,
   .card [class*="bg-blue"],
+  .card [class*="bg-cyan"],
   .card-header {
-    background: #1e40af !important;
+    background: #2563eb !important;
     color: white !important;
     padding: 16px 24px !important;
     margin: -2px -2px 16px -2px !important;
@@ -391,14 +377,14 @@
   h2 { 
     font-size: 16pt !important; 
     margin-bottom: 12px !important;
-    color: #1e40af !important;
-    border-bottom: 2px solid #1e40af !important;
+    color: #2563eb !important;
+    border-bottom: 2px solid #2563eb !important;
     padding-bottom: 4px !important;
   }
   h3 { 
     font-size: 14pt !important; 
     margin-bottom: 8px !important;
-    color: #1e40af !important;
+    color: #2563eb !important;
   }
   h4 { 
     font-size: 13pt !important; 
@@ -425,10 +411,10 @@
   [class*="badge"] {
     display: inline-block !important;
     padding: 4px 8px !important;
-    border: 1px solid #3b82f6 !important;
+    border: 1px solid #2563eb !important;
     border-radius: 4px !important;
-    background: rgba(59, 130, 246, 0.1) !important;
-    color: #3b82f6 !important;
+    background: rgba(37, 99, 235, 0.1) !important;
+    color: #2563eb !important;
     font-size: 10pt !important;
     font-weight: bold !important;
   }
@@ -459,7 +445,7 @@
   }
 
   .text-primary {
-    color: #1e40af !important;
+    color: #2563eb !important;
     font-weight: bold !important;
   }
 
@@ -545,7 +531,6 @@
   .print-show { display: block !important; }
   
   /* === FINAL CLEANUP === */
-  /* Remove any remaining interactive states */
   *:hover,
   *:focus,
   *:active {
@@ -555,7 +540,6 @@
     box-shadow: none !important;
   }
 
-  /* Ensure all text is visible */
   * {
     user-select: text !important;
     -webkit-user-select: text !important;
@@ -563,7 +547,6 @@
     visibility: visible !important;
   }
 
-  /* Hide any remaining drag and drop text */
   *[class*="sr-only"],
   .sr-only,
   [aria-hidden="true"] {
