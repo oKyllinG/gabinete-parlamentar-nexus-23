@@ -56,7 +56,7 @@ const SortableObraItem = ({ obra }: { obra: Obra }) => {
       <div className="flex items-start gap-3">
         <button
           {...listeners}
-          className="mt-1 p-1 hover:bg-gray-100 rounded cursor-grab active:cursor-grabbing flex-shrink-0"
+          className="mt-1 p-1 hover:bg-gray-100 rounded cursor-grab active:cursor-grabbing flex-shrink-0 no-print"
         >
           <GripVertical className="h-4 w-4 text-gray-400" />
         </button>
@@ -149,7 +149,7 @@ const SortableEmendaItem = ({ destinacao }: { destinacao: DestinacaoEmenda }) =>
       <div className="flex items-start gap-3">
         <button
           {...listeners}
-          className="mt-1 p-1 hover:bg-gray-100 rounded cursor-grab active:cursor-grabbing flex-shrink-0"
+          className="mt-1 p-1 hover:bg-gray-100 rounded cursor-grab active:cursor-grabbing flex-shrink-0 no-print"
         >
           <GripVertical className="h-4 w-4 text-gray-400" />
         </button>

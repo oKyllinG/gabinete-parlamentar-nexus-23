@@ -110,3 +110,206 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* Print Styles */
+@media print {
+  @page {
+    size: A4;
+    margin: 1.5cm 1cm;
+  }
+
+  body {
+    font-size: 12px;
+    line-height: 1.4;
+    color: black !important;
+    background: white !important;
+  }
+
+  /* Hide elements that shouldn't be printed */
+  .no-print,
+  button:not(.print-allow),
+  .sidebar,
+  nav,
+  [data-lov-id],
+  .cursor-grab,
+  .cursor-grabbing {
+    display: none !important;
+  }
+
+  /* Show elements only when printing */
+  .print-only {
+    display: block !important;
+  }
+
+  /* Print container adjustments */
+  .print-container {
+    padding: 0 !important;
+    margin: 0 !important;
+    background: white !important;
+  }
+
+  /* Header styling for print */
+  .print-header {
+    background: #0891b2 !important;
+    color: white !important;
+    border-radius: 4px;
+    margin-bottom: 20px;
+    page-break-inside: avoid;
+    -webkit-print-color-adjust: exact;
+    color-adjust: exact;
+  }
+
+  /* Section styling for print */
+  .print-section {
+    page-break-inside: avoid;
+    margin-bottom: 20px;
+  }
+
+  /* Card styling for print */
+  .print-section .border {
+    border: 1px solid #d1d5db !important;
+  }
+
+  .print-section .bg-cyan-600 {
+    background: #0891b2 !important;
+    color: white !important;
+    -webkit-print-color-adjust: exact;
+    color-adjust: exact;
+  }
+
+  .print-section .bg-gray-50 {
+    background: #f9fafb !important;
+    -webkit-print-color-adjust: exact;
+    color-adjust: exact;
+  }
+
+  .print-section .bg-gray-100 {
+    background: #f3f4f6 !important;
+    -webkit-print-color-adjust: exact;
+    color-adjust: exact;
+  }
+
+  /* Text colors for print */
+  .print-section .text-white {
+    color: white !important;
+  }
+
+  .print-section .text-gray-900 {
+    color: #111827 !important;
+  }
+
+  .print-section .text-gray-600 {
+    color: #4b5563 !important;
+  }
+
+  .print-section .text-gray-700 {
+    color: #374151 !important;
+  }
+
+  .print-section .text-green-700 {
+    color: #15803d !important;
+  }
+
+  .print-section .text-blue-600 {
+    color: #2563eb !important;
+  }
+
+  .print-section .text-purple-600 {
+    color: #9333ea !important;
+  }
+
+  .print-section .text-orange-600 {
+    color: #ea580c !important;
+  }
+
+  /* Card and layout adjustments */
+  .print-section .rounded-lg {
+    border-radius: 4px;
+  }
+
+  .print-section .shadow-sm {
+    box-shadow: none;
+  }
+
+  /* Grid adjustments for print */
+  .print-section .grid-cols-1 {
+    grid-template-columns: repeat(1, minmax(0, 1fr));
+  }
+
+  .print-section .md\:grid-cols-2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .print-section .lg\:grid-cols-3 {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  /* Ensure items don't break across pages */
+  .print-section .border.rounded-lg.p-4 {
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+
+  /* Table adjustments for print */
+  .print-section table {
+    page-break-inside: auto;
+  }
+
+  .print-section tr {
+    page-break-inside: avoid;
+    page-break-after: auto;
+  }
+
+  /* Badge styling for print */
+  .print-section .border-green-300 {
+    border-color: #86efac !important;
+    background: #dcfce7 !important;
+    color: #166534 !important;
+  }
+
+  .print-section .border-yellow-300 {
+    border-color: #fde047 !important;
+    background: #fefce8 !important;
+    color: #a16207 !important;
+  }
+
+  .print-section .border-blue-300 {
+    border-color: #93c5fd !important;
+    background: #dbeafe !important;
+    color: #1e40af !important;
+  }
+
+  .print-section .border-gray-300 {
+    border-color: #d1d5db !important;
+    background: #f9fafb !important;
+    color: #374151 !important;
+  }
+
+  /* Spacing adjustments */
+  .print-section .space-y-6 > * + * {
+    margin-top: 16px;
+  }
+
+  .print-section .space-y-4 > * + * {
+    margin-top: 12px;
+  }
+
+  .print-section .space-y-3 > * + * {
+    margin-top: 8px;
+  }
+
+  .print-section .space-y-2 > * + * {
+    margin-top: 6px;
+  }
+
+  /* Ensure proper color printing */
+  * {
+    -webkit-print-color-adjust: exact;
+    color-adjust: exact;
+  }
+}
+
+/* Hide print-only elements by default */
+.print-only {
+  display: none;
+}

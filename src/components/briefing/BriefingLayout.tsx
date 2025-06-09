@@ -1,5 +1,6 @@
 
-import { MapPin } from "lucide-react"
+import { MapPin, Printer } from "lucide-react"
+import { Button } from "@/components/ui/button"
 import { AcoesDeputado } from "./AcoesDeputado"
 import { ResultadosEleitoraisManager } from "./ResultadosEleitoraisManager"
 import { VotacaoHistoricaManager } from "./VotacaoHistoricaManager"
@@ -71,12 +72,27 @@ export const BriefingLayout = ({
   onSaveHistoricoAcoes
 }: BriefingLayoutProps) => {
 
+  const handlePrint = () => {
+    window.print()
+  }
+
   return (
-    <div className="space-y-6 bg-background p-6">
+    <div className="space-y-6 bg-background p-6 print-container">
       {/* Header */}
-      <div className="bg-cyan-600 text-white rounded-lg p-6 border border-gray-700">
-        <div className="flex items-center gap-3 mb-2">
-          <h1 className="text-2xl font-bold">{municipio.nome}</h1>
+      <div className="bg-cyan-600 text-white rounded-lg p-6 border border-gray-700 print-header">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-3 mb-2">
+            <h1 className="text-2xl font-bold">{municipio.nome}</h1>
+          </div>
+          <Button
+            onClick={handlePrint}
+            variant="secondary"
+            size="sm"
+            className="no-print bg-white text-cyan-600 hover:bg-gray-100"
+          >
+            <Printer className="h-4 w-4 mr-2" />
+            Imprimir
+          </Button>
         </div>
         <div className="flex items-center gap-2">
           <MapPin className="h-4 w-4" />
@@ -84,51 +100,70 @@ export const BriefingLayout = ({
         </div>
       </div>
 
+      {/* Print date header - only visible when printing */}
+      <div className="print-only text-center text-sm text-gray-600 mb-4">
+        Briefing Municipal - Gerado em {new Date().toLocaleDateString('pt-BR')}
+      </div>
+
       {/* Resultados Eleitorais */}
-      <ResultadosEleitoraisManager 
-        dadosPoliticos={dadosPoliticos}
-        onSave={onSaveDadosPoliticos}
-      />
+      <div className="print-section">
+        <ResultadosEleitoraisManager 
+          dadosPoliticos={dadosPoliticos}
+          onSave={onSaveDadosPoliticos}
+        />
+      </div>
 
       {/* Votação Histórica */}
-      <VotacaoHistoricaManager 
-        municipioId={municipio.id}
-        dadosPoliticos={dadosPoliticos}
-        onUpdateDados={onSaveDadosPoliticos}
-      />
+      <div className="print-section">
+        <VotacaoHistoricaManager 
+          municipioId={municipio.id}
+          dadosPoliticos={dadosPoliticos}
+          onUpdateDados={onSaveDadosPoliticos}
+        />
+      </div>
 
       {/* Deputados */}
       <div className="space-y-6">
         {/* Deputados Federais */}
-        <DeputadosFederaisManager 
-          deputadosFederais={deputadosFederais}
-          onSave={onSaveDeputadosFederais}
-        />
+        <div className="print-section">
+          <DeputadosFederaisManager 
+            deputadosFederais={deputadosFederais}
+            onSave={onSaveDeputadosFederais}
+          />
+        </div>
 
         {/* Deputados Estaduais */}
-        <DeputadosEstaduaisManager 
-          deputadosEstaduais={deputadosEstaduais}
-          onSave={onSaveDeputadosEstaduais}
-        />
+        <div className="print-section">
+          <DeputadosEstaduaisManager 
+            deputadosEstaduais={deputadosEstaduais}
+            onSave={onSaveDeputadosEstaduais}
+          />
+        </div>
 
         {/* Lideranças Municipais */}
-        <LiderancasManager 
-          liderancas={liderancas}
-          onSave={onSaveLiderancas}
-        />
+        <div className="print-section">
+          <LiderancasManager 
+            liderancas={liderancas}
+            onSave={onSaveLiderancas}
+          />
+        </div>
       </div>
 
       {/* Painel de Resumo - AcoesDeputado */}
-      <AcoesDeputado 
-        municipioNome={municipio.nome}
-      />
+      <div className="print-section">
+        <AcoesDeputado 
+          municipioNome={municipio.nome}
+        />
+      </div>
 
       {/* Histórico do Deputado - Movido para o final */}
-      <HistoricoDeputadoManager
-        acoes={historicoAcoes}
-        municipioNome={municipio.nome}
-        onSave={onSaveHistoricoAcoes}
-      />
+      <div className="print-section">
+        <HistoricoDeputadoManager
+          acoes={historicoAcoes}
+          municipioNome={municipio.nome}
+          onSave={onSaveHistoricoAcoes}
+        />
+      </div>
     </div>
   )
 }
