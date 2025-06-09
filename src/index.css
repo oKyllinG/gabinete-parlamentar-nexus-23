@@ -153,6 +153,7 @@
   .print-container {
     padding: 0 !important;
     margin: 0 !important;
+    space-y: 1rem !important;
   }
   .print-section {
     page-break-inside: avoid !important;
@@ -176,36 +177,35 @@
   .print-header h1, .print-header span, .print-header svg {
     color: white !important;
   }
-  .bg-cyan-600 {
-      background-color: #0e7490 !important;
+  .bg-cyan-600, .votacao-historica-header {
+      background-color: #0891b2 !important;
   }
-  .bg-cyan-600, .bg-cyan-600 * {
+  .bg-cyan-600 *, .votacao-historica-header th {
       color: white !important;
   }
-  .text-white {
-      color: white !important;
-  }
-
+  
   /* Table Styles */
   table {
       width: 100% !important;
       border-collapse: collapse !important;
+      table-layout: fixed; /* Helps with column widths */
   }
   th, td {
       border: 1px solid #e5e7eb !important;
-      padding: 4px 6px !important;
+      padding: 4px !important;
       font-size: 8pt !important;
+      word-wrap: break-word;
   }
   th {
     background-color: #f8fafc !important;
     font-weight: 600 !important;
   }
   
-  .deputies-table th:nth-child(1) { width: 5%; } /* Pos. */
-  .deputies-table th:nth-child(2) { width: 50%; } /* Nome */
-  .deputies-table th:nth-child(3) { width: 15%; } /* Partido */
-  .deputies-table th:nth-child(4) { width: 15%; } /* Votos */
-  .deputies-table th:nth-child(5) { width: 15%; } /* % */
+  .deputies-table .pos-col { width: 6%; }
+  .deputies-table .name-col { width: 44%; }
+  .deputies-table .party-col { width: 15%; }
+  .deputies-table .votes-col { width: 17%; }
+  .deputies-table .percent-col { width: 18%; }
 
 
   /* Grid layout for deputies */
