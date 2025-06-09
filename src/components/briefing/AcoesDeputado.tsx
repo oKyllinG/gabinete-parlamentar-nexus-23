@@ -5,13 +5,12 @@ import { arrayMove, SortableContext, sortableKeyboardCoordinates, verticalListSo
 import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { Calendar, MapPin, DollarSign, FileText, Wrench, Building, Target, Plus, GripVertical, Edit, Trash2 } from "lucide-react"
+import { Calendar, MapPin, DollarSign, FileText, Wrench, Building, Target, GripVertical, Edit, Trash2 } from "lucide-react"
 import { getObrasByMunicipio, getDestinacoesByMunicipio, type Obra, type DestinacaoEmenda } from "@/utils/briefingDataUtils"
 
 // Sortable Obra Item Component
-const SortableObraItem = ({ obra, onEdit, onDelete }: { obra: Obra, onEdit: (obra: Obra) => void, onDelete: (id: string) => void }) => {
+const SortableObraItem = ({ obra }: { obra: Obra }) => {
   const {
     attributes,
     listeners,
@@ -67,17 +66,9 @@ const SortableObraItem = ({ obra, onEdit, onDelete }: { obra: Obra, onEdit: (obr
             <h5 className="font-semibold text-gray-900 text-sm leading-tight flex-1 pr-2">
               {obra.titulo}
             </h5>
-            <div className="flex items-center gap-1 flex-shrink-0">
-              <Badge className={`text-xs ${getStatusColor(obra.status)}`}>
-                {obra.status}
-              </Badge>
-              <Button size="sm" variant="ghost" onClick={() => onEdit(obra)} className="h-6 w-6 p-0">
-                <Edit className="h-3 w-3" />
-              </Button>
-              <Button size="sm" variant="ghost" onClick={() => onDelete(obra.id)} className="h-6 w-6 p-0 text-red-600">
-                <Trash2 className="h-3 w-3" />
-              </Button>
-            </div>
+            <Badge className={`text-xs ${getStatusColor(obra.status)}`}>
+              {obra.status}
+            </Badge>
           </div>
           
           <p className="text-gray-600 text-sm mb-3 line-clamp-2">
@@ -113,7 +104,7 @@ const SortableObraItem = ({ obra, onEdit, onDelete }: { obra: Obra, onEdit: (obr
 }
 
 // Sortable Emenda Item Component
-const SortableEmendaItem = ({ destinacao, onEdit, onDelete }: { destinacao: DestinacaoEmenda, onEdit: (destinacao: DestinacaoEmenda) => void, onDelete: (id: string) => void }) => {
+const SortableEmendaItem = ({ destinacao }: { destinacao: DestinacaoEmenda }) => {
   const {
     attributes,
     listeners,
@@ -175,17 +166,9 @@ const SortableEmendaItem = ({ destinacao, onEdit, onDelete }: { destinacao: Dest
                 {destinacao.objeto}
               </h4>
             </div>
-            <div className="flex items-center gap-1 flex-shrink-0">
-              <Badge className={`text-xs ${getStatusColor(destinacao.status)}`}>
-                {destinacao.status}
-              </Badge>
-              <Button size="sm" variant="ghost" onClick={() => onEdit(destinacao)} className="h-6 w-6 p-0">
-                <Edit className="h-3 w-3" />
-              </Button>
-              <Button size="sm" variant="ghost" onClick={() => onDelete(destinacao.id)} className="h-6 w-6 p-0 text-red-600">
-                <Trash2 className="h-3 w-3" />
-              </Button>
-            </div>
+            <Badge className={`text-xs ${getStatusColor(destinacao.status)}`}>
+              {destinacao.status}
+            </Badge>
           </div>
           
           <div className="space-y-2">
@@ -278,64 +261,6 @@ export const AcoesDeputado = ({ municipioNome }: AcoesDeputadoProps) => {
     }
   }
 
-  const handleAddObra = () => {
-    const newObra: Obra = {
-      id: `obra-${Date.now()}`,
-      titulo: "Nova Obra",
-      descricao: "Descrição da obra",
-      valor: 0,
-      status: "Planejada",
-      categoria: "Infraestrutura",
-      dataInicio: new Date().toISOString().split('T')[0],
-      prazoExecucao: new Date().toISOString().split('T')[0],
-      municipio: municipioNome
-    }
-    const newObras = [...obras, newObra]
-    setObras(newObras)
-    localStorage.setItem(`obras-${municipioNome}`, JSON.stringify(newObras))
-  }
-
-  const handleAddEmenda = () => {
-    const newEmenda: DestinacaoEmenda = {
-      id: `emenda-${Date.now()}`,
-      numero: `${Date.now()}`,
-      objeto: "Nova emenda parlamentar",
-      destinatario: "Prefeitura Municipal",
-      areaAtuacao: "Saúde",
-      valor: 0,
-      status: "Pendente",
-      prazoInicio: new Date().toISOString().split('T')[0],
-      prazoFim: new Date().toISOString().split('T')[0],
-      gnd: "4",
-      municipio: municipioNome
-    }
-    const newEmendas = [...destinacoes, newEmenda]
-    setDestinacoes(newEmendas)
-    localStorage.setItem(`destinacoes-${municipioNome}`, JSON.stringify(newEmendas))
-  }
-
-  const handleEditObra = (obra: Obra) => {
-    console.log("Edit obra:", obra)
-    // Future implementation
-  }
-
-  const handleEditEmenda = (emenda: DestinacaoEmenda) => {
-    console.log("Edit emenda:", emenda)
-    // Future implementation
-  }
-
-  const handleDeleteObra = (id: string) => {
-    const newObras = obras.filter(o => o.id !== id)
-    setObras(newObras)
-    localStorage.setItem(`obras-${municipioNome}`, JSON.stringify(newObras))
-  }
-
-  const handleDeleteEmenda = (id: string) => {
-    const newEmendas = destinacoes.filter(e => e.id !== id)
-    setDestinacoes(newEmendas)
-    localStorage.setItem(`destinacoes-${municipioNome}`, JSON.stringify(newEmendas))
-  }
-
   // Agrupar obras por categoria
   const obrasPorCategoria = obras.reduce((acc, obra) => {
     const categoria = obra.categoria || 'Outras'
@@ -357,21 +282,9 @@ export const AcoesDeputado = ({ municipioNome }: AcoesDeputadoProps) => {
     return (
       <Card className="border-gray-300">
         <CardHeader className="bg-cyan-600 text-white border-b border-gray-300">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <div className="w-1 h-6 bg-white rounded"></div>
-              <CardTitle className="text-lg font-bold">Ações do Deputado</CardTitle>
-            </div>
-            <div className="flex gap-2">
-              <Button size="sm" className="bg-blue-600 hover:bg-blue-700 text-white" onClick={handleAddObra}>
-                <Plus className="h-4 w-4" />
-                Obra
-              </Button>
-              <Button size="sm" className="bg-green-600 hover:bg-green-700 text-white" onClick={handleAddEmenda}>
-                <Plus className="h-4 w-4" />
-                Emenda
-              </Button>
-            </div>
+          <div className="flex items-center gap-2">
+            <div className="w-1 h-6 bg-white rounded"></div>
+            <CardTitle className="text-lg font-bold">Ações do Deputado</CardTitle>
           </div>
         </CardHeader>
         <CardContent className="p-6">
@@ -387,21 +300,9 @@ export const AcoesDeputado = ({ municipioNome }: AcoesDeputadoProps) => {
   return (
     <Card className="border-gray-300">
       <CardHeader className="bg-cyan-600 text-white border-b border-gray-300">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <div className="w-1 h-6 bg-white rounded"></div>
-            <CardTitle className="text-lg font-bold">Ações do Deputado</CardTitle>
-          </div>
-          <div className="flex gap-2">
-            <Button size="sm" className="bg-blue-600 hover:bg-blue-700 text-white" onClick={handleAddObra}>
-              <Plus className="h-4 w-4" />
-              Obra
-            </Button>
-            <Button size="sm" className="bg-green-600 hover:bg-green-700 text-white" onClick={handleAddEmenda}>
-              <Plus className="h-4 w-4" />
-              Emenda
-            </Button>
-          </div>
+        <div className="flex items-center gap-2">
+          <div className="w-1 h-6 bg-white rounded"></div>
+          <CardTitle className="text-lg font-bold">Ações do Deputado</CardTitle>
         </div>
       </CardHeader>
       <CardContent className="p-6 space-y-6">
@@ -414,34 +315,32 @@ export const AcoesDeputado = ({ municipioNome }: AcoesDeputadoProps) => {
               <Badge variant="outline" className="ml-2">{obras.length}</Badge>
             </div>
 
-            {Object.entries(obrasPorCategoria).map(([categoria, obrasCategoria]) => (
-              <div key={categoria} className="mb-6">
-                <div className="flex items-center gap-2 mb-3">
-                  <Wrench className="h-4 w-4 text-blue-600" />
-                  <h4 className="text-md font-semibold text-gray-700">{categoria}</h4>
-                  <Badge variant="secondary" className="text-xs">{obrasCategoria.length}</Badge>
+            {/* Layout compacto por categoria - lado a lado */}
+            <div className="space-y-4">
+              {Object.entries(obrasPorCategoria).map(([categoria, obrasCategoria]) => (
+                <div key={categoria} className="border rounded-lg p-4 bg-gray-50">
+                  <div className="flex items-center gap-2 mb-3">
+                    <Wrench className="h-4 w-4 text-blue-600" />
+                    <h4 className="text-md font-semibold text-gray-700">{categoria}</h4>
+                    <Badge variant="secondary" className="text-xs">{obrasCategoria.length}</Badge>
+                  </div>
+                  
+                  <DndContext
+                    sensors={sensors}
+                    collisionDetection={closestCenter}
+                    onDragEnd={handleObrasDragEnd}
+                  >
+                    <SortableContext items={obrasCategoria.map(item => item.id)} strategy={verticalListSortingStrategy}>
+                      <div className="grid gap-3 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+                        {obrasCategoria.map((obra) => (
+                          <SortableObraItem key={obra.id} obra={obra} />
+                        ))}
+                      </div>
+                    </SortableContext>
+                  </DndContext>
                 </div>
-                
-                <DndContext
-                  sensors={sensors}
-                  collisionDetection={closestCenter}
-                  onDragEnd={handleObrasDragEnd}
-                >
-                  <SortableContext items={obrasCategoria.map(item => item.id)} strategy={verticalListSortingStrategy}>
-                    <div className="grid gap-3 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-                      {obrasCategoria.map((obra) => (
-                        <SortableObraItem
-                          key={obra.id}
-                          obra={obra}
-                          onEdit={handleEditObra}
-                          onDelete={handleDeleteObra}
-                        />
-                      ))}
-                    </div>
-                  </SortableContext>
-                </DndContext>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
         )}
 
@@ -454,24 +353,21 @@ export const AcoesDeputado = ({ municipioNome }: AcoesDeputadoProps) => {
               <Badge variant="outline" className="ml-2">{destinacoes.length}</Badge>
             </div>
             
-            <DndContext
-              sensors={sensors}
-              collisionDetection={closestCenter}
-              onDragEnd={handleEmendasDragEnd}
-            >
-              <SortableContext items={destinacoes.map(item => item.id)} strategy={verticalListSortingStrategy}>
-                <div className="grid gap-3 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-                  {destinacoes.map((destinacao) => (
-                    <SortableEmendaItem
-                      key={destinacao.id}
-                      destinacao={destinacao}
-                      onEdit={handleEditEmenda}
-                      onDelete={handleDeleteEmenda}
-                    />
-                  ))}
-                </div>
-              </SortableContext>
-            </DndContext>
+            <div className="border rounded-lg p-4 bg-gray-50">
+              <DndContext
+                sensors={sensors}
+                collisionDetection={closestCenter}
+                onDragEnd={handleEmendasDragEnd}
+              >
+                <SortableContext items={destinacoes.map(item => item.id)} strategy={verticalListSortingStrategy}>
+                  <div className="grid gap-3 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+                    {destinacoes.map((destinacao) => (
+                      <SortableEmendaItem key={destinacao.id} destinacao={destinacao} />
+                    ))}
+                  </div>
+                </SortableContext>
+              </DndContext>
+            </div>
           </div>
         )}
 

@@ -210,32 +210,32 @@ export const LiderancasManager = ({ liderancas, onSave }: LiderancasManagerProps
               />
             </div>
           ) : (
-            <div className="flex items-center justify-between gap-4">
-              <div className="min-w-0 flex-1">
+            <div className="grid grid-cols-12 gap-4 items-center">
+              {/* Nome e cargo - ocupa espaço flexível */}
+              <div className="col-span-6 min-w-0">
                 <div className="flex items-center gap-3 mb-1">
                   <h4 className="font-bold text-gray-900 text-lg truncate">{lideranca.nome}</h4>
                 </div>
                 <p className="text-gray-600 font-medium truncate">{lideranca.cargo}</p>
               </div>
               
-              {/* Fixed width layout for consistent alignment */}
-              <div className="flex items-center gap-4 flex-shrink-0">
-                {/* Partido - fixed width */}
-                <div className="w-20 text-center">
-                  <Badge variant="outline" className="border-gray-400 text-gray-700 bg-gray-100 text-sm px-2 py-1">
-                    {lideranca.partido}
-                  </Badge>
-                </div>
-                
-                {/* Phone - fixed width */}
-                <div className="w-32 flex items-center justify-center gap-1 text-gray-600">
-                  <Phone className="h-4 w-4 flex-shrink-0" />
-                  <span className="text-sm font-medium truncate">{lideranca.telefone}</span>
-                </div>
-                
-                {/* Votes - fixed width, only show if has votes */}
+              {/* Partido - largura fixa */}
+              <div className="col-span-2 flex justify-center">
+                <Badge variant="outline" className="border-gray-400 text-gray-700 bg-gray-100 text-sm px-2 py-1 whitespace-nowrap">
+                  {lideranca.partido}
+                </Badge>
+              </div>
+              
+              {/* Telefone - largura fixa */}
+              <div className="col-span-2 flex items-center justify-center gap-1 text-gray-600">
+                <Phone className="h-4 w-4 flex-shrink-0" />
+                <span className="text-sm font-medium truncate">{lideranca.telefone}</span>
+              </div>
+              
+              {/* Votos - largura fixa, só aparece se tiver votos */}
+              <div className="col-span-2 flex justify-center">
                 {hasVotes && (
-                  <div className="w-24 text-center bg-blue-50 px-3 py-2 rounded-lg border border-blue-200">
+                  <div className="bg-blue-50 px-3 py-2 rounded-lg border border-blue-200 text-center">
                     <div className="text-blue-600 font-bold text-sm">
                       {lideranca.votos?.toLocaleString()}
                     </div>
