@@ -1,3 +1,4 @@
+
 import { useState } from "react"
 import { Plus, Edit, Trash2, Check, X, Phone } from "lucide-react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
@@ -151,96 +152,102 @@ export const LiderancasManager = ({ liderancas, onSave }: LiderancasManagerProps
     !l.cargo.toLowerCase().includes('presidenta da câmara')
   )
 
-  const renderLideranca = (lideranca: Lideranca) => (
-    <div key={lideranca.id} className="flex items-center gap-4 p-4 bg-white rounded-lg border border-gray-200 shadow-sm">
-      <Avatar className="h-16 w-16 border-2 border-gray-200">
-        <AvatarImage src={lideranca.foto} alt={lideranca.nome} />
-        <AvatarFallback className="bg-gray-100 text-gray-700 text-lg font-semibold">
-          {lideranca.nome.split(' ').map(n => n[0]).join('')}
-        </AvatarFallback>
-      </Avatar>
-      
-      <div className="flex-1">
-        {editingId === lideranca.id ? (
-          <div className="grid grid-cols-2 gap-3">
-            <Input
-              value={editData.nome || ""}
-              onChange={(e) => setEditData({...editData, nome: e.target.value})}
-              placeholder="Nome"
-            />
-            <Select value={editData.cargo || ""} onValueChange={(value) => setEditData({...editData, cargo: value})}>
-              <SelectTrigger>
-                <SelectValue placeholder="Selecione um cargo" />
-              </SelectTrigger>
-              <SelectContent>
-                {Object.entries(cargosPredefinidos).map(([categoria, cargos]) => (
-                  <div key={categoria}>
-                    <div className="px-2 py-1 text-sm font-semibold text-gray-600 border-b">{categoria}</div>
-                    {cargos.map((cargo) => (
-                      <SelectItem key={cargo} value={cargo}>{cargo}</SelectItem>
-                    ))}
-                  </div>
-                ))}
-              </SelectContent>
-            </Select>
-            <Input
-              value={editData.partido || ""}
-              onChange={(e) => setEditData({...editData, partido: e.target.value})}
-              placeholder="Partido"
-            />
-            <Input
-              value={editData.telefone || ""}
-              onChange={(e) => setEditData({...editData, telefone: e.target.value})}
-              placeholder="Telefone"
-            />
-            <Input
-              type="number"
-              value={editData.votos || ""}
-              onChange={(e) => setEditData({...editData, votos: Number(e.target.value)})}
-              placeholder="Votos"
-            />
-            <Input
-              value={editData.foto || ""}
-              onChange={(e) => setEditData({...editData, foto: e.target.value})}
-              placeholder="URL da foto"
-            />
-          </div>
-        ) : (
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-6 flex-1">
+  const renderLideranca = (lideranca: Lideranca) => {
+    const hasVotes = lideranca.votos && lideranca.votos > 0
+
+    return (
+      <div key={lideranca.id} className="flex items-center gap-4 p-4 bg-white rounded-lg border border-gray-200 shadow-sm">
+        <Avatar className="h-16 w-16 border-2 border-gray-200 flex-shrink-0">
+          <AvatarImage src={lideranca.foto} alt={lideranca.nome} />
+          <AvatarFallback className="bg-gray-100 text-gray-700 text-lg font-semibold">
+            {lideranca.nome.split(' ').map(n => n[0]).join('')}
+          </AvatarFallback>
+        </Avatar>
+        
+        <div className="flex-1 min-w-0">
+          {editingId === lideranca.id ? (
+            <div className="grid grid-cols-2 gap-3">
+              <Input
+                value={editData.nome || ""}
+                onChange={(e) => setEditData({...editData, nome: e.target.value})}
+                placeholder="Nome"
+              />
+              <Select value={editData.cargo || ""} onValueChange={(value) => setEditData({...editData, cargo: value})}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Selecione um cargo" />
+                </SelectTrigger>
+                <SelectContent>
+                  {Object.entries(cargosPredefinidos).map(([categoria, cargos]) => (
+                    <div key={categoria}>
+                      <div className="px-2 py-1 text-sm font-semibold text-gray-600 border-b">{categoria}</div>
+                      {cargos.map((cargo) => (
+                        <SelectItem key={cargo} value={cargo}>{cargo}</SelectItem>
+                      ))}
+                    </div>
+                  ))}
+                </SelectContent>
+              </Select>
+              <Input
+                value={editData.partido || ""}
+                onChange={(e) => setEditData({...editData, partido: e.target.value})}
+                placeholder="Partido"
+              />
+              <Input
+                value={editData.telefone || ""}
+                onChange={(e) => setEditData({...editData, telefone: e.target.value})}
+                placeholder="Telefone"
+              />
+              <Input
+                type="number"
+                value={editData.votos || ""}
+                onChange={(e) => setEditData({...editData, votos: Number(e.target.value)})}
+                placeholder="Votos"
+              />
+              <Input
+                value={editData.foto || ""}
+                onChange={(e) => setEditData({...editData, foto: e.target.value})}
+                placeholder="URL da foto"
+              />
+            </div>
+          ) : (
+            <div className="flex items-center justify-between gap-4">
               <div className="min-w-0 flex-1">
                 <div className="flex items-center gap-3 mb-1">
-                  <h4 className="font-bold text-gray-900 text-lg">{lideranca.nome}</h4>
+                  <h4 className="font-bold text-gray-900 text-lg truncate">{lideranca.nome}</h4>
                 </div>
-                <p className="text-gray-600 font-medium">{lideranca.cargo}</p>
+                <p className="text-gray-600 font-medium truncate">{lideranca.cargo}</p>
               </div>
               
-              {/* Partido alinhado com largura fixa */}
-              <div className="text-center min-w-[100px]">
-                <Badge variant="outline" className="border-gray-400 text-gray-700 bg-gray-100 text-lg px-3 py-1">
-                  {lideranca.partido}
-                </Badge>
-              </div>
-              
-              {/* Votos alinhados à direita com largura fixa */}
-              <div className="text-center bg-blue-50 px-4 py-2 rounded-lg border border-blue-200 min-w-[120px]">
-                <div className="text-blue-600 font-bold text-lg">
-                  {(lideranca.votos || 0).toLocaleString()}
+              {/* Fixed width layout for consistent alignment */}
+              <div className="flex items-center gap-4 flex-shrink-0">
+                {/* Partido - fixed width */}
+                <div className="w-20 text-center">
+                  <Badge variant="outline" className="border-gray-400 text-gray-700 bg-gray-100 text-sm px-2 py-1">
+                    {lideranca.partido}
+                  </Badge>
                 </div>
-                <div className="text-blue-500 text-xs font-medium">VOTOS</div>
+                
+                {/* Phone - fixed width */}
+                <div className="w-32 flex items-center justify-center gap-1 text-gray-600">
+                  <Phone className="h-4 w-4 flex-shrink-0" />
+                  <span className="text-sm font-medium truncate">{lideranca.telefone}</span>
+                </div>
+                
+                {/* Votes - fixed width, only show if has votes */}
+                {hasVotes && (
+                  <div className="w-24 text-center bg-blue-50 px-3 py-2 rounded-lg border border-blue-200">
+                    <div className="text-blue-600 font-bold text-sm">
+                      {lideranca.votos?.toLocaleString()}
+                    </div>
+                    <div className="text-blue-500 text-xs font-medium">VOTOS</div>
+                  </div>
+                )}
               </div>
             </div>
-          </div>
-        )}
-      </div>
-      
-      <div className="flex items-center gap-3">
-        <div className="flex items-center gap-1 text-gray-600">
-          <Phone className="h-4 w-4" />
-          <span className="text-base font-medium">{lideranca.telefone}</span>
+          )}
         </div>
         
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 flex-shrink-0">
           {editingId === lideranca.id ? (
             <>
               <Button size="sm" onClick={handleSaveEdit} className="bg-green-600 hover:bg-green-700 text-white">
@@ -262,8 +269,8 @@ export const LiderancasManager = ({ liderancas, onSave }: LiderancasManagerProps
           )}
         </div>
       </div>
-    </div>
-  )
+    )
+  }
 
   return (
     <Card className="border-gray-300">

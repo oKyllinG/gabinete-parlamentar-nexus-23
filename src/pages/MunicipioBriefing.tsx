@@ -123,6 +123,178 @@ const municipiosMS: Municipio[] = [
   { id: 79, nome: "Vicentina", regiao: "Sul", assessor: null }
 ]
 
+// Mock data for Água Clara histórico
+const initializeHistoricoAguaClara = () => {
+  const mockHistorico: AcaoDeputado[] = [
+    {
+      id: 'h1',
+      categoria: 'Emendas Parlamentares',
+      descricao: 'Emenda destinada para aquisição de ambulância para o município',
+      valor: 180000,
+      municipio: 'Água Clara',
+      dataRegistro: '2024-03-15'
+    },
+    {
+      id: 'h2',
+      categoria: 'Obras e Equipamentos',
+      descricao: 'Construção de posto de saúde no bairro Centro',
+      valor: 850000,
+      municipio: 'Água Clara',
+      dataRegistro: '2024-02-10'
+    },
+    {
+      id: 'h3',
+      categoria: 'Recursos Obtidos',
+      descricao: 'Recursos para pavimentação asfáltica da Rua das Flores',
+      valor: 320000,
+      municipio: 'Água Clara',
+      dataRegistro: '2024-01-20'
+    },
+    {
+      id: 'h4',
+      categoria: 'Indicações e Requerimentos',
+      descricao: 'Indicação para melhorias na iluminação pública',
+      valor: 75000,
+      municipio: 'Água Clara',
+      dataRegistro: '2024-04-05'
+    },
+    {
+      id: 'h5',
+      categoria: 'Emendas Parlamentares',
+      descricao: 'Equipamentos odontológicos para UBS',
+      valor: 95000,
+      municipio: 'Água Clara',
+      dataRegistro: '2024-05-12'
+    },
+    {
+      id: 'h6',
+      categoria: 'Obras e Equipamentos',
+      descricao: 'Reforma da escola municipal Dom Pedro II',
+      valor: 420000,
+      municipio: 'Água Clara',
+      dataRegistro: '2023-11-30'
+    },
+    {
+      id: 'h7',
+      categoria: 'Projetos de Lei',
+      descricao: 'Projeto de incentivo ao empreendedorismo local',
+      valor: 0,
+      municipio: 'Água Clara',
+      dataRegistro: '2024-06-01'
+    },
+    {
+      id: 'h8',
+      categoria: 'Recursos Obtidos',
+      descricao: 'Verba para compra de medicamentos básicos',
+      valor: 150000,
+      municipio: 'Água Clara',
+      dataRegistro: '2024-03-22'
+    },
+    {
+      id: 'h9',
+      categoria: 'Emendas Parlamentares',
+      descricao: 'Aquisição de veículo para transporte escolar',
+      valor: 220000,
+      municipio: 'Água Clara',
+      dataRegistro: '2023-12-08'
+    },
+    {
+      id: 'h10',
+      categoria: 'Obras e Equipamentos',
+      descricao: 'Construção de quadra poliesportiva coberta',
+      valor: 380000,
+      municipio: 'Água Clara',
+      dataRegistro: '2024-04-18'
+    },
+    {
+      id: 'h11',
+      categoria: 'Indicações e Requerimentos',
+      descricao: 'Solicitação de melhorias no sistema de água',
+      valor: 0,
+      municipio: 'Água Clara',
+      dataRegistro: '2024-02-28'
+    },
+    {
+      id: 'h12',
+      categoria: 'Recursos Obtidos',
+      descricao: 'Verba para programa de assistência social',
+      valor: 120000,
+      municipio: 'Água Clara',
+      dataRegistro: '2024-01-10'
+    },
+    {
+      id: 'h13',
+      categoria: 'Emendas Parlamentares',
+      descricao: 'Equipamentos para laboratório de análises clínicas',
+      valor: 165000,
+      municipio: 'Água Clara',
+      dataRegistro: '2024-05-25'
+    },
+    {
+      id: 'h14',
+      categoria: 'Obras e Equipamentos',
+      descricao: 'Pavimentação da estrada rural do Distrito Industrial',
+      valor: 680000,
+      municipio: 'Água Clara',
+      dataRegistro: '2023-10-15'
+    },
+    {
+      id: 'h15',
+      categoria: 'Projetos de Lei',
+      descricao: 'Criação do programa municipal de habitação popular',
+      valor: 0,
+      municipio: 'Água Clara',
+      dataRegistro: '2024-03-08'
+    },
+    {
+      id: 'h16',
+      categoria: 'Recursos Obtidos',
+      descricao: 'Recursos para aquisição de equipamentos agrícolas',
+      valor: 280000,
+      municipio: 'Água Clara',
+      dataRegistro: '2024-04-30'
+    },
+    {
+      id: 'h17',
+      categoria: 'Emendas Parlamentares',
+      descricao: 'Mobiliário escolar para ensino fundamental',
+      valor: 85000,
+      municipio: 'Água Clara',
+      dataRegistro: '2024-02-14'
+    },
+    {
+      id: 'h18',
+      categoria: 'Indicações e Requerimentos',
+      descricao: 'Requerimento para instalação de semáforo na praça central',
+      valor: 0,
+      municipio: 'Água Clara',
+      dataRegistro: '2024-05-07'
+    },
+    {
+      id: 'h19',
+      categoria: 'Obras e Equipamentos',
+      descricao: 'Construção de centro comunitário no bairro Jardim das Acácias',
+      valor: 520000,
+      municipio: 'Água Clara',
+      dataRegistro: '2024-01-25'
+    },
+    {
+      id: 'h20',
+      categoria: 'Recursos Obtidos',
+      descricao: 'Verba para programa de capacitação profissional',
+      valor: 95000,
+      municipio: 'Água Clara',
+      dataRegistro: '2024-06-03'
+    }
+  ]
+
+  // Save to localStorage if not exists
+  const existingHistorico = getHistoricoByMunicipio(1) // Água Clara ID = 1
+  if (existingHistorico.length === 0) {
+    saveHistoricoMunicipio(1, mockHistorico)
+  }
+}
+
 const MunicipioBriefing = () => {
   const { municipioId } = useParams()
   const navigate = useNavigate()
@@ -173,6 +345,7 @@ const MunicipioBriefing = () => {
       // Initialize mock data for Água Clara if it doesn't exist
       if (municipio.nome === "Água Clara") {
         initializeMockDataForAguaClara()
+        initializeHistoricoAguaClara()
       }
 
       const savedData = localStorage.getItem(`municipio-${municipio.id}-dados-politicos`)
