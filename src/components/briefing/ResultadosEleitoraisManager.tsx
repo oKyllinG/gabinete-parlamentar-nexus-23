@@ -1,4 +1,3 @@
-
 import { useState } from "react"
 import { Edit, Check, X } from "lucide-react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
@@ -13,12 +12,11 @@ interface DadosPoliticos {
 }
 
 interface ResultadosEleitoraisManagerProps {
-  municipio: { nome: string; regiao: string }
   dadosPoliticos: DadosPoliticos
   onSave: (dados: DadosPoliticos) => void
 }
 
-export const ResultadosEleitoraisManager = ({ municipio, dadosPoliticos, onSave }: ResultadosEleitoraisManagerProps) => {
+export const ResultadosEleitoraisManager = ({ dadosPoliticos, onSave }: ResultadosEleitoraisManagerProps) => {
   const [isEditing, setIsEditing] = useState(false)
   const [editData, setEditData] = useState<DadosPoliticos>(dadosPoliticos)
 
@@ -39,8 +37,8 @@ export const ResultadosEleitoraisManager = ({ municipio, dadosPoliticos, onSave 
           <div className="flex items-center gap-2">
             <div className="w-1 h-6 bg-white rounded"></div>
             <div>
-              <CardTitle className="text-lg font-bold">{municipio.nome}</CardTitle>
-              <p className="text-sm opacity-90">{municipio.regiao}</p>
+              <CardTitle className="text-lg font-bold">Resultados Eleitorais</CardTitle>
+              <p className="text-sm opacity-90">Dados da última eleição</p>
             </div>
           </div>
           <div className="flex items-center gap-2 no-print">
