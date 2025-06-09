@@ -1,7 +1,6 @@
 import { useState } from "react"
 import { SortableObras } from "./SortableObras"
 import { SortableEmendas } from "./SortableEmendas"
-import { LiderancasManager } from "./LiderancasManager"
 import { getObrasByMunicipio, getDestinacoesByMunicipio, Obra, DestinacaoEmenda } from "@/utils/briefingDataUtils"
 
 interface Municipio {
@@ -29,22 +28,6 @@ export const BriefingComponentsManager = ({ municipio }: BriefingComponentsManag
   const [obras, setObras] = useState<Obra[]>(() => getObrasByMunicipio(municipio.nome))
   const [emendas, setEmendas] = useState<DestinacaoEmenda[]>(() => getDestinacoesByMunicipio(municipio.nome))
   
-  // Load lideranças from localStorage with proper null check
-  const loadLiderancas = () => {
-    if (!municipio || !municipio.id) {
-      console.log("Municipio is undefined or has no id, returning empty liderancas array")
-      return []
-    }
-    
-    const saved = localStorage.getItem(`municipio-${municipio.id}-liderancas`)
-    if (saved) {
-      return JSON.parse(saved)
-    }
-    return []
-  }
-
-  const [liderancas, setLiderancas] = useState<Lideranca[]>(loadLiderancas)
-
   const handleSaveObras = (newObras: Obra[]) => {
     setObras(newObras)
     localStorage.setItem(`obras-${municipio.nome}`, JSON.stringify(newObras))
@@ -53,13 +36,6 @@ export const BriefingComponentsManager = ({ municipio }: BriefingComponentsManag
   const handleSaveEmendas = (newEmendas: DestinacaoEmenda[]) => {
     setEmendas(newEmendas)
     localStorage.setItem(`destinacoes-${municipio.nome}`, JSON.stringify(newEmendas))
-  }
-
-  const handleSaveLiderancas = (newLiderancas: Lideranca[]) => {
-    setLiderancas(newLiderancas)
-    if (municipio && municipio.id) {
-      localStorage.setItem(`municipio-${municipio.id}-liderancas`, JSON.stringify(newLiderancas))
-    }
   }
 
   const handleAddObra = () => {
@@ -128,11 +104,6 @@ export const BriefingComponentsManager = ({ municipio }: BriefingComponentsManag
         onAdd={handleAddEmenda}
         onEdit={handleEditEmenda}
         onDelete={handleDeleteEmenda}
-      />
-
-      <LiderancasManager
-        liderancas={liderancas}
-        onSave={handleSaveLiderancas}
       />
     </div>
   )
