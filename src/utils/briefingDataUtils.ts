@@ -1,3 +1,60 @@
+// Types
+export interface Obra {
+  id: string
+  titulo: string
+  descricao: string
+  valor: number
+  status: string
+  categoria?: string
+  dataInicio: string
+  prazoExecucao: string
+  observacoes?: string
+  municipio: string
+}
+
+export interface DestinacaoEmenda {
+  id: string
+  numero: string
+  objeto: string
+  destinatario: string
+  areaAtuacao: string
+  valor: number
+  status: string
+  prazoInicio: string
+  prazoFim: string
+  gnd?: string
+  observacoes?: string
+  municipio: string
+}
+
+// Utility functions
+export const getObrasByMunicipio = (municipioNome: string): Obra[] => {
+  // For now, return empty array - this can be populated with real data later
+  const obrasSalvas = localStorage.getItem(`obras-${municipioNome}`)
+  if (obrasSalvas) {
+    try {
+      return JSON.parse(obrasSalvas)
+    } catch (error) {
+      console.error('Erro ao carregar obras:', error)
+      return []
+    }
+  }
+  return []
+}
+
+export const getDestinacoesByMunicipio = (municipioNome: string): DestinacaoEmenda[] => {
+  // For now, return empty array - this can be populated with real data later  
+  const destinacoesSalvas = localStorage.getItem(`destinacoes-${municipioNome}`)
+  if (destinacoesSalvas) {
+    try {
+      return JSON.parse(destinacoesSalvas)
+    } catch (error) {
+      console.error('Erro ao carregar destinações:', error)
+      return []
+    }
+  }
+  return []
+}
 
 export const initializeMockDataForAguaClara = () => {
   const municipioId = 1 // Água Clara
