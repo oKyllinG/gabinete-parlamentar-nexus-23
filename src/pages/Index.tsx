@@ -63,10 +63,14 @@ const Index = () => {
 
   return (
     <SidebarProvider defaultOpen={true}>
-      <div className="min-h-screen flex w-full bg-background">
-        <AppSidebar />
+      <div className="main-container min-h-screen flex w-full bg-background">
+        {/* Sidebar is wrapped in a div with no-print class */}
+        <div className="no-print">
+            <AppSidebar />
+        </div>
         <main className="flex-1">
-          <div className="p-4 border-b border-border bg-card shadow-sm">
+          {/* Header is also marked as no-print */}
+          <div className="p-4 border-b border-border bg-card shadow-sm no-print">
             <div className="flex items-center gap-4">
               <SidebarTrigger className="text-foreground hover:bg-accent hover:text-accent-foreground" />
               <div className="flex items-center gap-2">
