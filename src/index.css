@@ -1,3 +1,4 @@
+/* File Path: src/index.css */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -110,47 +111,49 @@
   }
 }
 
-/* Print-specific classes */
-@media screen {
-  .print-only {
-    display: none;
-  }
-}
-
-/* === ENHANCED PRINT STYLES === */
+/* === REFINED PRINT STYLES === */
 @media print {
   @page {
     size: A4;
-    margin: 1.5cm;
+    margin: 1cm; /* Adjust margin as needed */
+  }
+
+  /* Force background colors and images to print */
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    color-adjust: exact !important;
   }
 
   body {
-    background-color: white !important;
+    background: white !important;
     color: black !important;
     font-size: 10pt !important;
-    -webkit-print-color-adjust: exact;
-    print-color-adjust: exact;
+    line-height: 1.3 !important;
   }
 
-  .print-container {
-    padding: 0 !important;
-    margin: 0 !important;
-    box-shadow: none !important;
-    border: none !important;
-  }
-
-  .no-print,
-  button,
-  [data-sidebar="trigger"],
-  .sidebar-wrapper,
-  main > .p-4.border-b {
+  /* Hide elements not meant for printing */
+  .no-print {
     display: none !important;
   }
-  
-  .print-only {
+
+  /* Ensure the main content takes up the full page width */
+  body, #root, .main-container {
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    display: block !important; /* Reset flexbox for root containers */
+  }
+
+  main {
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    /* Allow flex/grid inside main content to work */
     display: block !important;
   }
-  
+
+  /* Keep card and section styles for structure */
   .print-header {
     background-color: #2563eb !important;
     color: white !important;
@@ -159,19 +162,8 @@
     page-break-inside: avoid;
   }
 
-  .print-header h1, .print-header span {
-      color: white !important;
-  }
-
-  .print-section {
-    page-break-inside: avoid !important;
-    margin-top: 1.5rem;
-    border: 1px solid #e2e8f0;
-    border-radius: 0.5rem;
-  }
-
-  main {
-    padding: 0 !important;
+  .print-header h1, .print-header span, .print-header svg {
+    color: white !important;
   }
   
   .bg-cyan-600 {
@@ -186,26 +178,44 @@
       color: white !important;
   }
 
-  /* Keep drag and drop items visible */
-  .drag-and-drop-container, .sortable-item {
-    display: block !important;
-    visibility: visible !important;
+  .print-section {
+    border: 1px solid #e5e7eb !important;
+    border-radius: 0.5rem !important;
+    page-break-inside: avoid;
+    margin-top: 1rem;
+    overflow: hidden; /* Prevent content from spilling */
   }
 
-  /* Ensure cards and tables maintain their structure */
+  /* Avoid breaking inside tables and cards */
   .card, table, thead, tbody, tr, td, th {
     page-break-inside: avoid;
   }
-  
+
   table {
-      width: 100%;
+      width: 100% !important;
+      border-collapse: collapse !important;
+  }
+  
+  th, td {
+      border: 1px solid #d1d5db !important;
+      padding: 6px !important;
+      text-align: left !important;
+      font-size: 9pt !important;
   }
 
-  .grid {
-    display: grid !important;
+  th {
+    background-color: #f3f4f6 !important;
   }
-  
-  .flex {
-    display: flex !important;
+
+  /* Only show this element on print */
+  .print-only {
+    display: block !important;
+  }
+}
+
+/* Hide print-only elements on screen */
+@media screen {
+  .print-only {
+    display: none;
   }
 }
