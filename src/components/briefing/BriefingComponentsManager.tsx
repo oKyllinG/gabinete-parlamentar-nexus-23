@@ -1,4 +1,3 @@
-
 import { useState } from "react"
 import { SortableObras } from "./SortableObras"
 import { SortableEmendas } from "./SortableEmendas"
@@ -30,8 +29,13 @@ export const BriefingComponentsManager = ({ municipio }: BriefingComponentsManag
   const [obras, setObras] = useState<Obra[]>(() => getObrasByMunicipio(municipio.nome))
   const [emendas, setEmendas] = useState<DestinacaoEmenda[]>(() => getDestinacoesByMunicipio(municipio.nome))
   
-  // Load lideranças from localStorage
+  // Load lideranças from localStorage with proper null check
   const loadLiderancas = () => {
+    if (!municipio || !municipio.id) {
+      console.log("Municipio is undefined or has no id, returning empty liderancas array")
+      return []
+    }
+    
     const saved = localStorage.getItem(`municipio-${municipio.id}-liderancas`)
     if (saved) {
       return JSON.parse(saved)
@@ -53,7 +57,9 @@ export const BriefingComponentsManager = ({ municipio }: BriefingComponentsManag
 
   const handleSaveLiderancas = (newLiderancas: Lideranca[]) => {
     setLiderancas(newLiderancas)
-    localStorage.setItem(`municipio-${municipio.id}-liderancas`, JSON.stringify(newLiderancas))
+    if (municipio && municipio.id) {
+      localStorage.setItem(`municipio-${municipio.id}-liderancas`, JSON.stringify(newLiderancas))
+    }
   }
 
   const handleAddObra = () => {

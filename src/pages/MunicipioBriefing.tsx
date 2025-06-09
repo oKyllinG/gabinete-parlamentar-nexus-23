@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react"
 import { useParams, useNavigate } from "react-router-dom"
 import { ArrowLeft } from "lucide-react"
@@ -307,15 +308,20 @@ const MunicipioBriefing = () => {
   let finalMunicipioId = municipioId
   if (!finalMunicipioId) {
     const path = window.location.pathname
+    console.log("Trying to extract municipioId from path:", path)
     const match = path.match(/\/briefing\/(\d+)/)
     if (match) {
       finalMunicipioId = match[1]
+      console.log("Extracted municipioId from path:", finalMunicipioId)
     }
   }
   
+  console.log("Final municipioId:", finalMunicipioId)
+  
   const municipio = municipiosMS.find(m => m.id === Number(finalMunicipioId))
+  console.log("Found municipio:", municipio)
 
-  // Estados para dados
+  // Estados para dados - initialized with safe defaults
   const [dadosPoliticos, setDadosPoliticos] = useState<DadosPoliticos>({
     totalEleitores: 12244,
     votosDeputado: 400,
@@ -341,7 +347,11 @@ const MunicipioBriefing = () => {
 
   // Carregar dados do localStorage e inicializar dados mock se necessário
   useEffect(() => {
+    console.log("useEffect triggered, municipio:", municipio)
+    
     if (municipio) {
+      console.log("Loading data for municipio:", municipio.nome)
+      
       // Initialize mock data for Água Clara if it doesn't exist
       if (municipio.nome === "Água Clara") {
         initializeMockDataForAguaClara()
