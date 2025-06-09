@@ -93,9 +93,9 @@ export const VotacaoHistoricaManager = ({ municipioId, dadosPoliticos, onUpdateD
           </div>
         </div>
       </CardHeader>
-      <CardContent className="p-6 print-card-content">
+      <CardContent className="p-0 print:p-0">
         <div className="overflow-x-auto">
-          <table className="w-full border border-gray-300">
+          <table className="w-full border-collapse">
             <thead>
               <tr className="bg-cyan-600">
                 <th className="text-white font-bold text-center p-2 border border-gray-300">
@@ -114,39 +114,15 @@ export const VotacaoHistoricaManager = ({ municipioId, dadosPoliticos, onUpdateD
             <tbody>
               <tr>
                 <td className="text-center font-medium p-2 border border-gray-300 bg-cyan-100">
-                  {isEditing ? (
-                    <Input
-                      value={editDataResultados.totalEleitores}
-                      onChange={(e) => setEditDataResultados({...editDataResultados, totalEleitores: Number(e.target.value)})}
-                      className="w-24 text-center text-black"
-                    />
-                  ) : (
-                    dadosPoliticos.totalEleitores.toLocaleString()
-                  )}
+                  {dadosPoliticos.totalEleitores.toLocaleString()}
                 </td>
                 {votacaoHistorica.map((item) => (
                   <td key={item.ano} className="text-center font-medium p-2 border border-gray-300">
-                    {isEditing ? (
-                      <Input
-                        value={item.votos}
-                        onChange={(e) => handleVotacaoChange(item.ano, Number(e.target.value))}
-                        className="w-20 text-center"
-                      />
-                    ) : (
-                      item.votos
-                    )}
+                     {item.votos}
                   </td>
                 ))}
                 <td className="text-center font-medium p-2 border border-gray-300 bg-cyan-100">
-                  {isEditing ? (
-                    <Input
-                      value={editDataResultados.colocacaoDeputado}
-                      onChange={(e) => setEditDataResultados({...editDataResultados, colocacaoDeputado: e.target.value})}
-                      className="w-16 text-center text-black"
-                    />
-                  ) : (
-                    dadosPoliticos.colocacaoDeputado
-                  )}
+                  {dadosPoliticos.colocacaoDeputado}
                 </td>
               </tr>
             </tbody>
