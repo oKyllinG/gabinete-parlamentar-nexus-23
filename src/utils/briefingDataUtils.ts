@@ -59,6 +59,142 @@ export const getDestinacoesByMunicipio = (municipioNome: string): DestinacaoEmen
 export const initializeMockDataForAguaClara = () => {
   const municipioId = 1 // Água Clara
 
+  // 6 Obras mock
+  const obras = [
+    {
+      id: "obra-1",
+      titulo: "Pavimentação da Avenida Central",
+      descricao: "Pavimentação asfáltica da Avenida Central, incluindo drenagem e sinalização",
+      valor: 2500000,
+      status: "Em andamento",
+      categoria: "Infraestrutura",
+      dataInicio: "2024-01-15",
+      prazoExecucao: "2024-12-30",
+      observacoes: "Obra prioritária para o desenvolvimento urbano",
+      municipio: "Água Clara"
+    },
+    {
+      id: "obra-2",
+      titulo: "Construção do Centro de Saúde",
+      descricao: "Construção de novo centro de saúde com 10 consultórios e laboratório",
+      valor: 3200000,
+      status: "Planejada",
+      categoria: "Saúde",
+      dataInicio: "2024-06-01",
+      prazoExecucao: "2025-05-30",
+      observacoes: "Atenderá toda a região rural",
+      municipio: "Água Clara"
+    },
+    {
+      id: "obra-3",
+      titulo: "Reforma da Escola Municipal Santos Dumont",
+      descricao: "Reforma completa com ampliação de 6 salas de aula e quadra coberta",
+      valor: 1800000,
+      status: "Concluída",
+      categoria: "Educação",
+      dataInicio: "2023-03-10",
+      prazoExecucao: "2023-11-20",
+      observacoes: "Beneficiará 450 alunos",
+      municipio: "Água Clara"
+    },
+    {
+      id: "obra-4",
+      titulo: "Sistema de Abastecimento de Água Rural",
+      descricao: "Implementação de sistema de captação e distribuição para zona rural",
+      valor: 4500000,
+      status: "Em licitação",
+      categoria: "Saneamento",
+      dataInicio: "2024-08-01",
+      prazoExecucao: "2025-07-30",
+      observacoes: "Atenderá 12 comunidades rurais",
+      municipio: "Água Clara"
+    },
+    {
+      id: "obra-5",
+      titulo: "Praça da Juventude",
+      descricao: "Construção de praça com equipamentos de ginástica e playground",
+      valor: 850000,
+      status: "Em andamento",
+      categoria: "Lazer",
+      dataInicio: "2024-02-20",
+      prazoExecucao: "2024-08-15",
+      observacoes: "Espaço de convivência para todas as idades",
+      municipio: "Água Clara"
+    },
+    {
+      id: "obra-6",
+      titulo: "Ponte sobre o Córrego das Pedras",
+      descricao: "Construção de ponte em concreto para acesso ao distrito rural",
+      valor: 1200000,
+      status: "Planejada",
+      categoria: "Infraestrutura",
+      dataInicio: "2024-09-01",
+      prazoExecucao: "2024-12-20",
+      observacoes: "Ligação essencial para escoamento da produção agrícola",
+      municipio: "Água Clara"
+    }
+  ]
+
+  // 4 Emendas mock
+  const emendas = [
+    {
+      id: "emenda-1",
+      numero: "32640001",
+      objeto: "Aquisição de ambulância UTI móvel para o município",
+      destinatario: "Secretaria Municipal de Saúde",
+      areaAtuacao: "Saúde",
+      valor: 650000,
+      status: "Aprovada",
+      prazoInicio: "2024-01-10",
+      prazoFim: "2024-12-31",
+      gnd: "4",
+      observacoes: "Emenda de bancada MS",
+      municipio: "Água Clara"
+    },
+    {
+      id: "emenda-2",
+      numero: "32640002",
+      objeto: "Equipamentos para laboratório de análises clínicas",
+      destinatario: "Hospital Municipal",
+      areaAtuacao: "Saúde",
+      valor: 320000,
+      status: "Em execução",
+      prazoInicio: "2024-03-15",
+      prazoFim: "2024-10-30",
+      gnd: "4",
+      observacoes: "Melhoria dos serviços diagnósticos",
+      municipio: "Água Clara"
+    },
+    {
+      id: "emenda-3",
+      numero: "32640003",
+      objeto: "Aquisição de ônibus escolar adaptado",
+      destinatario: "Secretaria Municipal de Educação",
+      areaAtuacao: "Educação",
+      valor: 280000,
+      status: "Aprovada",
+      prazoInicio: "2024-02-01",
+      prazoFim: "2024-08-30",
+      gnd: "4",
+      observacoes: "Transporte para estudantes da zona rural",
+      municipio: "Água Clara"
+    },
+    {
+      id: "emenda-4",
+      numero: "32640004",
+      objeto: "Equipamentos para Centro de Referência da Assistência Social",
+      destinatario: "CRAS Municipal",
+      areaAtuacao: "Assistência Social",
+      valor: 150000,
+      status: "Em execução",
+      prazoInicio: "2024-04-01",
+      prazoFim: "2024-11-30",
+      gnd: "4",
+      observacoes: "Fortalecimento dos serviços socioassistenciais",
+      municipio: "Água Clara"
+    }
+  ]
+
   // Deputados Federais (10 mocks)
   const deputadosFederais = [
     {
@@ -411,7 +547,163 @@ export const initializeMockDataForAguaClara = () => {
     }
   ]
 
-  // Salvar no localStorage se não existir
+  // 16 Lideranças Municipais mock (prefeito, vice, secretário de saúde e 13 vereadores)
+  const liderancasMunicipais = [
+    {
+      id: 1,
+      nome: "Carlos Eduardo Silva",
+      cargo: "Prefeito",
+      partido: "PSDB",
+      telefone: "(67) 99988-7766",
+      votos: 8245,
+      ordem: 0
+    },
+    {
+      id: 2,
+      nome: "Ana Maria Santos",
+      cargo: "Vice-Prefeita",
+      partido: "PSDB",
+      telefone: "(67) 99977-8855",
+      votos: 8245,
+      ordem: 1
+    },
+    {
+      id: 3,
+      nome: "Dr. Roberto Oliveira",
+      cargo: "Secretário de Saúde",
+      partido: "PDT",
+      telefone: "(67) 99966-9944",
+      votos: 0,
+      ordem: 2
+    },
+    {
+      id: 4,
+      nome: "José da Silva",
+      cargo: "Vereador",
+      partido: "PT",
+      telefone: "(67) 99955-1122",
+      votos: 1850,
+      ordem: 3
+    },
+    {
+      id: 5,
+      nome: "Maria das Graças",
+      cargo: "Vereadora",
+      partido: "PP",
+      telefone: "(67) 99944-3344",
+      votos: 1620,
+      ordem: 4
+    },
+    {
+      id: 6,
+      nome: "João Pedro Costa",
+      cargo: "Vereador",
+      partido: "MDB",
+      telefone: "(67) 99933-5566",
+      votos: 1480,
+      ordem: 5
+    },
+    {
+      id: 7,
+      nome: "Antônio Carlos",
+      cargo: "Vereador",
+      partido: "PL",
+      telefone: "(67) 99922-7788",
+      votos: 1320,
+      ordem: 6
+    },
+    {
+      id: 8,
+      nome: "Luciana Fernandes",
+      cargo: "Vereadora",
+      partido: "UNIÃO",
+      telefone: "(67) 99911-9900",
+      votos: 1280,
+      ordem: 7
+    },
+    {
+      id: 9,
+      nome: "Fernando Almeida",
+      cargo: "Vereador",
+      partido: "REPUBLICANOS",
+      telefone: "(67) 99900-1122",
+      votos: 1150,
+      ordem: 8
+    },
+    {
+      id: 10,
+      nome: "Sandra Regina",
+      cargo: "Vereadora",
+      partido: "PSB",
+      telefone: "(67) 99888-3344",
+      votos: 1080,
+      ordem: 9
+    },
+    {
+      id: 11,
+      nome: "Ricardo Mendes",
+      cargo: "Vereador",
+      partido: "PODE",
+      telefone: "(67) 99877-5566",
+      votos: 980,
+      ordem: 10
+    },
+    {
+      id: 12,
+      nome: "Patrícia Lima",
+      cargo: "Vereadora",
+      partido: "PV",
+      telefone: "(67) 99866-7788",
+      votos: 920,
+      ordem: 11
+    },
+    {
+      id: 13,
+      nome: "Marcos Vinícius",
+      cargo: "Vereador",
+      partido: "CIDADANIA",
+      telefone: "(67) 99855-9900",
+      votos: 880,
+      ordem: 12
+    },
+    {
+      id: 14,
+      nome: "Cláudia Souza",
+      cargo: "Vereadora",
+      partido: "SOLIDARIEDADE",
+      telefone: "(67) 99844-1122",
+      votos: 850,
+      ordem: 13
+    },
+    {
+      id: 15,
+      nome: "Rafael Rodrigues",
+      cargo: "Vereador",
+      partido: "AVANTE",
+      telefone: "(67) 99833-3344",
+      votos: 800,
+      ordem: 14
+    },
+    {
+      id: 16,
+      nome: "Vanessa Castro",
+      cargo: "Vereadora",
+      partido: "PROS",
+      telefone: "(67) 99822-5566",
+      votos: 750,
+      ordem: 15
+    }
+  ]
+
+  // Salvar todos os dados no localStorage se não existir
+  if (!localStorage.getItem(`obras-Água Clara`)) {
+    localStorage.setItem(`obras-Água Clara`, JSON.stringify(obras))
+  }
+
+  if (!localStorage.getItem(`destinacoes-Água Clara`)) {
+    localStorage.setItem(`destinacoes-Água Clara`, JSON.stringify(emendas))
+  }
+
   if (!localStorage.getItem(`municipio-${municipioId}-deputados-federais`)) {
     localStorage.setItem(`municipio-${municipioId}-deputados-federais`, JSON.stringify(deputadosFederais))
   }
@@ -422,6 +714,10 @@ export const initializeMockDataForAguaClara = () => {
 
   if (!localStorage.getItem(`municipio-${municipioId}-historico-acoes`)) {
     localStorage.setItem(`municipio-${municipioId}-historico-acoes`, JSON.stringify(historicoAcoes))
+  }
+
+  if (!localStorage.getItem(`municipio-${municipioId}-liderancas`)) {
+    localStorage.setItem(`municipio-${municipioId}-liderancas`, JSON.stringify(liderancasMunicipais))
   }
 
   // Dados políticos atualizados

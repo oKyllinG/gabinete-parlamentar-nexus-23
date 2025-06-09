@@ -103,6 +103,13 @@ const SortableLiderancaItem = ({
           {lideranca.nome.split(' ').map(n => n[0]).join('')}
         </AvatarFallback>
       </Avatar>
+
+      {lideranca.votos && (
+        <div className="text-center bg-muted/50 rounded-lg p-4 min-w-[120px]">
+          <p className="text-sm text-muted-foreground font-medium mb-1">Votos</p>
+          <p className="text-2xl font-bold">{lideranca.votos.toLocaleString()}</p>
+        </div>
+      )}
       
       <div className="flex-1 space-y-2">
         {isEditing ? (
@@ -141,23 +148,17 @@ const SortableLiderancaItem = ({
           </div>
         ) : (
           <div className="flex items-center justify-between">
-            <div className="space-y-1">
-              <div className="flex items-center gap-3">
-                <h4 className="text-xl font-bold">{lideranca.nome}</h4>
-                <Badge variant="secondary" className="text-base px-3 py-1">{lideranca.partido}</Badge>
+            <div className="space-y-2">
+              <div className="flex items-center gap-4">
+                <h4 className="text-2xl font-bold">{lideranca.nome}</h4>
+                <Badge variant="secondary" className="text-lg px-4 py-2">{lideranca.partido}</Badge>
               </div>
-              <p className="text-lg text-muted-foreground font-medium">{lideranca.cargo}</p>
-              {lideranca.votos && (
-                <div className="text-left">
-                  <p className="text-sm text-muted-foreground font-medium">Votos</p>
-                  <p className="text-lg font-semibold">{lideranca.votos.toLocaleString()}</p>
-                </div>
-              )}
+              <p className="text-xl text-muted-foreground font-semibold">{lideranca.cargo}</p>
             </div>
             
-            <div className="flex items-center gap-2 text-lg">
-              <Phone className="h-5 w-5 text-muted-foreground" />
-              <span className="font-medium">{lideranca.telefone}</span>
+            <div className="flex items-center gap-3 text-xl">
+              <Phone className="h-6 w-6 text-muted-foreground" />
+              <span className="font-semibold">{lideranca.telefone}</span>
             </div>
           </div>
         )}
