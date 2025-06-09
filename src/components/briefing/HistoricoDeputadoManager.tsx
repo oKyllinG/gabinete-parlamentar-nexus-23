@@ -1,4 +1,3 @@
-
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
@@ -96,7 +95,7 @@ export const HistoricoDeputadoManager = ({ acoes, municipioNome, onSave }: Histo
               </p>
             )}
           </div>
-          <Button onClick={handleAddAcao} size="sm" variant="secondary">
+          <Button onClick={handleAddAcao} size="sm" variant="secondary" className="no-print">
             <Plus className="h-4 w-4 mr-2" />
             Adicionar Ação
           </Button>
@@ -129,7 +128,7 @@ export const HistoricoDeputadoManager = ({ acoes, municipioNome, onSave }: Histo
                           {formatCurrency(acao.valor)}
                         </p>
                       </div>
-                      <div className="flex items-center gap-2">
+                      <div className="flex items-center gap-2 no-print">
                         <Button
                           variant="ghost"
                           size="sm"

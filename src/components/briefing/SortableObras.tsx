@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react"
 import { DndContext, closestCenter, KeyboardSensor, PointerSensor, useSensor, useSensors } from '@dnd-kit/core'
 import { arrayMove, SortableContext, sortableKeyboardCoordinates, verticalListSortingStrategy } from '@dnd-kit/sortable'
@@ -66,7 +65,7 @@ const SortableObraItem = ({ obra, onEdit, onDelete }: SortableObraItemProps) => 
           <div className="flex items-start gap-3">
             <button
               {...listeners}
-              className="mt-2 p-1 hover:bg-gray-100 rounded cursor-grab active:cursor-grabbing"
+              className="mt-2 p-1 hover:bg-gray-100 rounded cursor-grab active:cursor-grabbing no-print"
             >
               <GripVertical className="h-4 w-4 text-gray-400" />
             </button>
@@ -74,7 +73,7 @@ const SortableObraItem = ({ obra, onEdit, onDelete }: SortableObraItemProps) => 
             <div className="flex-1">
               <div className="flex justify-between items-start mb-2">
                 <h4 className="font-semibold text-gray-900">{obra.titulo}</h4>
-                <div className="flex gap-2">
+                <div className="flex gap-2 no-print">
                   <Button size="sm" variant="ghost" onClick={() => onEdit(obra)}>
                     <Edit className="h-4 w-4" />
                   </Button>
@@ -208,7 +207,7 @@ export const SortableObras = ({ obras, onSave, onAdd, onEdit, onDelete }: Sortab
           </div>
           <Button 
             size="sm" 
-            className="bg-blue-600 hover:bg-blue-700 text-white"
+            className="bg-blue-600 hover:bg-blue-700 text-white no-print"
             onClick={onAdd}
           >
             <Plus className="h-4 w-4" />
