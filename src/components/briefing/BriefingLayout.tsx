@@ -73,113 +73,189 @@ export const BriefingLayout = ({
 }: BriefingLayoutProps) => {
 
   const handlePrint = () => {
-    // Criar uma nova janela com apenas o conteúdo do briefing
+    // Criar uma nova janela para impressão
     const printWindow = window.open('', '_blank')
     if (!printWindow) return
 
-    // Obter o conteúdo HTML completo da seção print-container
+    // Obter o conteúdo da seção print-container
     const printContent = document.querySelector('.print-container')
     if (!printContent) return
 
-    // Obter todas as folhas de estilo da página atual
-    const styleSheets = Array.from(document.styleSheets)
-    let allCSS = ''
-
-    try {
-      styleSheets.forEach(sheet => {
-        try {
-          if (sheet.href || sheet.ownerNode) {
-            const rules = Array.from(sheet.cssRules || sheet.rules || [])
-            rules.forEach(rule => {
-              allCSS += rule.cssText + '\n'
-            })
-          }
-        } catch (e) {
-          console.log('Could not access stylesheet:', e)
-        }
-      })
-    } catch (e) {
-      console.log('Error reading stylesheets:', e)
-    }
-
-    // CSS adicional específico para impressão com cores forçadas
-    const additionalCSS = `
-      body {
-        font-family: Arial, sans-serif !important;
-        font-size: 12px !important;
-        line-height: 1.4 !important;
-        color: #000 !important;
-        background: white !important;
-        margin: 0 !important;
-        padding: 20px !important;
-      }
-      
-      .print-container {
-        max-width: 100% !important;
-        padding: 0 !important;
-        margin: 0 !important;
-      }
-      
-      /* Forçar cores dos headers */
-      .bg-primary, [class*="bg-primary"] {
-        background-color: #1e40af !important;
-        color: white !important;
-        -webkit-print-color-adjust: exact !important;
-        color-adjust: exact !important;
-        print-color-adjust: exact !important;
-      }
-      
-      .text-primary-foreground {
-        color: white !important;
-      }
-      
-      /* Forçar cores dos cards */
-      .bg-muted, [class*="bg-muted"] {
-        background-color: #f3f4f6 !important;
-        -webkit-print-color-adjust: exact !important;
-        color-adjust: exact !important;
-        print-color-adjust: exact !important;
-      }
-      
-      /* Esconder elementos não printáveis */
-      .no-print, button, [class*="no-print"] {
-        display: none !important;
-        visibility: hidden !important;
-      }
-      
-      /* Forçar bordas visíveis */
-      .border, [class*="border"] {
-        border: 1px solid #e5e7eb !important;
-      }
-      
-      /* Badges */
-      .badge, [class*="badge"] {
-        border: 1px solid #3b82f6 !important;
-        background-color: rgba(59, 130, 246, 0.1) !important;
-        color: #3b82f6 !important;
-        padding: 4px 8px !important;
-        border-radius: 4px !important;
-        display: inline-block !important;
-      }
-      
-      /* Garantir que todas as cores sejam forçadas */
-      * {
-        -webkit-print-color-adjust: exact !important;
-        color-adjust: exact !important;
-        print-color-adjust: exact !important;
-      }
-    `
-
-    // Escrever o HTML completo na nova janela
-    printWindow.document.write(`
+    // CSS completo para impressão com cores forçadas
+    const printCSS = `
       <!DOCTYPE html>
       <html>
         <head>
-          <title>Briefing Municipal - ${municipio.nome}</title>
           <meta charset="utf-8">
+          <title>Briefing Municipal - ${municipio.nome}</title>
           <style>
-            ${allCSS}
-            ${additionalCSS}
+            * {
+              box-sizing: border-box;
+              -webkit-print-color-adjust: exact !important;
+              color-adjust: exact !important;
+              print-color-adjust: exact !important;
+            }
+            
+            @page {
+              size: A4;
+              margin: 1cm;
+            }
+            
+            body {
+              font-family: Arial, sans-serif;
+              font-size: 12px;
+              line-height: 1.4;
+              color: #000;
+              background: white;
+              margin: 0;
+              padding: 0;
+            }
+            
+            /* Esconder elementos não printáveis */
+            .no-print, button, [class*="no-print"] {
+              display: none !important;
+            }
+            
+            /* Container principal */
+            .print-container {
+              width: 100%;
+              max-width: none;
+              padding: 0;
+              margin: 0;
+            }
+            
+            /* Header principal com cor azul */
+            .bg-primary {
+              background-color: #1e40af !important;
+              color: white !important;
+              padding: 24px !important;
+              border-radius: 8px !important;
+              margin-bottom: 24px !important;
+            }
+            
+            .text-primary-foreground {
+              color: white !important;
+            }
+            
+            /* Headers dos cards */
+            .card-header-primary {
+              background-color: #1e40af !important;
+              color: white !important;
+              padding: 16px 24px !important;
+              border-top-left-radius: 8px !important;
+              border-top-right-radius: 8px !important;
+            }
+            
+            /* Cards */
+            .card {
+              border: 1px solid #e5e7eb !important;
+              border-radius: 8px !important;
+              margin-bottom: 24px !important;
+              background: white !important;
+              page-break-inside: avoid !important;
+            }
+            
+            .card-content {
+              padding: 24px !important;
+            }
+            
+            /* Backgrounds */
+            .bg-muted {
+              background-color: #f9fafb !important;
+              padding: 16px !important;
+              border-radius: 8px !important;
+              border: 1px solid #e5e7eb !important;
+            }
+            
+            /* Badges */
+            .badge {
+              display: inline-block !important;
+              padding: 4px 8px !important;
+              border-radius: 4px !important;
+              font-size: 12px !important;
+              border: 1px solid #3b82f6 !important;
+              background-color: rgba(59, 130, 246, 0.1) !important;
+              color: #3b82f6 !important;
+            }
+            
+            /* Texto */
+            .text-foreground { color: #0f172a !important; }
+            .text-muted-foreground { color: #64748b !important; }
+            .text-primary { color: #1e40af !important; }
+            .text-success { color: #16a34a !important; }
+            .text-warning { color: #eab308 !important; }
+            
+            /* Layout */
+            .grid { display: grid !important; }
+            .flex { display: flex !important; }
+            .items-center { align-items: center !important; }
+            .justify-between { justify-content: space-between !important; }
+            .gap-2 { gap: 8px !important; }
+            .gap-3 { gap: 12px !important; }
+            .gap-4 { gap: 16px !important; }
+            .gap-6 { gap: 24px !important; }
+            
+            /* Spacing */
+            .space-y-6 > * + * { margin-top: 24px !important; }
+            .space-y-4 > * + * { margin-top: 16px !important; }
+            .space-y-3 > * + * { margin-top: 12px !important; }
+            .space-y-2 > * + * { margin-top: 8px !important; }
+            
+            .mb-2 { margin-bottom: 8px !important; }
+            .mb-4 { margin-bottom: 16px !important; }
+            .mb-6 { margin-bottom: 24px !important; }
+            .pb-2 { padding-bottom: 8px !important; }
+            
+            /* Typography */
+            .text-2xl { font-size: 24px !important; font-weight: bold !important; }
+            .text-xl { font-size: 20px !important; }
+            .text-lg { font-size: 18px !important; }
+            .text-sm { font-size: 14px !important; }
+            .text-xs { font-size: 12px !important; }
+            
+            .font-bold { font-weight: bold !important; }
+            .font-semibold { font-weight: 600 !important; }
+            
+            /* Border */
+            .border { border: 1px solid #e5e7eb !important; }
+            .border-b { border-bottom: 1px solid #e5e7eb !important; }
+            .rounded { border-radius: 4px !important; }
+            .rounded-lg { border-radius: 8px !important; }
+            
+            /* Avatar e imagens */
+            .w-20 { width: 80px !important; }
+            .h-20 { height: 80px !important; }
+            .w-1 { width: 4px !important; }
+            .h-6 { height: 24px !important; }
+            .bg-primary-foreground { background-color: white !important; }
+            .rounded-full { border-radius: 50% !important; }
+            
+            /* Grid específico */
+            .grid-cols-1 { grid-template-columns: repeat(1, minmax(0, 1fr)) !important; }
+            .md\\:grid-cols-12 { grid-template-columns: repeat(12, minmax(0, 1fr)) !important; }
+            .md\\:col-span-1 { grid-column: span 1 / span 1 !important; }
+            .md\\:col-span-2 { grid-column: span 2 / span 2 !important; }
+            .md\\:col-span-3 { grid-column: span 3 / span 3 !important; }
+            .md\\:col-span-4 { grid-column: span 4 / span 4 !important; }
+            
+            /* Tabelas */
+            table { border-collapse: collapse !important; width: 100% !important; }
+            th, td { border: 1px solid #e5e7eb !important; padding: 8px !important; text-align: left !important; }
+            th { background-color: #f9fafb !important; font-weight: 600 !important; }
+            
+            /* Garantir visibilidade */
+            h1, h2, h3, h4, h5, h6, p, div, span, td, th, li {
+              display: block !important;
+              visibility: visible !important;
+              opacity: 1 !important;
+            }
+            
+            /* Quebra de página */
+            .print-section {
+              page-break-inside: avoid !important;
+              display: block !important;
+              visibility: visible !important;
+            }
           </style>
         </head>
         <body>
@@ -190,11 +266,12 @@ export const BriefingLayout = ({
           ${printContent.innerHTML}
         </body>
       </html>
-    `)
+    `
 
+    printWindow.document.write(printCSS)
     printWindow.document.close()
     
-    // Aguardar um pouco para carregar e então imprimir
+    // Aguardar carregamento e imprimir
     setTimeout(() => {
       printWindow.print()
       printWindow.close()
@@ -204,7 +281,7 @@ export const BriefingLayout = ({
   return (
     <div className="space-y-6 bg-background p-6 print-container">
       {/* Header */}
-      <div className="bg-primary text-primary-foreground rounded-lg p-6 border border-border print-header">
+      <div className="bg-blue-600 text-white rounded-lg p-6 border border-border print-header">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3 mb-2">
             <h1 className="text-2xl font-bold">{municipio.nome}</h1>
@@ -213,7 +290,7 @@ export const BriefingLayout = ({
             onClick={handlePrint}
             variant="secondary"
             size="sm"
-            className="no-print bg-background text-foreground hover:bg-muted"
+            className="no-print"
           >
             <Printer className="h-4 w-4 mr-2" />
             Imprimir

@@ -146,17 +146,17 @@ export const LiderancasManager = ({ liderancas, onSave }: LiderancasManagerProps
 
   return (
     <Card className="border-border print-section">
-      <CardHeader className="bg-primary text-primary-foreground border-b border-border">
+      <CardHeader className="bg-blue-600 text-white border-b border-border">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <div className="w-1 h-6 bg-primary-foreground rounded"></div>
+            <div className="w-1 h-6 bg-white rounded"></div>
             <CardTitle className="text-lg font-bold">Lideranças Municipais</CardTitle>
           </div>
           <Button
             onClick={() => setIsEditing(true)}
             variant="secondary"
             size="sm"
-            className="no-print bg-background text-foreground hover:bg-muted"
+            className="no-print"
           >
             <Edit className="h-4 w-4 mr-2" />
             Editar
@@ -189,7 +189,7 @@ export const LiderancasManager = ({ liderancas, onSave }: LiderancasManagerProps
                     const formattedVotes = formatVotes(lideranca.votos)
                     
                     return (
-                      <div key={lideranca.id} className="border border-border rounded-lg p-4 bg-muted">
+                      <div key={lideranca.id} className="border border-border rounded-lg p-4 bg-gray-50">
                         <div className="grid grid-cols-1 md:grid-cols-12 gap-4 items-center">
                           {/* Avatar */}
                           <div className="md:col-span-1 flex justify-center md:justify-start">
