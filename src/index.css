@@ -31,6 +31,14 @@
     --chart-4: 43 74% 66%;
     --chart-5: 27 87% 67%;
     --radius: 0.5rem;
+    --sidebar-background: 222.2 47.4% 11.2%;
+    --sidebar-foreground: 210 40% 98%;
+    --sidebar-primary: 210 40% 98%;
+    --sidebar-primary-foreground: 222.2 47.4% 11.2%;
+    --sidebar-accent: 217.2 32.6% 17.5%;
+    --sidebar-accent-foreground: 210 40% 98%;
+    --sidebar-border: 217.2 32.6% 17.5%;
+    --sidebar-ring: 212.7 26.8% 83.9%;
   }
 
   .dark {
@@ -116,30 +124,30 @@
   }
 
   .deputies-table .pos-col {
-    width: 6% !important;
+    width: 5% !important;
   }
 
   .deputies-table .name-col {
-    width: 50% !important;
+    width: 55% !important;
   }
 
   .deputies-table .party-col {
-    width: 14% !important;
+    width: 12% !important;
   }
 
   .deputies-table .votes-col {
-    width: 15% !important;
+    width: 14% !important;
   }
 
   .deputies-table .percent-col {
-    width: 15% !important;
+    width: 14% !important;
   }
 
   .deputies-table th,
   .deputies-table td {
     padding: 0.25rem 0.5rem !important;
     border: 1px solid #d1d5db !important;
-    font-size: 8pt !important;
+    font-size: 7pt !important;
   }
 
   .deputies-table th {
@@ -147,6 +155,16 @@
     font-weight: 600 !important;
     -webkit-print-color-adjust: exact !important;
     print-color-adjust: exact !important;
+  }
+
+  .deputies-table .party-col {
+    font-size: 6pt !important;
+    padding: 0.1rem 0.25rem !important;
+  }
+
+  .deputies-table .votes-col,
+  .deputies-table .percent-col {
+    font-size: 6pt !important;
   }
 
   .print-header {

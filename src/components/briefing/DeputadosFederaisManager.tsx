@@ -142,7 +142,13 @@ export const DeputadosFederaisManager = ({ deputadosFederais, onSave }: Deputado
                     <>
                         <td className="p-2 border font-medium print:text-[7pt]">{deputado.colocacao || "-"}</td>
                         <td className="p-2 border">{deputado.nome}</td>
-                        <td className="p-2 border print:text-[7pt]"><Badge variant="outline" className="text-xs">{deputado.partido}</Badge></td>
+                        <td className="p-2 border print:text-[7pt]">
+                          <span className="print:bg-transparent print:border-0 print:p-0 print:text-inherit print:font-normal">
+                            <Badge variant="outline" className="text-xs print:bg-transparent print:border-0 print:p-0 print:text-inherit print:font-normal print:inline">
+                              {deputado.partido}
+                            </Badge>
+                          </span>
+                        </td>
                         <td className="p-2 border print:text-[7pt]">{deputado.votos.toLocaleString()}</td>
                         <td className="p-2 border print:text-[7pt]">{deputado.percentual.toFixed(2)}%</td>
                         <td className="p-2 border no-print">
