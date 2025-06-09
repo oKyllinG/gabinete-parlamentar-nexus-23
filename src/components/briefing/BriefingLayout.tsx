@@ -1,3 +1,4 @@
+
 import { ArrowLeft, MapPin, Printer } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { BriefingComponentsManager } from "./BriefingComponentsManager"
@@ -90,7 +91,7 @@ export const BriefingLayout = ({
       </Button>
       
       {/* Header */}
-      <div className="print-header bg-blue-600 text-white rounded-lg p-6 border border-border">
+      <div className="print-header bg-cyan-600 text-white rounded-lg p-6 border border-border">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3 mb-2">
             <h1 className="text-2xl font-bold">{municipio.nome}</h1>
