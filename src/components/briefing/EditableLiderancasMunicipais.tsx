@@ -8,52 +8,23 @@ import { Badge } from "@/components/ui/badge"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 
-interface Municipio {
-  id: number
-  nome: string
-  regiao: string
-  assessor: string | null
-}
-
-interface LiderancasMunicipaisProps {
-  municipio: Municipio
-}
-
 interface Lideranca {
   id: number
   nome: string
   cargo: string
   partido: string
   telefone: string
+  votos?: number
   foto?: string
 }
 
-export const EditableLiderancasMunicipais = ({ municipio }: LiderancasMunicipaisProps) => {
-  // Carregar dados do localStorage
-  const loadLiderancas = () => {
-    const saved = localStorage.getItem(`municipio-${municipio.id}-liderancas`)
-    if (saved) {
-      return JSON.parse(saved)
-    }
-    return [
-      {
-        id: 1,
-        nome: "João Silva",
-        cargo: "Prefeito",
-        partido: "PSDB",
-        telefone: "(67) 99999-9999"
-      },
-      {
-        id: 2,
-        nome: "Maria Santos",
-        cargo: "Vereadora",
-        partido: "PT",
-        telefone: "(67) 88888-8888"
-      }
-    ]
-  }
+interface EditableLiderancasMunicipaisProps {
+  liderancas: Lideranca[]
+  onSave: (liderancas: Lideranca[]) => void
+  onCancel: () => void
+}
 
-  const [liderancas, setLiderancas] = useState<Lideranca[]>(loadLiderancas)
+export const EditableLiderancasMunicipais = ({ liderancas, onSave, onCancel }: EditableLiderancasMunicipaisProps) => {
   const [editingId, setEditingId] = useState<number | null>(null)
   const [showAddForm, setShowAddForm] = useState(false)
   const [editData, setEditData] = useState<Partial<Lideranca>>({})
@@ -63,11 +34,6 @@ export const EditableLiderancasMunicipais = ({ municipio }: LiderancasMunicipais
     partido: "",
     telefone: ""
   })
-
-  const saveLiderancas = (newLiderancas: Lideranca[]) => {
-    localStorage.setItem(`municipio-${municipio.id}-liderancas`, JSON.stringify(newLiderancas))
-    setLiderancas(newLiderancas)
-  }
 
   const handleEdit = (lideranca: Lideranca) => {
     setEditingId(lideranca.id)
@@ -79,7 +45,7 @@ export const EditableLiderancasMunicipais = ({ municipio }: LiderancasMunicipais
       const updatedLiderancas = liderancas.map(l => 
         l.id === editingId ? { ...l, ...editData } : l
       )
-      saveLiderancas(updatedLiderancas)
+      onSave(updatedLiderancas)
       setEditingId(null)
       setEditData({})
     }
@@ -92,14 +58,14 @@ export const EditableLiderancasMunicipais = ({ municipio }: LiderancasMunicipais
 
   const handleDelete = (id: number) => {
     const updatedLiderancas = liderancas.filter(l => l.id !== id)
-    saveLiderancas(updatedLiderancas)
+    onSave(updatedLiderancas)
   }
 
   const handleAddNew = () => {
     if (newLideranca.nome && newLideranca.cargo && newLideranca.partido && newLideranca.telefone) {
       const newId = Math.max(...liderancas.map(l => l.id), 0) + 1
       const updatedLiderancas = [...liderancas, { ...newLideranca, id: newId } as Lideranca]
-      saveLiderancas(updatedLiderancas)
+      onSave(updatedLiderancas)
       setNewLideranca({ nome: "", cargo: "", partido: "", telefone: "" })
       setShowAddForm(false)
     }
@@ -109,14 +75,23 @@ export const EditableLiderancasMunicipais = ({ municipio }: LiderancasMunicipais
     <Card>
       <CardHeader className="flex flex-row items-center justify-between">
         <CardTitle>Lideranças Municipais</CardTitle>
-        <Button 
-          size="sm" 
-          className="flex items-center gap-2"
-          onClick={() => setShowAddForm(true)}
-        >
-          <Plus className="h-4 w-4" />
-          Adicionar Liderança
-        </Button>
+        <div className="flex gap-2">
+          <Button 
+            size="sm" 
+            className="flex items-center gap-2"
+            onClick={() => setShowAddForm(true)}
+          >
+            <Plus className="h-4 w-4" />
+            Adicionar Liderança
+          </Button>
+          <Button 
+            size="sm" 
+            variant="outline"
+            onClick={onCancel}
+          >
+            Cancelar
+          </Button>
+        </div>
       </CardHeader>
       <CardContent>
         <div className="space-y-4">
