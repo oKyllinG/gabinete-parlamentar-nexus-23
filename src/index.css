@@ -236,6 +236,7 @@
   }
 
   /* Grid layouts */
+  /*
   .grid {
     display: block !important;
   }
@@ -244,11 +245,25 @@
     display: block !important;
     margin-bottom: 10px !important;
   }
+  */
 
   /* Flex layouts */
+  /*
   .flex {
     display: block !important;
   }
+  */
+
+  /* Styles for SortableObras and SortableEmendas - Start */
+  /* Add specific styles here if needed once component structure is known */
+  .drag-item {
+    display: block !important;
+    page-break-inside: avoid !important;
+    border: 1px solid #ccc !important; /* Example border for visibility */
+    padding: 8px !important; /* Example padding */
+    margin-bottom: 8px !important; /* Example margin */
+  }
+  /* Styles for SortableObras and SortableEmendas - End */
 
   /* Page breaks */
   .avoid-break {
