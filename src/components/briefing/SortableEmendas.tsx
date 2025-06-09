@@ -1,5 +1,4 @@
-
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { DndContext, closestCenter, KeyboardSensor, PointerSensor, useSensor, useSensors } from '@dnd-kit/core'
 import { arrayMove, SortableContext, sortableKeyboardCoordinates, verticalListSortingStrategy } from '@dnd-kit/sortable'
 import { useSortable } from '@dnd-kit/sortable'
@@ -165,7 +164,7 @@ export const SortableEmendas = ({ emendas, onSave, onAdd, onEdit, onDelete }: So
   }
 
   // Update local state when emendas prop changes
-  useState(() => {
+  useEffect(() => {
     setItems(emendas)
   }, [emendas])
 
