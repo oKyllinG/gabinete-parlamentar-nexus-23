@@ -52,12 +52,12 @@ const CATEGORIAS = {
     "Secretário de Habitação", "Secretária de Habitação"
   ],
   "Câmara Municipal": [
-    "Vereador", "Vereadora",
     "Presidente da Câmara Municipal",
     "1º Vice-Presidente da Câmara", "1ª Vice-Presidente da Câmara",
     "2º Vice-Presidente da Câmara", "2ª Vice-Presidente da Câmara", 
     "1º Secretário da Câmara", "1ª Secretária da Câmara",
-    "2º Secretário da Câmara", "2ª Secretária da Câmara"
+    "2º Secretário da Câmara", "2ª Secretária da Câmara",
+    "Vereador", "Vereadora"
   ]
 }
 
@@ -79,6 +79,7 @@ export const EditableLiderancasMunicipais = ({ liderancas, onSave, onCancel }: E
     cargo: "",
     partido: "",
     telefone: "",
+    votos: 0,
     foto: "",
     categoria: ""
   })
@@ -120,7 +121,7 @@ export const EditableLiderancasMunicipais = ({ liderancas, onSave, onCancel }: E
         categoria
       } as Lideranca]
       onSave(updatedLiderancas)
-      setNewLideranca({ nome: "", cargo: "", partido: "", telefone: "", foto: "", categoria: "" })
+      setNewLideranca({ nome: "", cargo: "", partido: "", telefone: "", votos: 0, foto: "", categoria: "" })
       setShowAddForm(false)
     }
   }
@@ -218,7 +219,16 @@ export const EditableLiderancasMunicipais = ({ liderancas, onSave, onCancel }: E
                     onChange={(e) => setNewLideranca({...newLideranca, telefone: e.target.value})}
                   />
                 </div>
-                <div className="col-span-2">
+                <div>
+                  <Label htmlFor="new-votos">Votos</Label>
+                  <Input
+                    id="new-votos"
+                    type="number"
+                    value={newLideranca.votos || 0}
+                    onChange={(e) => setNewLideranca({...newLideranca, votos: Number(e.target.value)})}
+                  />
+                </div>
+                <div>
                   <Label htmlFor="new-foto">URL da Foto</Label>
                   <Input
                     id="new-foto"
@@ -293,10 +303,15 @@ export const EditableLiderancasMunicipais = ({ liderancas, onSave, onCancel }: E
                           placeholder="Telefone"
                         />
                         <Input
+                          type="number"
+                          value={editData.votos || 0}
+                          onChange={(e) => setEditData({...editData, votos: Number(e.target.value)})}
+                          placeholder="Votos"
+                        />
+                        <Input
                           value={editData.foto || ""}
                           onChange={(e) => setEditData({...editData, foto: e.target.value})}
                           placeholder="URL da foto"
-                          className="col-span-2"
                         />
                       </div>
                     ) : (
@@ -307,6 +322,9 @@ export const EditableLiderancasMunicipais = ({ liderancas, onSave, onCancel }: E
                         </div>
                         <p className="text-sm text-muted-foreground">{lideranca.cargo}</p>
                         <p className="text-sm text-muted-foreground">{lideranca.telefone}</p>
+                        {lideranca.votos && lideranca.votos > 0 && (
+                          <p className="text-sm font-semibold text-green-700">{lideranca.votos.toLocaleString()} votos</p>
+                        )}
                       </>
                     )}
                   </div>
@@ -314,23 +332,42 @@ export const EditableLiderancasMunicipais = ({ liderancas, onSave, onCancel }: E
                   <div className="flex items-center gap-2">
                     {editingId === lideranca.id ? (
                       <>
-                        <Button variant="ghost" size="sm" onClick={handleSaveEdit}>
+                        <Button variant="ghost" size="sm" onClick={() => {
+                          if (editingId && editData) {
+                            const categoria = getCategoriaFromCargo(editData.cargo || "")
+                            const updatedLiderancas = liderancas.map(l => 
+                              l.id === editingId ? { ...l, ...editData, categoria } : l
+                            )
+                            onSave(updatedLiderancas)
+                            setEditingId(null)
+                            setEditData({})
+                          }
+                        }}>
                           <Check className="h-4 w-4" />
                         </Button>
-                        <Button variant="ghost" size="sm" onClick={handleCancelEdit}>
+                        <Button variant="ghost" size="sm" onClick={() => {
+                          setEditingId(null)
+                          setEditData({})
+                        }}>
                           <X className="h-4 w-4" />
                         </Button>
                       </>
                     ) : (
                       <>
-                        <Button variant="ghost" size="sm" onClick={() => handleEdit(lideranca)}>
+                        <Button variant="ghost" size="sm" onClick={() => {
+                          setEditingId(lideranca.id)
+                          setEditData(lideranca)
+                        }}>
                           <Edit3 className="h-4 w-4" />
                         </Button>
                         <Button 
                           variant="ghost" 
                           size="sm" 
                           className="text-destructive"
-                          onClick={() => handleDelete(lideranca.id)}
+                          onClick={() => {
+                            const updatedLiderancas = liderancas.filter(l => l.id !== lideranca.id)
+                            onSave(updatedLiderancas)
+                          }}
                         >
                           <Trash2 className="h-4 w-4" />
                         </Button>
