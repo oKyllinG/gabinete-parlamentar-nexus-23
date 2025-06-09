@@ -80,7 +80,7 @@ export const BriefingLayout = ({
 
   return (
     <div className="print-container space-y-4 bg-background p-6">
-      <Button
+       <Button
         variant="ghost"
         onClick={() => navigate('/briefing')}
         className="flex items-center gap-2 mb-6 no-print"
@@ -88,7 +88,7 @@ export const BriefingLayout = ({
         <ArrowLeft className="h-4 w-4" />
         Voltar
       </Button>
-
+      
       {/* Header */}
       <div className="print-header bg-blue-600 text-white rounded-lg p-6 border border-border">
         <div className="flex items-center justify-between">
