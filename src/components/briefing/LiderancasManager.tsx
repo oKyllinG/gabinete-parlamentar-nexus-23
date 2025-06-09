@@ -1,4 +1,3 @@
-
 import { useState } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -66,7 +65,6 @@ const getCategoriaFromCargo = (cargo: string): string => {
   return "Outros"
 }
 
-// Função para determinar a hierarquia dos cargos da Câmara Municipal
 const getHierarquiaCamara = (cargo: string): number => {
   const hierarquia = {
     "Presidente da Câmara Municipal": 1,
@@ -84,18 +82,15 @@ const getHierarquiaCamara = (cargo: string): number => {
   return hierarquia[cargo] || 999
 }
 
-// Função para ordenar lideranças da Câmara Municipal
 const ordenarLiderancasCamara = (liderancas: Lideranca[]): Lideranca[] => {
   return liderancas.sort((a, b) => {
     const hierarquiaA = getHierarquiaCamara(a.cargo)
     const hierarquiaB = getHierarquiaCamara(b.cargo)
     
-    // Primeiro por hierarquia
     if (hierarquiaA !== hierarquiaB) {
       return hierarquiaA - hierarquiaB
     }
     
-    // Depois por votos (decrescente)
     const votosA = a.votos || 0
     const votosB = b.votos || 0
     return votosB - votosA
@@ -110,13 +105,11 @@ export const LiderancasManager = ({ liderancas, onSave }: LiderancasManagerProps
     return votos.toLocaleString('pt-BR')
   }
 
-  // Adicionar categoria às lideranças se não existir
   const liderancasComCategoria = liderancas.map(lideranca => ({
     ...lideranca,
     categoria: lideranca.categoria || getCategoriaFromCargo(lideranca.cargo)
   }))
 
-  // Organizar por categoria
   const liderancasPorCategoria = liderancasComCategoria.reduce((acc, lideranca) => {
     const categoria = lideranca.categoria
     if (!acc[categoria]) {
@@ -126,7 +119,6 @@ export const LiderancasManager = ({ liderancas, onSave }: LiderancasManagerProps
     return acc
   }, {} as Record<string, Lideranca[]>)
 
-  // Ordenar lideranças da Câmara Municipal por hierarquia e votos
   if (liderancasPorCategoria["Câmara Municipal"]) {
     liderancasPorCategoria["Câmara Municipal"] = ordenarLiderancasCamara(liderancasPorCategoria["Câmara Municipal"])
   }
@@ -145,7 +137,7 @@ export const LiderancasManager = ({ liderancas, onSave }: LiderancasManagerProps
   }
 
   return (
-    <Card className="border-border print-section">
+    <Card className="border-border">
       <CardHeader className="bg-blue-600 text-white border-b border-border">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
@@ -163,7 +155,7 @@ export const LiderancasManager = ({ liderancas, onSave }: LiderancasManagerProps
           </Button>
         </div>
       </CardHeader>
-      <CardContent className="p-6">
+      <CardContent className="p-6 print-card-content">
         {liderancasComCategoria.length === 0 ? (
           <div className="text-center py-8 text-muted-foreground">
             <Users className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
@@ -180,7 +172,7 @@ export const LiderancasManager = ({ liderancas, onSave }: LiderancasManagerProps
         ) : (
           <div className="space-y-6">
             {Object.entries(liderancasPorCategoria).map(([categoria, liderancasCategoria]) => (
-              <div key={categoria} className="space-y-4">
+              <div key={categoria} className="space-y-4 print-section">
                 <h3 className="text-lg font-semibold text-primary border-b border-border pb-2">
                   {categoria}
                 </h3>
@@ -189,9 +181,8 @@ export const LiderancasManager = ({ liderancas, onSave }: LiderancasManagerProps
                     const formattedVotes = formatVotes(lideranca.votos)
                     
                     return (
-                      <div key={lideranca.id} className="border border-border rounded-lg p-4 bg-gray-50">
+                      <div key={lideranca.id} className="border border-border rounded-lg p-4 bg-gray-50 lideranca-card">
                         <div className="grid grid-cols-1 md:grid-cols-12 gap-4 items-center">
-                          {/* Avatar */}
                           <div className="md:col-span-1 flex justify-center md:justify-start">
                             <div className="w-20 h-20 bg-muted-foreground/20 rounded-full flex items-center justify-center overflow-hidden">
                               {lideranca.foto ? (
@@ -206,7 +197,6 @@ export const LiderancasManager = ({ liderancas, onSave }: LiderancasManagerProps
                             </div>
                           </div>
                           
-                          {/* Nome e Cargo */}
                           <div className="md:col-span-4 text-center md:text-left">
                             <h4 className="font-semibold text-foreground">
                               {lideranca.nome}
@@ -216,14 +206,12 @@ export const LiderancasManager = ({ liderancas, onSave }: LiderancasManagerProps
                             </p>
                           </div>
                           
-                          {/* Partido */}
                           <div className="md:col-span-2 text-center">
                             <Badge variant="outline" className="font-semibold border-secondary text-secondary">
                               {lideranca.partido}
                             </Badge>
                           </div>
                           
-                          {/* Telefone */}
                           <div className="md:col-span-3 text-center md:text-left">
                             <div className="flex items-center justify-center md:justify-start gap-2">
                               <Phone className="h-4 w-4 text-muted-foreground flex-shrink-0" />
@@ -233,7 +221,6 @@ export const LiderancasManager = ({ liderancas, onSave }: LiderancasManagerProps
                             </div>
                           </div>
                           
-                          {/* Votos */}
                           <div className="md:col-span-2 text-center">
                             {formattedVotes && (
                               <div className="text-sm">
