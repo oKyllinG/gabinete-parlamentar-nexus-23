@@ -96,17 +96,17 @@ export const VotacaoHistoricaManager = ({ municipioId, dadosPoliticos, onUpdateD
       <CardContent className="p-0 print:p-0">
         <div className="overflow-x-auto">
           <table className="w-full border-collapse">
-            <thead>
-              <tr className="bg-cyan-600">
-                <th className="text-white font-bold text-center p-2 border border-gray-300">
+            <thead className="votacao-historica-header">
+              <tr>
+                <th className="font-bold text-center p-2 border border-gray-300">
                   ELEITORES<br />2022
                 </th>
                 {votacaoHistorica.map((item) => (
-                  <th key={item.ano} className="text-white font-bold text-center p-2 border border-gray-300">
+                  <th key={item.ano} className="font-bold text-center p-2 border border-gray-300">
                     {item.ano}
                   </th>
                 ))}
-                <th className="text-white font-bold text-center p-2 border border-gray-300">
+                <th className="font-bold text-center p-2 border border-gray-300">
                   COLOCAÇÃO
                 </th>
               </tr>
