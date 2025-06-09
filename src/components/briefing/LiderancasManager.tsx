@@ -212,9 +212,11 @@ export const LiderancasManager = ({ liderancas, onSave }: LiderancasManagerProps
               <div className="min-w-0 flex-1">
                 <div className="flex items-center gap-3 mb-1">
                   <h4 className="font-bold text-gray-900 text-lg">{lideranca.nome}</h4>
-                  <Badge variant="outline" className="border-blue-300 text-blue-700 bg-blue-50 text-lg px-3 py-1">
-                    {lideranca.partido}
-                  </Badge>
+                  <div className="min-w-[100px] text-center">
+                    <Badge variant="outline" className="border-gray-400 text-gray-700 bg-gray-100 text-lg px-3 py-1">
+                      {lideranca.partido}
+                    </Badge>
+                  </div>
                 </div>
                 <p className="text-gray-600 font-medium">{lideranca.cargo}</p>
               </div>

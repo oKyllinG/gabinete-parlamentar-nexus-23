@@ -1,3 +1,4 @@
+
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Calendar, MapPin, DollarSign, FileText, Wrench, Building, Target } from "lucide-react"
@@ -97,7 +98,7 @@ export const AcoesDeputado = ({ municipioNome }: AcoesDeputadoProps) => {
         </div>
       </CardHeader>
       <CardContent className="p-6 space-y-6">
-        {/* Obras Section - Agrupadas por Categoria */}
+        {/* Obras Section - Organizadas em grid com melhor aproveitamento */}
         {obras.length > 0 && (
           <div>
             <div className="flex items-center gap-2 mb-4">
@@ -114,7 +115,8 @@ export const AcoesDeputado = ({ municipioNome }: AcoesDeputadoProps) => {
                   <Badge variant="secondary" className="text-xs">{obrasCategoria.length}</Badge>
                 </div>
                 
-                <div className="grid gap-4 md:grid-cols-2">
+                {/* Grid responsivo que se adapta ao conteúdo */}
+                <div className="grid gap-4 grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
                   {obrasCategoria.map((obra) => (
                     <div key={obra.id} className="border border-gray-200 rounded-lg p-4 bg-white shadow-sm">
                       <div className="flex items-start justify-between mb-3">
@@ -168,7 +170,7 @@ export const AcoesDeputado = ({ municipioNome }: AcoesDeputadoProps) => {
               <h3 className="text-lg font-semibold text-gray-800">Destinações de Emendas Parlamentares</h3>
               <Badge variant="outline" className="ml-2">{destinacoes.length}</Badge>
             </div>
-            <div className="grid gap-4 md:grid-cols-2">
+            <div className="grid gap-4 grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
               {destinacoes.map((destinacao) => (
                 <div key={destinacao.id} className="border border-gray-200 rounded-lg p-4 bg-white shadow-sm">
                   <div className="flex items-start justify-between mb-3">
