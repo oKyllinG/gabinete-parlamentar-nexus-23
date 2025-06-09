@@ -1,7 +1,6 @@
-
 import { MapPin, Printer } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { AcoesDeputado } from "./AcoesDeputado"
+import { BriefingComponentsManager } from "./BriefingComponentsManager"
 import { ResultadosEleitoraisManager } from "./ResultadosEleitoraisManager"
 import { VotacaoHistoricaManager } from "./VotacaoHistoricaManager"
 import { DeputadosFederaisManager } from "./DeputadosFederaisManager"
@@ -151,8 +150,8 @@ export const BriefingLayout = ({
 
       {/* Painel de Resumo - AcoesDeputado */}
       <div className="print-section avoid-break">
-        <AcoesDeputado 
-          municipioNome={municipio.nome}
+        <BriefingComponentsManager 
+          municipio={municipio}
         />
       </div>
 
