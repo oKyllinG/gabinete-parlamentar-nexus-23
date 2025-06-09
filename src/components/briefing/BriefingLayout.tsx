@@ -79,7 +79,7 @@ export const BriefingLayout = ({
   return (
     <div className="space-y-6 bg-background p-6 print-container">
       {/* Header */}
-      <div className="bg-cyan-600 text-white rounded-lg p-6 border border-gray-700 print-header">
+      <div className="bg-primary text-primary-foreground rounded-lg p-6 border border-border print-header">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3 mb-2">
             <h1 className="text-2xl font-bold">{municipio.nome}</h1>
@@ -88,7 +88,7 @@ export const BriefingLayout = ({
             onClick={handlePrint}
             variant="secondary"
             size="sm"
-            className="no-print bg-white text-cyan-600 hover:bg-gray-100"
+            className="no-print bg-background text-foreground hover:bg-muted"
           >
             <Printer className="h-4 w-4 mr-2" />
             Imprimir
@@ -101,7 +101,7 @@ export const BriefingLayout = ({
       </div>
 
       {/* Print date header - only visible when printing */}
-      <div className="print-only text-center text-sm text-gray-600 mb-4">
+      <div className="print-only text-center text-sm text-muted-foreground mb-4">
         Briefing Municipal - Gerado em {new Date().toLocaleDateString('pt-BR')}
       </div>
 

@@ -111,12 +111,16 @@
   }
 }
 
-/* Hide print-only elements by default */
+/* Print-specific classes */
 .print-only {
   display: none;
 }
 
-/* Print Styles */
+.no-print {
+  display: block;
+}
+
+/* Print Styles - Simplified and using design system */
 @media print {
   @page {
     size: A4;
@@ -132,13 +136,13 @@
   body {
     font-size: 12px !important;
     line-height: 1.4 !important;
-    color: black !important;
+    color: hsl(var(--foreground)) !important;
     background: white !important;
     margin: 0 !important;
     padding: 0 !important;
   }
 
-  /* Hide elements that shouldn't be printed */
+  /* Hide non-printable elements */
   .no-print,
   button:not(.print-allow),
   .sidebar,
@@ -148,13 +152,13 @@
     visibility: hidden !important;
   }
 
-  /* Show elements only when printing */
+  /* Show print-only elements */
   .print-only {
     display: block !important;
     visibility: visible !important;
   }
 
-  /* Print container adjustments */
+  /* Print container */
   .print-container {
     padding: 0 !important;
     margin: 0 !important;
@@ -163,20 +167,20 @@
     max-width: none !important;
   }
 
-  /* Ensure all print sections are visible */
+  /* Print sections */
   .print-section {
     display: block !important;
     visibility: visible !important;
     page-break-inside: avoid !important;
     margin-bottom: 20px !important;
     background: white !important;
-    color: black !important;
+    color: hsl(var(--foreground)) !important;
   }
 
-  /* Header styling for print */
+  /* Header styling using design system */
   .print-header {
-    background: #0891b2 !important;
-    color: white !important;
+    background: hsl(var(--primary)) !important;
+    color: hsl(var(--primary-foreground)) !important;
     border-radius: 4px !important;
     margin-bottom: 20px !important;
     page-break-inside: avoid !important;
@@ -188,203 +192,129 @@
     visibility: visible !important;
   }
 
-  /* Force visibility of all text elements */
+  /* Card headers using design system */
+  .bg-primary {
+    background: hsl(var(--primary)) !important;
+    color: hsl(var(--primary-foreground)) !important;
+    -webkit-print-color-adjust: exact !important;
+    color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  .text-primary-foreground {
+    color: hsl(var(--primary-foreground)) !important;
+  }
+
+  /* Card content */
+  .bg-card {
+    background: white !important;
+    color: hsl(var(--card-foreground)) !important;
+  }
+
+  /* Muted backgrounds */
+  .bg-muted {
+    background: hsl(var(--muted)) !important;
+    color: hsl(var(--muted-foreground)) !important;
+    -webkit-print-color-adjust: exact !important;
+    color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  /* Borders using design system */
+  .border,
+  .border-border {
+    border-color: hsl(var(--border)) !important;
+  }
+
+  /* Text colors using design system */
+  .text-foreground {
+    color: hsl(var(--foreground)) !important;
+  }
+
+  .text-muted-foreground {
+    color: hsl(var(--muted-foreground)) !important;
+  }
+
+  /* Badge colors using design system */
+  .border-success {
+    border-color: hsl(var(--success)) !important;
+    background: hsl(var(--success) / 0.1) !important;
+    color: hsl(var(--success)) !important;
+  }
+
+  .border-warning {
+    border-color: hsl(var(--warning)) !important;
+    background: hsl(var(--warning) / 0.1) !important;
+    color: hsl(var(--warning)) !important;
+  }
+
+  .border-secondary {
+    border-color: hsl(var(--secondary)) !important;
+    background: hsl(var(--secondary) / 0.1) !important;
+    color: hsl(var(--secondary)) !important;
+  }
+
+  /* Ensure all important text is visible */
   h1, h2, h3, h4, h5, h6, p, div, span, td, th, li {
     display: block !important;
     visibility: visible !important;
-    color: black !important;
+    color: inherit !important;
   }
 
-  /* Card styling for print */
-  .print-section .border,
-  .print-section [class*="border"] {
-    border: 1px solid #d1d5db !important;
-    background: white !important;
-    color: black !important;
+  /* Grid and flex layouts */
+  .grid {
+    display: grid !important;
   }
 
-  /* Override all background and text colors for print */
-  .bg-cyan-600,
-  [class*="bg-cyan-600"] {
-    background: #0891b2 !important;
-    color: white !important;
-    -webkit-print-color-adjust: exact !important;
-    color-adjust: exact !important;
-    print-color-adjust: exact !important;
+  .flex {
+    display: flex !important;
   }
 
-  .bg-gray-50,
-  [class*="bg-gray-50"] {
-    background: #f9fafb !important;
-    -webkit-print-color-adjust: exact !important;
-    color-adjust: exact !important;
-    print-color-adjust: exact !important;
+  /* Spacing utilities */
+  .space-y-6 > * {
+    margin-bottom: 16px !important;
   }
 
-  .bg-gray-100,
-  [class*="bg-gray-100"] {
-    background: #f3f4f6 !important;
-    -webkit-print-color-adjust: exact !important;
-    color-adjust: exact !important;
-    print-color-adjust: exact !important;
+  .space-y-4 > * {
+    margin-bottom: 12px !important;
   }
 
-  /* Text colors for print */
-  .text-white,
-  [class*="text-white"] {
-    color: white !important;
+  .space-y-3 > * {
+    margin-bottom: 8px !important;
   }
 
-  .text-gray-900,
-  [class*="text-gray-900"] {
-    color: #111827 !important;
+  .space-y-2 > * {
+    margin-bottom: 6px !important;
   }
 
-  .text-gray-600,
-  [class*="text-gray-600"] {
-    color: #4b5563 !important;
+  /* Remove transforms and filters */
+  * {
+    transform: none !important;
+    filter: none !important;
+    opacity: 1 !important;
   }
 
-  .text-gray-700,
-  [class*="text-gray-700"] {
-    color: #374151 !important;
-  }
-
-  .text-green-700,
-  [class*="text-green-700"] {
-    color: #15803d !important;
-  }
-
-  .text-blue-600,
-  [class*="text-blue-600"] {
-    color: #2563eb !important;
-  }
-
-  .text-purple-600,
-  [class*="text-purple-600"] {
-    color: #9333ea !important;
-  }
-
-  .text-orange-600,
-  [class*="text-orange-600"] {
-    color: #ea580c !important;
-  }
-
-  .text-cyan-700,
-  [class*="text-cyan-700"] {
-    color: #0e7490 !important;
-  }
-
-  /* Grid adjustments for print */
-  .grid-cols-1 {
-    grid-template-columns: repeat(1, minmax(0, 1fr)) !important;
-  }
-
-  .md\:grid-cols-2 {
-    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-  }
-
-  .md\:grid-cols-12 {
-    grid-template-columns: repeat(12, minmax(0, 1fr)) !important;
-  }
-
-  .lg\:grid-cols-3 {
-    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
-  }
-
-  /* Badge styling for print */
-  .border-green-300,
-  [class*="border-green-300"] {
-    border-color: #86efac !important;
-    background: #dcfce7 !important;
-    color: #166534 !important;
-  }
-
-  .border-yellow-300,
-  [class*="border-yellow-300"] {
-    border-color: #fde047 !important;
-    background: #fefce8 !important;
-    color: #a16207 !important;
-  }
-
-  .border-blue-300,
-  [class*="border-blue-300"] {
-    border-color: #93c5fd !important;
-    background: #dbeafe !important;
-    color: #1e40af !important;
-  }
-
-  .border-gray-300,
-  [class*="border-gray-300"] {
-    border-color: #d1d5db !important;
-    background: #f9fafb !important;
-    color: #374151 !important;
-  }
-
-  /* Force column display rules */
-  .md\:col-span-1 { grid-column: span 1 / span 1 !important; }
-  .md\:col-span-2 { grid-column: span 2 / span 2 !important; }
-  .md\:col-span-3 { grid-column: span 3 / span 3 !important; }
-  .md\:col-span-4 { grid-column: span 4 / span 4 !important; }
-
-  /* Avatar and image handling */
+  /* Avatar styling */
   img {
     max-width: 100% !important;
     height: auto !important;
     display: block !important;
   }
 
-  /* Ensure proper text alignment */
-  .text-center {
-    text-align: center !important;
+  /* Table styling */
+  table {
+    border-collapse: collapse !important;
+    width: 100% !important;
   }
 
-  .text-left {
+  th, td {
+    border: 1px solid hsl(var(--border)) !important;
+    padding: 8px !important;
     text-align: left !important;
   }
 
-  .md\:text-left {
-    text-align: left !important;
-  }
-
-  /* Force all important elements to be visible */
-  .space-y-6 > * {
-    margin-bottom: 16px !important;
-    display: block !important;
-    visibility: visible !important;
-  }
-
-  .space-y-4 > * {
-    margin-bottom: 12px !important;
-    display: block !important;
-    visibility: visible !important;
-  }
-
-  .space-y-3 > * {
-    margin-bottom: 8px !important;
-    display: block !important;
-    visibility: visible !important;
-  }
-
-  .space-y-2 > * {
-    margin-bottom: 6px !important;
-    display: block !important;
-    visibility: visible !important;
-  }
-
-  /* Ensure flex layouts work in print */
-  .flex {
-    display: flex !important;
-  }
-
-  .grid {
-    display: grid !important;
-  }
-
-  /* Remove any transforms or filters that might hide content */
-  * {
-    transform: none !important;
-    filter: none !important;
-    opacity: 1 !important;
+  th {
+    background: hsl(var(--muted)) !important;
+    font-weight: 600 !important;
   }
 }

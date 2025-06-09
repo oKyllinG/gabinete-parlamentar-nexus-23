@@ -1,8 +1,9 @@
+
 import { useState } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import { Users, Edit, Plus, Trash2, Phone, User } from "lucide-react"
+import { Users, Edit, Plus, Phone, User } from "lucide-react"
 import { EditableLiderancasMunicipais } from "./EditableLiderancasMunicipais"
 
 interface Lideranca {
@@ -144,18 +145,18 @@ export const LiderancasManager = ({ liderancas, onSave }: LiderancasManagerProps
   }
 
   return (
-    <Card className="border-gray-300 print-section">
-      <CardHeader className="bg-cyan-600 text-white border-b border-gray-300">
+    <Card className="border-border print-section">
+      <CardHeader className="bg-primary text-primary-foreground border-b border-border">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <div className="w-1 h-6 bg-white rounded"></div>
+            <div className="w-1 h-6 bg-primary-foreground rounded"></div>
             <CardTitle className="text-lg font-bold">Lideranças Municipais</CardTitle>
           </div>
           <Button
             onClick={() => setIsEditing(true)}
             variant="secondary"
             size="sm"
-            className="no-print bg-white text-cyan-600 hover:bg-gray-100"
+            className="no-print bg-background text-foreground hover:bg-muted"
           >
             <Edit className="h-4 w-4 mr-2" />
             Editar
@@ -164,8 +165,8 @@ export const LiderancasManager = ({ liderancas, onSave }: LiderancasManagerProps
       </CardHeader>
       <CardContent className="p-6">
         {liderancasComCategoria.length === 0 ? (
-          <div className="text-center py-8 text-gray-500">
-            <Users className="h-12 w-12 mx-auto mb-4 text-gray-400" />
+          <div className="text-center py-8 text-muted-foreground">
+            <Users className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
             <p>Nenhuma liderança cadastrada</p>
             <Button
               onClick={() => setIsEditing(true)}
@@ -180,7 +181,7 @@ export const LiderancasManager = ({ liderancas, onSave }: LiderancasManagerProps
           <div className="space-y-6">
             {Object.entries(liderancasPorCategoria).map(([categoria, liderancasCategoria]) => (
               <div key={categoria} className="space-y-4">
-                <h3 className="text-lg font-semibold text-cyan-700 border-b border-gray-200 pb-2">
+                <h3 className="text-lg font-semibold text-primary border-b border-border pb-2">
                   {categoria}
                 </h3>
                 <div className="grid gap-4">
@@ -188,11 +189,11 @@ export const LiderancasManager = ({ liderancas, onSave }: LiderancasManagerProps
                     const formattedVotes = formatVotes(lideranca.votos)
                     
                     return (
-                      <div key={lideranca.id} className="border rounded-lg p-4 bg-gray-50">
+                      <div key={lideranca.id} className="border border-border rounded-lg p-4 bg-muted">
                         <div className="grid grid-cols-1 md:grid-cols-12 gap-4 items-center">
                           {/* Avatar */}
                           <div className="md:col-span-1 flex justify-center md:justify-start">
-                            <div className="w-20 h-20 bg-gray-300 rounded-full flex items-center justify-center overflow-hidden">
+                            <div className="w-20 h-20 bg-muted-foreground/20 rounded-full flex items-center justify-center overflow-hidden">
                               {lideranca.foto ? (
                                 <img 
                                   src={lideranca.foto} 
@@ -200,24 +201,24 @@ export const LiderancasManager = ({ liderancas, onSave }: LiderancasManagerProps
                                   className="w-full h-full object-cover"
                                 />
                               ) : (
-                                <User className="h-10 w-10 text-gray-600" />
+                                <User className="h-10 w-10 text-muted-foreground" />
                               )}
                             </div>
                           </div>
                           
                           {/* Nome e Cargo */}
                           <div className="md:col-span-4 text-center md:text-left">
-                            <h4 className="font-semibold text-gray-900">
+                            <h4 className="font-semibold text-foreground">
                               {lideranca.nome}
                             </h4>
-                            <p className="text-sm text-gray-600">
+                            <p className="text-sm text-muted-foreground">
                               {lideranca.cargo}
                             </p>
                           </div>
                           
                           {/* Partido */}
                           <div className="md:col-span-2 text-center">
-                            <Badge variant="outline" className="font-semibold">
+                            <Badge variant="outline" className="font-semibold border-secondary text-secondary">
                               {lideranca.partido}
                             </Badge>
                           </div>
@@ -225,8 +226,8 @@ export const LiderancasManager = ({ liderancas, onSave }: LiderancasManagerProps
                           {/* Telefone */}
                           <div className="md:col-span-3 text-center md:text-left">
                             <div className="flex items-center justify-center md:justify-start gap-2">
-                              <Phone className="h-4 w-4 text-gray-500 flex-shrink-0" />
-                              <span className="text-sm text-gray-700">
+                              <Phone className="h-4 w-4 text-muted-foreground flex-shrink-0" />
+                              <span className="text-sm text-foreground">
                                 {lideranca.telefone}
                               </span>
                             </div>
@@ -236,10 +237,10 @@ export const LiderancasManager = ({ liderancas, onSave }: LiderancasManagerProps
                           <div className="md:col-span-2 text-center">
                             {formattedVotes && (
                               <div className="text-sm">
-                                <span className="font-semibold text-green-700">
+                                <span className="font-semibold text-success">
                                   {formattedVotes}
                                 </span>
-                                <span className="text-gray-500 block text-xs">votos</span>
+                                <span className="text-muted-foreground block text-xs">votos</span>
                               </div>
                             )}
                           </div>
