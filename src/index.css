@@ -1,4 +1,3 @@
-/* File Path: src/index.css */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -128,7 +127,7 @@
   body {
     background: white !important;
     color: black !important;
-    font-size: 10pt !important;
+    font-size: 9pt !important;
     line-height: 1.3 !important;
   }
 
@@ -142,30 +141,27 @@
     width: 100% !important;
     margin: 0 !important;
     padding: 0 !important;
-    display: block !important; /* Reset flexbox for root containers */
+    display: block !important;
   }
 
   main {
     width: 100% !important;
     margin: 0 !important;
     padding: 0 !important;
-    /* Allow flex/grid inside main content to work */
     display: block !important;
   }
 
-  /* Keep card and section styles for structure */
   .print-header {
     background-color: #2563eb !important;
     color: white !important;
-    border-radius: 8px !important;
-    padding: 1rem !important;
-    page-break-inside: avoid;
+    padding: 0.75rem !important;
+    border-radius: 0.5rem !important;
   }
 
   .print-header h1, .print-header span, .print-header svg {
     color: white !important;
   }
-  
+
   .bg-cyan-600 {
       background-color: #0891b2 !important;
   }
@@ -177,37 +173,43 @@
   .text-white {
       color: white !important;
   }
-
+  
   .print-section {
-    border: 1px solid #e5e7eb !important;
-    border-radius: 0.5rem !important;
-    page-break-inside: avoid;
+    page-break-inside: avoid !important;
     margin-top: 1rem;
-    overflow: hidden; /* Prevent content from spilling */
+    padding: 0;
+  }
+  
+  .print-card-content {
+      padding: 0.75rem !important;
   }
 
-  /* Avoid breaking inside tables and cards */
-  .card, table, thead, tbody, tr, td, th {
+  .card, table, thead, tbody, tr, td, th, .lideranca-card {
     page-break-inside: avoid;
   }
-
+  
   table {
       width: 100% !important;
       border-collapse: collapse !important;
   }
   
   th, td {
-      border: 1px solid #d1d5db !important;
-      padding: 6px !important;
-      text-align: left !important;
-      font-size: 9pt !important;
+      border: 1px solid #dee2e6 !important;
+      padding: 4px 6px !important;
+      font-size: 8pt !important;
   }
 
   th {
-    background-color: #f3f4f6 !important;
+    background-color: #f1f5f9 !important;
   }
 
-  /* Only show this element on print */
+  .print-deputies-grid {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    align-items: start;
+  }
+
   .print-only {
     display: block !important;
   }
