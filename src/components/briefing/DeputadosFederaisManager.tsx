@@ -4,7 +4,6 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
-import { Label } from "@/components/ui/label"
 
 interface Deputado {
   id: string
@@ -110,7 +109,7 @@ export const DeputadosFederaisManager = ({ deputadosFederais, onSave }: Deputado
           </div>
         )}
         <div className="overflow-x-auto">
-          <table className="w-full border-collapse">
+          <table className="w-full border-collapse deputies-table">
             <thead>
               <tr className="bg-gray-100">
                 <th className="text-left p-2 border font-semibold print:w-[5%] print:text-[7pt]">Pos.</th>
@@ -162,4 +161,3 @@ export const DeputadosFederaisManager = ({ deputadosFederais, onSave }: Deputado
     </Card>
   )
 }
-
