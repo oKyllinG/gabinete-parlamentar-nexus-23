@@ -1,4 +1,3 @@
-
 import { useState } from "react"
 import { Plus, Edit3, Trash2, Check, X, GripVertical, Phone } from "lucide-react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
@@ -103,13 +102,6 @@ const SortableLiderancaItem = ({
           {lideranca.nome.split(' ').map(n => n[0]).join('')}
         </AvatarFallback>
       </Avatar>
-
-      {lideranca.votos && (
-        <div className="text-center bg-muted/50 rounded-lg p-4 min-w-[120px]">
-          <p className="text-sm text-muted-foreground font-medium mb-1">Votos</p>
-          <p className="text-2xl font-bold">{lideranca.votos.toLocaleString()}</p>
-        </div>
-      )}
       
       <div className="flex-1 space-y-2">
         {isEditing ? (
@@ -147,18 +139,29 @@ const SortableLiderancaItem = ({
             />
           </div>
         ) : (
-          <div className="flex items-center justify-between">
-            <div className="space-y-2">
-              <div className="flex items-center gap-4">
-                <h4 className="text-2xl font-bold">{lideranca.nome}</h4>
-                <Badge variant="secondary" className="text-lg px-4 py-2">{lideranca.partido}</Badge>
+          <div className="flex items-center justify-between w-full">
+            <div className="flex items-center gap-6 flex-1">
+              <div className="space-y-2 min-w-0 flex-1">
+                <div className="flex items-center gap-4">
+                  <h4 className="text-2xl font-bold truncate">{lideranca.nome}</h4>
+                  <Badge variant="secondary" className="text-lg px-4 py-2 whitespace-nowrap">
+                    {lideranca.partido}
+                  </Badge>
+                </div>
+                <p className="text-xl text-muted-foreground font-semibold">{lideranca.cargo}</p>
               </div>
-              <p className="text-xl text-muted-foreground font-semibold">{lideranca.cargo}</p>
+              
+              {/* Votos - alinhados */}
+              <div className="text-center bg-muted/50 rounded-lg p-4 min-w-[120px]">
+                <p className="text-sm text-muted-foreground font-medium mb-1">Votos</p>
+                <p className="text-2xl font-bold">{lideranca.votos?.toLocaleString() || '0'}</p>
+              </div>
             </div>
             
-            <div className="flex items-center gap-3 text-xl">
+            {/* Telefone no final com ícone */}
+            <div className="flex items-center gap-3 text-xl ml-6">
               <Phone className="h-6 w-6 text-muted-foreground" />
-              <span className="font-semibold">{lideranca.telefone}</span>
+              <span className="font-semibold whitespace-nowrap">{lideranca.telefone}</span>
             </div>
           </div>
         )}
