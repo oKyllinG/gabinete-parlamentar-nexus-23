@@ -59,7 +59,7 @@ export const getDestinacoesByMunicipio = (municipioNome: string): DestinacaoEmen
 export const initializeMockDataForAguaClara = () => {
   const municipioId = 1 // Água Clara
 
-  // 6 Obras mock
+  // 6 Obras mock - ordenadas para ter Saúde e Educação juntas
   const obras = [
     {
       id: "obra-1",

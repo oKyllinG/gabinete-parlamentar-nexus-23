@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Label } from "@/components/ui/label"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 
 interface Lideranca {
   id: number
@@ -21,6 +22,64 @@ interface Lideranca {
 interface LiderancasManagerProps {
   liderancas: Lideranca[]
   onSave: (liderancas: Lideranca[]) => void
+}
+
+const cargosPredefinidos = {
+  "Executivo Municipal": [
+    "Prefeito",
+    "Prefeita", 
+    "Vice-Prefeito",
+    "Vice-Prefeita",
+    "Chefe de Gabinete"
+  ],
+  "Secretários": [
+    "Secretário de Administração",
+    "Secretária de Administração",
+    "Secretário de Agricultura",
+    "Secretária de Agricultura", 
+    "Secretário de Assistência Social",
+    "Secretária de Assistência Social",
+    "Secretário de Cultura",
+    "Secretária de Cultura",
+    "Secretário de Educação",
+    "Secretária de Educação",
+    "Secretário de Esportes",
+    "Secretária de Esportes",
+    "Secretário de Finanças",
+    "Secretária de Finanças",
+    "Secretário de Governo",
+    "Secretária de Governo",
+    "Secretário de Infraestrutura",
+    "Secretária de Infraestrutura",
+    "Secretário de Meio Ambiente",
+    "Secretária de Meio Ambiente",
+    "Secretário de Obras",
+    "Secretária de Obras",
+    "Secretário de Planejamento",
+    "Secretária de Planejamento",
+    "Secretário de Saúde",
+    "Secretária de Saúde",
+    "Secretário de Segurança",
+    "Secretária de Segurança",
+    "Secretário de Transporte",
+    "Secretária de Transporte",
+    "Secretário de Turismo",
+    "Secretária de Turismo"
+  ],
+  "Câmara Municipal": [
+    "Vereador",
+    "Vereadora",
+    "Presidente da Câmara",
+    "Presidenta da Câmara",
+    "1º Vice-Presidente",
+    "1ª Vice-Presidente", 
+    "2º Vice-Presidente",
+    "2ª Vice-Presidente",
+    "1º Secretário",
+    "1ª Secretária",
+    "2º Secretário", 
+    "2ª Secretária"
+  ]
 }
 
 export const LiderancasManager = ({ liderancas, onSave }: LiderancasManagerProps) => {
@@ -67,16 +126,30 @@ export const LiderancasManager = ({ liderancas, onSave }: LiderancasManagerProps
   }
 
   // Separate leadership by type for better organization
-  const prefeito = liderancas.find(l => l.cargo.toLowerCase().includes('prefeito'))
+  const prefeito = liderancas.find(l => l.cargo.toLowerCase().includes('prefeito') || l.cargo.toLowerCase().includes('prefeita'))
   const vicePrefeito = liderancas.find(l => l.cargo.toLowerCase().includes('vice'))
-  const secretarios = liderancas.filter(l => l.cargo.toLowerCase().includes('secretário') || l.cargo.toLowerCase().includes('secretaria'))
-  const vereadores = liderancas.filter(l => l.cargo.toLowerCase().includes('vereador')).sort((a, b) => (b.votos || 0) - (a.votos || 0))
+  const chefeGabinete = liderancas.find(l => l.cargo.toLowerCase().includes('chefe de gabinete'))
+  const secretarios = liderancas.filter(l => l.cargo.toLowerCase().includes('secretário') || l.cargo.toLowerCase().includes('secretária'))
+  const vereadores = liderancas.filter(l => 
+    l.cargo.toLowerCase().includes('vereador') || 
+    l.cargo.toLowerCase().includes('vereadora') ||
+    l.cargo.toLowerCase().includes('presidente da câmara') ||
+    l.cargo.toLowerCase().includes('presidenta da câmara') ||
+    l.cargo.toLowerCase().includes('vice-presidente') ||
+    l.cargo.toLowerCase().includes('secretário') && l.cargo.toLowerCase().includes('câmara') ||
+    l.cargo.toLowerCase().includes('secretária') && l.cargo.toLowerCase().includes('câmara')
+  ).sort((a, b) => (b.votos || 0) - (a.votos || 0))
   const outros = liderancas.filter(l => 
     !l.cargo.toLowerCase().includes('prefeito') && 
+    !l.cargo.toLowerCase().includes('prefeita') &&
     !l.cargo.toLowerCase().includes('vice') &&
+    !l.cargo.toLowerCase().includes('chefe de gabinete') &&
     !l.cargo.toLowerCase().includes('secretário') &&
-    !l.cargo.toLowerCase().includes('secretaria') &&
-    !l.cargo.toLowerCase().includes('vereador')
+    !l.cargo.toLowerCase().includes('secretária') &&
+    !l.cargo.toLowerCase().includes('vereador') &&
+    !l.cargo.toLowerCase().includes('vereadora') &&
+    !l.cargo.toLowerCase().includes('presidente da câmara') &&
+    !l.cargo.toLowerCase().includes('presidenta da câmara')
   )
 
   const renderLideranca = (lideranca: Lideranca) => (
@@ -96,11 +169,21 @@ export const LiderancasManager = ({ liderancas, onSave }: LiderancasManagerProps
               onChange={(e) => setEditData({...editData, nome: e.target.value})}
               placeholder="Nome"
             />
-            <Input
-              value={editData.cargo || ""}
-              onChange={(e) => setEditData({...editData, cargo: e.target.value})}
-              placeholder="Cargo"
-            />
+            <Select value={editData.cargo || ""} onValueChange={(value) => setEditData({...editData, cargo: value})}>
+              <SelectTrigger>
+                <SelectValue placeholder="Selecione um cargo" />
+              </SelectTrigger>
+              <SelectContent>
+                {Object.entries(cargosPredefinidos).map(([categoria, cargos]) => (
+                  <div key={categoria}>
+                    <div className="px-2 py-1 text-sm font-semibold text-gray-600 border-b">{categoria}</div>
+                    {cargos.map((cargo) => (
+                      <SelectItem key={cargo} value={cargo}>{cargo}</SelectItem>
+                    ))}
+                  </div>
+                ))}
+              </SelectContent>
+            </Select>
             <Input
               value={editData.partido || ""}
               onChange={(e) => setEditData({...editData, partido: e.target.value})}
@@ -125,8 +208,8 @@ export const LiderancasManager = ({ liderancas, onSave }: LiderancasManagerProps
           </div>
         ) : (
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-6">
-              <div>
+            <div className="flex items-center gap-6 flex-1">
+              <div className="min-w-0 flex-1">
                 <div className="flex items-center gap-3 mb-1">
                   <h4 className="font-bold text-gray-900 text-lg">{lideranca.nome}</h4>
                   <Badge variant="outline" className="border-blue-300 text-blue-700 bg-blue-50 text-lg px-3 py-1">
@@ -136,14 +219,13 @@ export const LiderancasManager = ({ liderancas, onSave }: LiderancasManagerProps
                 <p className="text-gray-600 font-medium">{lideranca.cargo}</p>
               </div>
               
-              {lideranca.votos && lideranca.votos > 0 && (
-                <div className="text-center bg-blue-50 px-3 py-2 rounded-lg border border-blue-200">
-                  <div className="text-blue-600 font-bold text-lg">
-                    {lideranca.votos.toLocaleString()}
-                  </div>
-                  <div className="text-blue-500 text-xs font-medium">VOTOS</div>
+              {/* Votos alinhados à direita com largura fixa */}
+              <div className="text-center bg-blue-50 px-4 py-2 rounded-lg border border-blue-200 min-w-[120px]">
+                <div className="text-blue-600 font-bold text-lg">
+                  {(lideranca.votos || 0).toLocaleString()}
                 </div>
-              )}
+                <div className="text-blue-500 text-xs font-medium">VOTOS</div>
+              </div>
             </div>
           </div>
         )}
@@ -213,11 +295,21 @@ export const LiderancasManager = ({ liderancas, onSave }: LiderancasManagerProps
               </div>
               <div>
                 <Label htmlFor="new-cargo">Cargo</Label>
-                <Input
-                  id="new-cargo"
-                  value={newLideranca.cargo}
-                  onChange={(e) => setNewLideranca({...newLideranca, cargo: e.target.value})}
-                />
+                <Select value={newLideranca.cargo || ""} onValueChange={(value) => setNewLideranca({...newLideranca, cargo: value})}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Selecione um cargo" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {Object.entries(cargosPredefinidos).map(([categoria, cargos]) => (
+                      <div key={categoria}>
+                        <div className="px-2 py-1 text-sm font-semibold text-gray-600 border-b">{categoria}</div>
+                        {cargos.map((cargo) => (
+                          <SelectItem key={cargo} value={cargo}>{cargo}</SelectItem>
+                        ))}
+                      </div>
+                    ))}
+                  </SelectContent>
+                </Select>
               </div>
               <div>
                 <Label htmlFor="new-partido">Partido</Label>
@@ -274,12 +366,13 @@ export const LiderancasManager = ({ liderancas, onSave }: LiderancasManagerProps
         ) : (
           <div className="space-y-6">
             {/* Executivo Municipal */}
-            {(prefeito || vicePrefeito) && (
+            {(prefeito || vicePrefeito || chefeGabinete) && (
               <div>
                 <h3 className="text-lg font-semibold text-gray-800 mb-3 border-b pb-2">Executivo Municipal</h3>
                 <div className="space-y-3">
                   {prefeito && renderLideranca(prefeito)}
                   {vicePrefeito && renderLideranca(vicePrefeito)}
+                  {chefeGabinete && renderLideranca(chefeGabinete)}
                 </div>
               </div>
             )}
@@ -298,7 +391,7 @@ export const LiderancasManager = ({ liderancas, onSave }: LiderancasManagerProps
             {vereadores.length > 0 && (
               <div>
                 <h3 className="text-lg font-semibold text-gray-800 mb-3 border-b pb-2">
-                  Câmara Municipal ({vereadores.length} vereadores)
+                  Câmara Municipal ({vereadores.filter(v => v.cargo.toLowerCase().includes('vereador')).length} vereadores)
                 </h3>
                 <div className="space-y-3">
                   {vereadores.map(renderLideranca)}
