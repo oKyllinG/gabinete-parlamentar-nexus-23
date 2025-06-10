@@ -174,17 +174,17 @@ export const LiderancasManager = ({ liderancas, onSave }: LiderancasManagerProps
           <div className="space-y-6 print:space-y-2">
             {Object.entries(liderancasPorCategoria).map(([categoria, liderancasCategoria]) => (
               <div key={categoria} className="space-y-4 print:space-y-1 print-section">
-                <h3 className="text-lg font-semibold text-primary border-b border-border pb-2 print:hidden">
+                <h3 className="text-lg font-semibold text-primary border-b border-border pb-2">
                   {categoria}
                 </h3>
-                <div className="grid gap-4 print:gap-1">
+                <div className="grid gap-3 print:gap-1">
                   {liderancasCategoria.map((lideranca) => {
                     const formattedVotes = formatVotes(lideranca.votos)
                     
                     return (
                       <div key={lideranca.id} className="border border-border rounded-lg p-4 print:p-2 bg-gray-50 lideranca-card print:border-0 print:bg-transparent">
                         <div className="grid grid-cols-1 md:grid-cols-12 gap-4 print:gap-2 items-center">
-                          <div className="md:col-span-1 flex justify-center md:justify-start print:hidden">
+                          <div className="md:col-span-1 flex justify-center md:justify-start">
                             <div className="w-20 h-20 bg-muted-foreground/20 rounded-full flex items-center justify-center overflow-hidden">
                               {lideranca.foto ? (
                                 <img 

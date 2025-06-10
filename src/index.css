@@ -186,6 +186,11 @@
     print-color-adjust: exact !important;
   }
 
+  /* Prevenir quebra de página em emendas e obras individuais */
+  .drag-item {
+    page-break-inside: avoid !important;
+  }
+
   @page {
     margin: 1cm;
     size: A4;

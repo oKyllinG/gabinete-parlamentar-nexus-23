@@ -1,3 +1,4 @@
+
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
@@ -124,25 +125,27 @@ export const HistoricoDeputadoManager = ({ acoes, municipioNome, onSave }: Histo
                     <div key={acao.id} className="flex items-center justify-between p-3 bg-muted rounded-lg">
                       <div className="flex-1">
                         <p className="font-medium">{acao.descricao}</p>
-                        <p className="text-sm text-muted-foreground font-medium">
-                          {formatCurrency(acao.valor)}
-                        </p>
                       </div>
-                      <div className="flex items-center gap-2 no-print">
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={() => handleEditAcao(acao)}
-                        >
-                          <Edit className="h-4 w-4" />
-                        </Button>
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={() => handleDeleteAcao(acao.id)}
-                        >
-                          <Trash2 className="h-4 w-4" />
-                        </Button>
+                      <div className="flex items-center gap-3">
+                        <span className="text-sm text-muted-foreground font-medium">
+                          {formatCurrency(acao.valor)}
+                        </span>
+                        <div className="flex items-center gap-2 no-print">
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => handleEditAcao(acao)}
+                          >
+                            <Edit className="h-4 w-4" />
+                          </Button>
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => handleDeleteAcao(acao.id)}
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
+                        </div>
                       </div>
                     </div>
                   ))}
