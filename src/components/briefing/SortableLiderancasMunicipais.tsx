@@ -327,6 +327,7 @@ export const SortableLiderancasMunicipais = ({ municipio }: LiderancasMunicipais
           partido: "CIDADANIA",
           telefone: "(67) 99855-9900",
           votos: 880,
+          foto: "https://images.unsplash.com/photo-1557862921-37829c790f19?w=150&h=150&fit=crop&crop=face",
           ordem: 12
         },
         {
