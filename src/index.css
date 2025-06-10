@@ -191,10 +191,34 @@
     break-inside: avoid !important;
   }
 
-  /* Emendas e Obras - Prevenir quebra de página individual */
+  /* Prevenir quebra entre categoria e primeira liderança */
+  .lideranca-categoria {
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+  }
+
+  /* Emendas e Obras - Prevenir quebra de página individual e dos headers */
   .drag-item {
     page-break-inside: avoid !important;
     break-inside: avoid !important;
+  }
+
+  /* Headers das seções - devem ficar com o conteúdo */
+  .bg-cyan-600,
+  .bg-blue-600,
+  [class*="CardHeader"] {
+    page-break-after: avoid !important;
+  }
+
+  /* Cards inteiros devem ficar juntos */
+  [class*="Card"] {
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+  }
+
+  /* Conteúdo dos cards */
+  [class*="CardContent"] {
+    page-break-before: avoid !important;
   }
 
   @page {
