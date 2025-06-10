@@ -86,24 +86,52 @@
 
 /* Print Styles */
 @media print {
+  body {
+    font-size: 10pt !important;
+    line-height: 1.2 !important;
+  }
+
   .no-print {
     display: none !important;
   }
 
+  .print-only {
+    display: block !important;
+  }
+  
+  .print-container {
+    padding: 0 !important;
+    background: white !important;
+  }
+
+  /* --- General Page Break Control --- */
+  .print-section,
+  [class*="Card"] {
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+  }
+
+  /* Evita quebras logo após os cabeçalhos */
+  .print-header,
+  [class*="CardHeader"] {
+    page-break-after: avoid !important;
+  }
+  
+  /* Evita quebras logo antes do conteúdo */
+  [class*="CardContent"] {
+    page-break-before: avoid !important;
+  }
+  
   .print-first-page-group {
     page-break-inside: avoid !important;
   }
 
-  .print-section {
-    margin-bottom: 1rem !important;
-    page-break-inside: avoid;
-  }
-
+  /* --- Specific Component Styling for Print --- */
+  
   .print-deputies-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 1rem;
-    page-break-inside: avoid !important;
   }
 
   .print-card-content {
@@ -113,34 +141,18 @@
   .votacao-historica-header tr th {
     background-color: #0891b2 !important;
     color: white !important;
-    -webkit-print-color-adjust: exact !important;
-    print-color-adjust: exact !important;
   }
 
   .deputies-table {
     width: 100% !important;
     border-collapse: collapse !important;
   }
-
-  .deputies-table .pos-col {
-    width: 5% !important;
-  }
-
-  .deputies-table .name-col {
-    width: 55% !important;
-  }
-
-  .deputies-table .party-col {
-    width: 12% !important;
-  }
-
-  .deputies-table .votes-col {
-    width: 14% !important;
-  }
-
-  .deputies-table .percent-col {
-    width: 14% !important;
-  }
+  
+  .deputies-table .pos-col { width: 5% !important; }
+  .deputies-table .name-col { width: 55% !important; }
+  .deputies-table .party-col { width: 12% !important; }
+  .deputies-table .votes-col { width: 14% !important; }
+  .deputies-table .percent-col { width: 14% !important; }
 
   .deputies-table th,
   .deputies-table td {
@@ -148,12 +160,10 @@
     border: 1px solid #d1d5db !important;
     font-size: 7pt !important;
   }
-
+  
   .deputies-table th {
     background-color: #f3f4f6 !important;
     font-weight: 600 !important;
-    -webkit-print-color-adjust: exact !important;
-    print-color-adjust: exact !important;
   }
 
   .deputies-table .party-col {
@@ -166,78 +176,28 @@
     font-size: 6pt !important;
   }
 
-  .print-header {
-    -webkit-print-color-adjust: exact !important;
-    print-color-adjust: exact !important;
-  }
-
-  .bg-cyan-600 {
-    background-color: #0891b2 !important;
-    color: white !important;
-    -webkit-print-color-adjust: exact !important;
-    print-color-adjust: exact !important;
-  }
-
-  .bg-blue-600 {
-    background-color: #2563eb !important;
-    color: white !important;
-    -webkit-print-color-adjust: exact !important;
-    print-color-adjust: exact !important;
-  }
-
-  /* Lideranças Municipais - Prevenir quebra de página individual */
-  .lideranca-card {
-    page-break-inside: avoid !important;
-    break-inside: avoid !important;
-  }
-
-  /* Prevenir quebra entre categoria e primeira liderança */
+  /* --- Lideranças Municipais --- */
+  .lideranca-card,
   .lideranca-categoria {
     page-break-inside: avoid !important;
     break-inside: avoid !important;
   }
 
-  /* Emendas e Obras - Prevenir quebra de página individual e dos headers */
+  /* --- Emendas e Obras --- */
   .drag-item {
     page-break-inside: avoid !important;
     break-inside: avoid !important;
   }
-
-  /* Headers das seções - devem ficar com o conteúdo */
-  .bg-cyan-600,
-  .bg-blue-600,
-  [class*="CardHeader"] {
-    page-break-after: avoid !important;
-  }
-
-  /* Cards inteiros devem ficar juntos */
-  [class*="Card"] {
-    page-break-inside: avoid !important;
-    break-inside: avoid !important;
-  }
-
-  /* Conteúdo dos cards */
-  [class*="CardContent"] {
-    page-break-before: avoid !important;
+  
+  /* Força a impressão das cores de fundo */
+  .bg-cyan-600, .bg-blue-600, .deputies-table th, .votacao-historica-header tr th {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
   }
 
   @page {
     margin: 1cm;
     size: A4;
-  }
-
-  body {
-    font-size: 10pt !important;
-    line-height: 1.2 !important;
-  }
-
-  .print-only {
-    display: block !important;
-  }
-
-  .print-container {
-    padding: 0 !important;
-    background: white !important;
   }
 }
 
