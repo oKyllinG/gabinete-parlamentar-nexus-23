@@ -1,4 +1,3 @@
-
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
 @tailwind base;
 @tailwind components;
@@ -189,20 +188,13 @@
   /* Lideranças Municipais - Prevenir quebra de página individual */
   .lideranca-card {
     page-break-inside: avoid !important;
+    break-inside: avoid !important;
   }
 
-  /* Lideranças Municipais - Permitir quebra entre categorias mas não dentro */
-  .print-category-section {
-    break-inside: avoid-page !important;
-  }
-
-  .print-category-title {
-    break-after: avoid !important;
-  }
-
-  /* Emendas e Obras - Permitir sequência normal */
+  /* Emendas e Obras - Prevenir quebra de página individual */
   .drag-item {
     page-break-inside: avoid !important;
+    break-inside: avoid !important;
   }
 
   @page {
