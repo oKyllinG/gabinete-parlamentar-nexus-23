@@ -186,13 +186,22 @@
     print-color-adjust: exact !important;
   }
 
-  /* Prevenir quebra de página em emendas e obras individuais */
-  .drag-item {
+  /* Lideranças Municipais - Prevenir quebra de página individual */
+  .lideranca-card {
     page-break-inside: avoid !important;
   }
 
-  /* Prevenir quebra de página em lideranças individuais */
-  .lideranca-card {
+  /* Lideranças Municipais - Permitir quebra entre categorias mas não dentro */
+  .print-category-section {
+    break-inside: avoid-page !important;
+  }
+
+  .print-category-title {
+    break-after: avoid !important;
+  }
+
+  /* Emendas e Obras - Permitir sequência normal */
+  .drag-item {
     page-break-inside: avoid !important;
   }
 

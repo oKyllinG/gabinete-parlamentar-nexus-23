@@ -1,4 +1,3 @@
-
 import { useState } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -98,6 +97,30 @@ const ordenarLiderancasCamara = (liderancas: Lideranca[]): Lideranca[] => {
   })
 }
 
+// Mock photos for different leadership positions
+const getMockPhoto = (cargo: string, nome: string): string => {
+  const mockPhotos = [
+    "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face",
+    "https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face",
+    "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face",
+    "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop&crop=face",
+    "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&h=150&fit=crop&crop=face",
+    "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&h=150&fit=crop&crop=face",
+    "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=150&h=150&fit=crop&crop=face",
+    "https://images.unsplash.com/photo-1560250097-0b93528c311a?w=150&h=150&fit=crop&crop=face",
+    "https://images.unsplash.com/photo-1547425260-76bcadfb4f2c?w=150&h=150&fit=crop&crop=face",
+    "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=150&h=150&fit=crop&crop=face"
+  ]
+  
+  // Use a simple hash of the name to consistently assign the same photo to the same person
+  const hash = nome.split('').reduce((a, b) => {
+    a = ((a << 5) - a) + b.charCodeAt(0)
+    return a & a
+  }, 0)
+  
+  return mockPhotos[Math.abs(hash) % mockPhotos.length]
+}
+
 export const LiderancasManager = ({ liderancas, onSave }: LiderancasManagerProps) => {
   const [isEditing, setIsEditing] = useState(false)
 
@@ -108,7 +131,8 @@ export const LiderancasManager = ({ liderancas, onSave }: LiderancasManagerProps
 
   const liderancasComCategoria = liderancas.map(lideranca => ({
     ...lideranca,
-    categoria: lideranca.categoria || getCategoriaFromCargo(lideranca.cargo)
+    categoria: lideranca.categoria || getCategoriaFromCargo(lideranca.cargo),
+    foto: lideranca.foto || getMockPhoto(lideranca.cargo, lideranca.nome)
   }))
 
   const liderancasPorCategoria = liderancasComCategoria.reduce((acc, lideranca) => {
@@ -139,7 +163,7 @@ export const LiderancasManager = ({ liderancas, onSave }: LiderancasManagerProps
 
   return (
     <Card className="border-border">
-      <CardHeader className="bg-cyan-600 text-white border-b border-border">
+      <CardHeader className="bg-blue-600 text-white border-b border-border print-header">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <div className="w-1 h-6 bg-white rounded"></div>
@@ -173,8 +197,8 @@ export const LiderancasManager = ({ liderancas, onSave }: LiderancasManagerProps
         ) : (
           <div className="space-y-6 print:space-y-1">
             {Object.entries(liderancasPorCategoria).map(([categoria, liderancasCategoria]) => (
-              <div key={categoria} className="space-y-4 print:space-y-1">
-                <h3 className="text-lg font-semibold text-primary border-b border-border pb-2 print:text-sm print:mb-1">
+              <div key={categoria} className="space-y-4 print:space-y-1 print-category-section">
+                <h3 className="text-lg font-semibold text-primary border-b border-border pb-2 print:text-sm print:mb-1 print-category-title">
                   {categoria}
                 </h3>
                 <div className="grid gap-3 print:gap-1">
@@ -184,8 +208,8 @@ export const LiderancasManager = ({ liderancas, onSave }: LiderancasManagerProps
                     return (
                       <div key={lideranca.id} className="border border-border rounded-lg p-4 print:p-1 bg-gray-50 lideranca-card print:border-0 print:bg-transparent print:page-break-inside-avoid">
                         <div className="grid grid-cols-1 md:grid-cols-12 gap-4 print:gap-1 items-center print:grid-cols-12">
-                          <div className="md:col-span-1 print:col-span-1 flex justify-center md:justify-start">
-                            <div className="w-20 h-20 print:w-8 print:h-8 bg-muted-foreground/20 rounded-full flex items-center justify-center overflow-hidden">
+                          <div className="md:col-span-1 print:col-span-2 flex justify-center md:justify-start">
+                            <div className="w-20 h-20 print:w-12 print:h-12 bg-muted-foreground/20 rounded-full flex items-center justify-center overflow-hidden">
                               {lideranca.foto ? (
                                 <img 
                                   src={lideranca.foto} 
@@ -193,12 +217,12 @@ export const LiderancasManager = ({ liderancas, onSave }: LiderancasManagerProps
                                   className="w-full h-full object-cover"
                                 />
                               ) : (
-                                <User className="h-10 w-10 print:h-4 print:w-4 text-muted-foreground" />
+                                <User className="h-10 w-10 print:h-6 print:w-6 text-muted-foreground" />
                               )}
                             </div>
                           </div>
                           
-                          <div className="md:col-span-4 print:col-span-5 text-center md:text-left">
+                          <div className="md:col-span-4 print:col-span-4 text-center md:text-left">
                             <h4 className="font-semibold text-foreground print:text-xs print:font-medium">
                               {lideranca.nome}
                             </h4>
@@ -208,21 +232,12 @@ export const LiderancasManager = ({ liderancas, onSave }: LiderancasManagerProps
                           </div>
                           
                           <div className="md:col-span-2 print:col-span-2 text-center">
-                            <Badge variant="outline" className="font-semibold border-secondary text-secondary print:text-[8px] print:p-0.5 print:px-1">
+                            <Badge variant="outline" className="font-semibold border-secondary text-secondary print:text-[8px] print:p-0.5 print:px-1 print:bg-gray-300 print:text-black print:border-gray-400">
                               {lideranca.partido}
                             </Badge>
                           </div>
                           
-                          <div className="md:col-span-3 print:col-span-3 text-center md:text-left">
-                            <div className="flex items-center justify-center md:justify-start gap-2 print:gap-1">
-                              <Phone className="h-4 w-4 text-muted-foreground flex-shrink-0 print:h-2 print:w-2" />
-                              <span className="text-sm text-foreground print:text-[10px]">
-                                {lideranca.telefone}
-                              </span>
-                            </div>
-                          </div>
-                          
-                          <div className="md:col-span-2 print:col-span-1 text-center print:text-right">
+                          <div className="md:col-span-3 print:col-span-2 text-center print:text-right">
                             {formattedVotes && (
                               <div className="text-sm print:text-[10px] print:leading-none">
                                 <span className="font-semibold text-success print:block">
@@ -231,6 +246,15 @@ export const LiderancasManager = ({ liderancas, onSave }: LiderancasManagerProps
                                 <span className="text-muted-foreground block text-xs print:text-[8px]">votos</span>
                               </div>
                             )}
+                          </div>
+                          
+                          <div className="md:col-span-2 print:col-span-2 text-center md:text-left">
+                            <div className="flex items-center justify-center md:justify-start gap-2 print:gap-1">
+                              <Phone className="h-4 w-4 text-muted-foreground flex-shrink-0 print:h-2 print:w-2" />
+                              <span className="text-sm text-foreground print:text-[10px]">
+                                {lideranca.telefone}
+                              </span>
+                            </div>
                           </div>
                         </div>
                       </div>
