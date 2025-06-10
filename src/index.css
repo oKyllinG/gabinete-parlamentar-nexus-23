@@ -191,6 +191,11 @@
     page-break-inside: avoid !important;
   }
 
+  /* Prevenir quebra de página em lideranças individuais */
+  .lideranca-card {
+    page-break-inside: avoid !important;
+  }
+
   @page {
     margin: 1cm;
     size: A4;

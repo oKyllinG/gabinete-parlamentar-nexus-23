@@ -171,10 +171,10 @@ export const LiderancasManager = ({ liderancas, onSave }: LiderancasManagerProps
             </Button>
           </div>
         ) : (
-          <div className="space-y-6 print:space-y-2">
+          <div className="space-y-6 print:space-y-1">
             {Object.entries(liderancasPorCategoria).map(([categoria, liderancasCategoria]) => (
-              <div key={categoria} className="space-y-4 print:space-y-1 print-section">
-                <h3 className="text-lg font-semibold text-primary border-b border-border pb-2">
+              <div key={categoria} className="space-y-4 print:space-y-1">
+                <h3 className="text-lg font-semibold text-primary border-b border-border pb-2 print:text-sm print:mb-1">
                   {categoria}
                 </h3>
                 <div className="grid gap-3 print:gap-1">
@@ -182,10 +182,10 @@ export const LiderancasManager = ({ liderancas, onSave }: LiderancasManagerProps
                     const formattedVotes = formatVotes(lideranca.votos)
                     
                     return (
-                      <div key={lideranca.id} className="border border-border rounded-lg p-4 print:p-2 bg-gray-50 lideranca-card print:border-0 print:bg-transparent">
-                        <div className="grid grid-cols-1 md:grid-cols-12 gap-4 print:gap-2 items-center">
-                          <div className="md:col-span-1 flex justify-center md:justify-start">
-                            <div className="w-20 h-20 bg-muted-foreground/20 rounded-full flex items-center justify-center overflow-hidden">
+                      <div key={lideranca.id} className="border border-border rounded-lg p-4 print:p-1 bg-gray-50 lideranca-card print:border-0 print:bg-transparent print:page-break-inside-avoid">
+                        <div className="grid grid-cols-1 md:grid-cols-12 gap-4 print:gap-1 items-center print:grid-cols-12">
+                          <div className="md:col-span-1 print:col-span-1 flex justify-center md:justify-start">
+                            <div className="w-20 h-20 print:w-8 print:h-8 bg-muted-foreground/20 rounded-full flex items-center justify-center overflow-hidden">
                               {lideranca.foto ? (
                                 <img 
                                   src={lideranca.foto} 
@@ -193,42 +193,42 @@ export const LiderancasManager = ({ liderancas, onSave }: LiderancasManagerProps
                                   className="w-full h-full object-cover"
                                 />
                               ) : (
-                                <User className="h-10 w-10 text-muted-foreground" />
+                                <User className="h-10 w-10 print:h-4 print:w-4 text-muted-foreground" />
                               )}
                             </div>
                           </div>
                           
                           <div className="md:col-span-4 print:col-span-5 text-center md:text-left">
-                            <h4 className="font-semibold text-foreground print:text-sm">
+                            <h4 className="font-semibold text-foreground print:text-xs print:font-medium">
                               {lideranca.nome}
                             </h4>
-                            <p className="text-sm text-muted-foreground print:text-xs">
+                            <p className="text-sm text-muted-foreground print:text-[10px]">
                               {lideranca.cargo}
                             </p>
                           </div>
                           
                           <div className="md:col-span-2 print:col-span-2 text-center">
-                            <Badge variant="outline" className="font-semibold border-secondary text-secondary print:text-xs print:p-1">
+                            <Badge variant="outline" className="font-semibold border-secondary text-secondary print:text-[8px] print:p-0.5 print:px-1">
                               {lideranca.partido}
                             </Badge>
                           </div>
                           
                           <div className="md:col-span-3 print:col-span-3 text-center md:text-left">
-                            <div className="flex items-center justify-center md:justify-start gap-2">
-                              <Phone className="h-4 w-4 text-muted-foreground flex-shrink-0 print:h-3 print:w-3" />
-                              <span className="text-sm text-foreground print:text-xs">
+                            <div className="flex items-center justify-center md:justify-start gap-2 print:gap-1">
+                              <Phone className="h-4 w-4 text-muted-foreground flex-shrink-0 print:h-2 print:w-2" />
+                              <span className="text-sm text-foreground print:text-[10px]">
                                 {lideranca.telefone}
                               </span>
                             </div>
                           </div>
                           
-                          <div className="md:col-span-2 print:col-span-2 text-center">
+                          <div className="md:col-span-2 print:col-span-1 text-center print:text-right">
                             {formattedVotes && (
-                              <div className="text-sm print:text-xs">
-                                <span className="font-semibold text-success">
+                              <div className="text-sm print:text-[10px] print:leading-none">
+                                <span className="font-semibold text-success print:block">
                                   {formattedVotes}
                                 </span>
-                                <span className="text-muted-foreground block text-xs print:text-[10px]">votos</span>
+                                <span className="text-muted-foreground block text-xs print:text-[8px]">votos</span>
                               </div>
                             )}
                           </div>
