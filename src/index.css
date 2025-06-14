@@ -182,11 +182,14 @@
     margin-bottom: -3rem !important;
   }
 
-  /* Reduzir espaçamentos internos dos cards de obra */
+  /* Cards de obra - melhor controle de quebras */
   [data-component-name="SortableObras"] .border.border-gray-200.rounded-lg {
     padding: 0.5rem !important;
-    margin-bottom: 0.25rem !important;
+    margin-bottom: 0.5rem !important;
     font-size: 0.75rem !important;
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+    min-height: 120px !important;
   }
 
   [data-component-name="SortableObras"] .space-y-2 > div {
@@ -197,16 +200,25 @@
     gap: 0.5rem !important;
   }
 
+  [data-component-name="SortableObras"] h4,
   [data-component-name="SortableObras"] h5 {
     font-size: 0.8rem !important;
     line-height: 1.1 !important;
     margin-bottom: 0.25rem !important;
+    page-break-after: avoid !important;
+    break-after: avoid !important;
   }
 
   [data-component-name="SortableObras"] p {
     font-size: 0.7rem !important;
-    line-height: 1.1 !important;
+    line-height: 1.2 !important;
     margin-bottom: 0.5rem !important;
+  }
+
+  /* Proteger observações de corte */
+  [data-component-name="SortableObras"] .text-sm.text-gray-600 {
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
   }
 
   /* Otimização específica para Emendas */
@@ -216,11 +228,14 @@
     margin-bottom: -3rem !important;
   }
 
-  /* Reduzir espaçamentos internos dos cards de emenda */
+  /* Cards de emenda - melhor controle de quebras */
   [data-component-name="SortableEmendas"] .border.border-gray-200.rounded-lg {
     padding: 0.5rem !important;
-    margin-bottom: 0.25rem !important;
+    margin-bottom: 0.5rem !important;
     font-size: 0.75rem !important;
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+    min-height: 120px !important;
   }
 
   [data-component-name="SortableEmendas"] .space-y-2 > div {
@@ -235,21 +250,37 @@
     font-size: 0.8rem !important;
     line-height: 1.1 !important;
     margin-bottom: 0.25rem !important;
+    page-break-after: avoid !important;
+    break-after: avoid !important;
   }
 
   [data-component-name="SortableEmendas"] .text-xs {
     font-size: 0.65rem !important;
   }
 
-  /* Forçar quebra de página após cada 4 itens nas seções de obras e emendas */
-  [data-component-name="SortableObras"] .grid > div:nth-child(4n) {
-    page-break-after: always !important;
-    break-after: page !important;
+  [data-component-name="SortableEmendas"] p {
+    font-size: 0.7rem !important;
+    line-height: 1.2 !important;
+    margin-bottom: 0.5rem !important;
   }
 
-  [data-component-name="SortableEmendas"] .grid > div:nth-child(4n) {
-    page-break-after: always !important;
-    break-after: page !important;
+  /* Proteger observações de corte */
+  [data-component-name="SortableEmendas"] .text-sm.text-gray-600 {
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+  }
+
+  /* Melhor controle para grids de cards */
+  [data-component-name="SortableObras"] .grid,
+  [data-component-name="SortableEmendas"] .grid {
+    display: block !important;
+  }
+
+  [data-component-name="SortableObras"] .grid > div,
+  [data-component-name="SortableEmendas"] .grid > div {
+    display: block !important;
+    width: 100% !important;
+    margin-bottom: 0.5rem !important;
   }
 
   /* Correção específica para o cabeçalho das Lideranças */
