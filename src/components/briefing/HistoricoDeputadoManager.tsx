@@ -122,12 +122,12 @@ export const HistoricoDeputadoManager = ({ acoes, municipioNome, onSave }: Histo
                 
                 <div className="space-y-2">
                   {acoesDaCategoria.map((acao) => (
-                    <div key={acao.id} className="flex items-center justify-between p-3 bg-muted rounded-lg">
-                      <div className="flex-1">
-                        <p className="font-medium">{acao.descricao}</p>
+                    <div key={acao.id} className="flex items-center justify-between">
+                      <div className="flex-1 pr-4">
+                        <p className="text-sm">{acao.descricao}</p>
                       </div>
-                      <div className="flex items-center gap-3">
-                        <span className="text-sm text-muted-foreground font-medium">
+                      <div className="flex items-center gap-3 shrink-0">
+                        <span className="w-32 text-right font-medium text-sm">
                           {formatCurrency(acao.valor)}
                         </span>
                         <div className="flex items-center gap-2 no-print">
