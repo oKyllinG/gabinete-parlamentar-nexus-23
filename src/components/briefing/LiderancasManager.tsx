@@ -207,14 +207,14 @@ export const LiderancasManager = ({ liderancas, onSave }: LiderancasManagerProps
             </Button>
           </div>
         ) : (
-          <div className="flex flex-col gap-4 print:gap-0 print:space-y-0">
+          <div className="flex flex-col gap-4">
             {Object.entries(liderancasPorCategoria).map(([categoria, liderancasCategoria]) => (
-              <div key={categoria} className="lideranca-categoria print:mb-0">
-                <h3 className="text-lg font-semibold text-primary border-b pb-2 mb-3 print:text-sm print:mb-0 print:pb-0 print:border-b-0">
+              <div key={categoria} className="lideranca-categoria">
+                <h3 className="text-lg font-semibold text-primary border-b pb-2 mb-3 print:text-sm">
                   {categoria}
                 </h3>
-                {/* Flex column sem qualquer espaçamento na impressão */}
-                <div className="flex flex-col gap-3 print:gap-0 print:space-y-0">
+                {/* Flex column com espaçamento normal na tela */}
+                <div className="flex flex-col gap-3">
                   {liderancasCategoria.map((lideranca) => {
                     const formattedVotes = formatVotes(lideranca.votos)
                     return (
@@ -222,7 +222,7 @@ export const LiderancasManager = ({ liderancas, onSave }: LiderancasManagerProps
                         key={lideranca.id}
                         className="
                           border border-border rounded-lg p-4 bg-gray-50 lideranca-card
-                          print:border-0 print:bg-transparent print:mb-0 print:mt-0 print:p-0 print:rounded-none
+                          print:border-0 print:bg-transparent print:p-0 print:rounded-none
                         "
                         style={{ breakInside: "avoid" }}
                       >
