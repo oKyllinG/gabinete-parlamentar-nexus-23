@@ -289,40 +289,41 @@
 
   /* Ajustar layout do grid dos gestores - dar muito mais espaço ao telefone */
   [data-component-name="LiderancasManager"] .grid.grid-cols-1.md\\:grid-cols-12 {
-    grid-template-columns: 1fr 3fr 2fr 1fr 4fr !important; /* Foto(1fr) Nome(3fr) Partido(2fr) Votos(1fr) Telefone(4fr) */
+    display: grid !important;
+    grid-template-columns: 1fr 3fr 2fr 0.5fr 5fr !important; /* Foto(1fr) Nome(3fr) Partido(2fr) Votos(0.5fr) Telefone(5fr) */
+    align-items: center !important;
   }
 
-  /* Forçar comportamento específico de cada coluna dos gestores */
+  /* Mapear explicitamente cada coluna do grid por ordem visual */
   [data-component-name="LiderancasManager"] .grid.grid-cols-1.md\\:grid-cols-12 > div:nth-child(1) {
     grid-column: span 1 !important; /* Foto */
   }
-  
   [data-component-name="LiderancasManager"] .grid.grid-cols-1.md\\:grid-cols-12 > div:nth-child(2) {
     grid-column: span 3 !important; /* Nome */
   }
-  
   [data-component-name="LiderancasManager"] .grid.grid-cols-1.md\\:grid-cols-12 > div:nth-child(3) {
     grid-column: span 2 !important; /* Partido */
   }
-  
   [data-component-name="LiderancasManager"] .grid.grid-cols-1.md\\:grid-cols-12 > div:nth-child(4) {
-    grid-column: span 1 !important; /* Votos */
+    grid-column: span 0.5 !important; /* Votos */
   }
-  
   [data-component-name="LiderancasManager"] .grid.grid-cols-1.md\\:grid-cols-12 > div:nth-child(5) {
-    grid-column: span 4 !important; /* Telefone */
-    white-space: nowrap !important; /* Impedir quebra de linha no telefone */
-    overflow: hidden !important;
-    text-overflow: ellipsis !important;
+    grid-column: span 5 !important; /* Telefone */
+    white-space: nowrap !important; /* Nunca quebrar linha */
+    overflow: visible !important;
+    text-overflow: unset !important;
+    min-width: 150px !important;
   }
 
-  /* Garantir que o texto do telefone não quebre */
+  /* Texto do telefone SEMPRE em linha única */
   [data-component-name="LiderancasManager"] .grid.grid-cols-1.md\\:grid-cols-12 > div:nth-child(5) span {
     white-space: nowrap !important;
     display: inline-block !important;
     max-width: 100% !important;
+    overflow: visible !important;
+    text-overflow: unset !important;
   }
-
+  
   /* Sobrescrever todas as classes md: do Tailwind para os gestores */
   [data-component-name="LiderancasManager"] .md\\:col-span-1 {
     grid-column: span 1 !important;
