@@ -179,6 +179,46 @@
     margin-bottom: -2rem !important;
   }
 
+  /* Histórico do Deputado - Compact List Layout for Print */
+  [data-component-name="HistoricoDeputadoManager"] .pt-6 {
+    padding-top: 0.5rem !important;
+  }
+
+  [data-component-name="HistoricoDeputadoManager"] .space-y-6 > * + * {
+    margin-top: 0.75rem !important; /* Space between categories */
+  }
+
+  [data-component-name="HistoricoDeputadoManager"] .border-b.pb-2 {
+    padding-bottom: 0.2rem !important;
+  }
+
+  [data-component-name="HistoricoDeputadoManager"] .space-y-3 > * + * {
+    margin-top: 0.3rem !important; /* Space between category header and items */
+  }
+
+  [data-component-name="HistoricoDeputadoManager"] h3 {
+    font-size: 1rem !important;
+  }
+  [data-component-name="HistoricoDeputadoManager"] .text-lg.font-bold.text-green-600 {
+    font-size: 1rem !important;
+  }
+
+  [data-component-name="HistoricoDeputadoManager"] .space-y-2 > * + * {
+    margin-top: 0.15rem !important; /* Space between list items */
+  }
+
+  [data-component-name="HistoricoDeputadoManager"] .p-3.bg-muted {
+    padding: 0.1rem 0 !important; /* reduce padding */
+    background: none !important;
+    border: none !important;
+    border-radius: 0 !important;
+  }
+
+  [data-component-name="HistoricoDeputadoManager"] .p-3.bg-muted p,
+  [data-component-name="HistoricoDeputadoManager"] .p-3.bg-muted span {
+    font-size: 0.8rem !important;
+  }
+
   /* Votação Histórica - proteger layout da tabela */
   [data-component-name="VotacaoHistoricaManager"] {
     page-break-inside: avoid !important;

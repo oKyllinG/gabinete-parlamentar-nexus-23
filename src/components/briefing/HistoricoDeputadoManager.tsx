@@ -85,7 +85,7 @@ export const HistoricoDeputadoManager = ({ acoes, municipioNome, onSave }: Histo
   }
 
   return (
-    <Card>
+    <Card data-component-name="HistoricoDeputadoManager">
       <CardHeader className="bg-cyan-600 text-white rounded-t-lg">
         <div className="flex items-center justify-between">
           <div className="space-y-2">
