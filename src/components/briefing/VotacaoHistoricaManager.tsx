@@ -61,7 +61,7 @@ export const VotacaoHistoricaManager = ({ municipioId, dadosPoliticos, onUpdateD
   }
 
   return (
-    <Card className="border-gray-300">
+    <Card className="border-gray-300" data-component-name="VotacaoHistoricaManager">
       <CardHeader className="bg-cyan-600 text-white border-b border-gray-300">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">

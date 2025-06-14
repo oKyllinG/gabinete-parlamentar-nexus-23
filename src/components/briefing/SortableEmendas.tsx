@@ -186,7 +186,7 @@ export const SortableEmendas = ({ emendas, onSave, onAdd, onEdit, onDelete }: So
   }
 
   return (
-    <Card className="border-gray-300">
+    <Card className="border-gray-300" data-component-name="SortableEmendas">
       <CardHeader className="bg-cyan-600 text-white border-b border-gray-300">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
