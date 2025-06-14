@@ -1,3 +1,4 @@
+
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
 @tailwind base;
 @tailwind components;
@@ -84,12 +85,13 @@
   }
 }
 
-/* Print Styles */
+/* Print Styles - Simplified to maintain screen appearance */
 @media print {
   body {
-    /* Font size and line height removed to inherit from screen styles */
+    /* Use screen styles */
   }
 
+  /* Hide elements that shouldn't be printed */
   .no-print {
     display: none !important;
   }
@@ -103,23 +105,19 @@
     background: white !important;
   }
 
-  /* --- Evitar quebras de cabeçalhos no final das páginas --- */
+  /* Only essential page break rules to avoid orphaned titles */
   .print-section,
   [class*="Card"] {
     page-break-inside: auto !important;
     break-inside: auto !important;
-    page-break-before: auto !important;
-    page-break-after: auto !important;
   }
 
-  /* Evita quebras logo após os cabeçalhos */
   .print-header,
   [class*="CardHeader"] {
     page-break-after: avoid !important;
     break-after: avoid !important;
   }
   
-  /* Evita quebras logo antes do conteúdo */
   [class*="CardContent"] {
     page-break-before: avoid !important;
     break-before: avoid !important;
@@ -129,125 +127,20 @@
     page-break-inside: auto !important;
   }
 
-  /* --- Specific Component Styling for Print --- */
-  
+  /* ONLY keep deputies side by side - this is the only layout exception */
   .print-deputies-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1rem;
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 1rem !important;
   }
 
-  .print-card-content {
-    padding: 1rem !important;
-  }
-
-  .votacao-historica-header tr th {
-    background-color: #0891b2 !important;
-    color: white !important;
-  }
-
-  .deputies-table {
-    width: 100% !important;
-    border-collapse: collapse !important;
-  }
-  
-  .deputies-table .pos-col { width: 5% !important; }
-  .deputies-table .name-col { width: 55% !important; }
-  .deputies-table .party-col { width: 12% !important; }
-  .deputies-table .votes-col { width: 14% !important; }
-  .deputies-table .percent-col { width: 14% !important; }
-
-  .deputies-table th,
-  .deputies-table td {
-    padding: 0.25rem 0.5rem !important;
-    border: 1px solid #d1d5db !important;
-    font-size: 7pt !important;
-  }
-  
-  .deputies-table th {
-    background-color: #f3f4f6 !important;
-    font-weight: 600 !important;
-  }
-
-  .deputies-table .party-col {
-    font-size: 6pt !important;
-    padding: 0.1rem 0.25rem !important;
-  }
-
-  .deputies-table .votes-col,
-  .deputies-table .percent-col {
-    font-size: 6pt !important;
-  }
-
-  /* --- Lideranças Municipais --- */
-  .print-header h3 { /* Main title: "Lideranças Municipais" */
-    font-size: 14pt !important;
-    line-height: 1.2 !important;
-  }
-  
-  .print-card-content > .flex { /* Container of all categories */
-    row-gap: 0 !important; /* Overwrite tailwind gap-4 */
-  }
-
-  .lideranca-categoria {
-    page-break-inside: avoid !important;
-    break-inside: avoid !important;
-    margin-top: 1rem !important; /* Space between categories */
-  }
-  
-  .print-card-content > .flex > .lideranca-categoria:first-child {
-    margin-top: 0 !important;
-  }
-
-  /* Remove extra space between specific sections */
-  .lideranca-categoria:has(h3:contains("Câmara Municipal")) {
-    margin-top: 0.5rem !important;
-  }
-
-  .lideranca-categoria h3 { /* Category title */
-    font-size: 11pt !important;
-    line-height: 1.2 !important;
-    margin-bottom: 0.5rem !important;
-    page-break-after: avoid !important;
-  }
-
-  .lideranca-categoria > .flex { /* Container of leaders in a category */
-    row-gap: 0.5rem !important; /* Overwrite tailwind gap-3 */
-  }
-
-  .lideranca-card {
-    padding: 0.5rem !important;
-    border: 1px solid #e5e7eb !important;
-  }
-
-  .lideranca-card, .lideranca-card * {
-    font-size: 8pt !important;
-    line-height: 1.3 !important;
-  }
-  
-  .lideranca-card h4 {
-    font-size: 9pt !important;
-    font-weight: 600 !important;
-  }
-
-  /* Keep sections from splitting awkwardly */
-  .lideranca-categoria:has(h3:contains("Secretários")) {
-    page-break-after: avoid !important;
-    break-after: avoid !important;
-  }
-
-  /* --- Emendas e Obras --- */
-  .drag-item {
-    page-break-inside: avoid !important;
-    break-inside: avoid !important;
-  }
-  
-  /* Força a impressão das cores de fundo */
-  .bg-cyan-600, .bg-blue-600, .deputies-table th, .votacao-historica-header tr th {
+  /* Force background colors to print */
+  .bg-cyan-600, .bg-blue-600 {
     -webkit-print-color-adjust: exact !important;
     print-color-adjust: exact !important;
   }
 
+  /* Basic page setup */
   @page {
     margin: 1cm;
     size: A4;
