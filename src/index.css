@@ -1,4 +1,3 @@
-
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
 @tailwind base;
 @tailwind components;
@@ -291,6 +290,54 @@
   /* Ajustar layout do grid dos gestores - dar muito mais espaço ao telefone */
   [data-component-name="LiderancasManager"] .grid.grid-cols-1.md\\:grid-cols-12 {
     grid-template-columns: 1fr 3fr 2fr 1fr 4fr !important; /* Foto(1fr) Nome(3fr) Partido(2fr) Votos(1fr) Telefone(4fr) */
+  }
+
+  /* Forçar comportamento específico de cada coluna dos gestores */
+  [data-component-name="LiderancasManager"] .grid.grid-cols-1.md\\:grid-cols-12 > div:nth-child(1) {
+    grid-column: span 1 !important; /* Foto */
+  }
+  
+  [data-component-name="LiderancasManager"] .grid.grid-cols-1.md\\:grid-cols-12 > div:nth-child(2) {
+    grid-column: span 3 !important; /* Nome */
+  }
+  
+  [data-component-name="LiderancasManager"] .grid.grid-cols-1.md\\:grid-cols-12 > div:nth-child(3) {
+    grid-column: span 2 !important; /* Partido */
+  }
+  
+  [data-component-name="LiderancasManager"] .grid.grid-cols-1.md\\:grid-cols-12 > div:nth-child(4) {
+    grid-column: span 1 !important; /* Votos */
+  }
+  
+  [data-component-name="LiderancasManager"] .grid.grid-cols-1.md\\:grid-cols-12 > div:nth-child(5) {
+    grid-column: span 4 !important; /* Telefone */
+    white-space: nowrap !important; /* Impedir quebra de linha no telefone */
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+  }
+
+  /* Garantir que o texto do telefone não quebre */
+  [data-component-name="LiderancasManager"] .grid.grid-cols-1.md\\:grid-cols-12 > div:nth-child(5) span {
+    white-space: nowrap !important;
+    display: inline-block !important;
+    max-width: 100% !important;
+  }
+
+  /* Sobrescrever todas as classes md: do Tailwind para os gestores */
+  [data-component-name="LiderancasManager"] .md\\:col-span-1 {
+    grid-column: span 1 !important;
+  }
+  
+  [data-component-name="LiderancasManager"] .md\\:col-span-2 {
+    grid-column: span 2 !important;
+  }
+  
+  [data-component-name="LiderancasManager"] .md\\:col-span-3 {
+    grid-column: span 3 !important;
+  }
+  
+  [data-component-name="LiderancasManager"] .md\\:col-span-4 {
+    grid-column: span 4 !important;
   }
 
   /* Force background colors to print */
