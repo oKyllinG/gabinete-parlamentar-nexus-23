@@ -105,26 +105,19 @@
   }
 
   /* Controle geral de quebras de página */
-  .print-section,
-  [class*="Card"] {
+  .print-section {
     page-break-inside: auto !important;
     break-inside: auto !important;
   }
 
   /* Proteger cabeçalhos de serem cortados */
   .print-header,
-  [class*="CardHeader"],
   [data-component-name="LiderancasManager"] .bg-cyan-600,
   [data-component-name="VotacaoHistoricaManager"] .bg-cyan-600 {
     page-break-after: avoid !important;
     break-after: avoid !important;
     page-break-inside: avoid !important;
     break-inside: avoid !important;
-  }
-  
-  [class*="CardContent"] {
-    page-break-before: avoid !important;
-    break-before: avoid !important;
   }
   
   .print-first-page-group {
@@ -190,6 +183,8 @@
 
   [data-component-name="HistoricoDeputadoManager"] .border-b.pb-2 {
     padding-bottom: 0.2rem !important;
+    page-break-after: avoid !important;
+    break-after: avoid !important;
   }
 
   [data-component-name="HistoricoDeputadoManager"] .space-y-3 > * + * {
@@ -253,9 +248,7 @@
 
   /* Cards de obra e emenda - controle melhorado de quebras */
   [data-component-name="SortableObras"] .drag-item,
-  [data-component-name="SortableObras"] [class*="Card"],
-  [data-component-name="SortableEmendas"] .drag-item,
-  [data-component-name="SortableEmendas"] [class*="Card"] {
+  [data-component-name="SortableEmendas"] .drag-item {
     page-break-inside: avoid !important;
     break-inside: avoid !important;
     margin-bottom: 0.75rem !important;
