@@ -287,6 +287,11 @@
     padding: 0.25rem !important; /* Reduzido de 0.5rem para 0.25rem (50% menos novamente) */
   }
 
+  /* Ajustar layout do grid dos gestores - dar mais espaço ao telefone e menos aos votos */
+  [data-component-name="LiderancasManager"] .grid.grid-cols-1.md\\:grid-cols-12 {
+    grid-template-columns: 1fr 4fr 2fr 2fr 3fr !important; /* Reduzir coluna dos votos de 3fr para 2fr e aumentar telefone para 3fr */
+  }
+
   /* Force background colors to print */
   .bg-cyan-600, .bg-blue-600, .deputies-table th, .bg-cyan-100 {
     -webkit-print-color-adjust: exact !important;
