@@ -1,4 +1,3 @@
-
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
 @tailwind base;
 @tailwind components;
@@ -88,8 +87,7 @@
 /* Print Styles */
 @media print {
   body {
-    font-size: 10pt !important;
-    line-height: 1.2 !important;
+    /* Font size and line height removed to inherit from screen styles */
   }
 
   .no-print {
@@ -186,8 +184,7 @@
   .lideranca-categoria {
     page-break-inside: avoid !important;
     break-inside: avoid !important;
-    margin: 0 !important;
-    padding: 0 !important;
+    /* margin and padding removed to inherit from component classes */
   }
 
   /* Manter seções contíguas - Secretários seguidos de Câmara Municipal */
@@ -201,18 +198,11 @@
     break-before: avoid !important;
   }
 
-  /* Espaçamento entre lideranças individuais - tamanho normal */
-  .lideranca-card {
-    margin-bottom: 8pt !important;
-  }
-
-  /* Espaçamento entre categorias - tamanho normal */
-  .lideranca-categoria {
-    margin-bottom: 12pt !important;
-  }
+  /* Removed margin overrides for .lideranca-card and .lideranca-categoria to use Tailwind gap utilities */
 
   .lideranca-categoria h3 {
     margin-bottom: 6pt !important;
+    page-break-after: avoid !important;
   }
 
   /* Outros espaçamentos zerados */

@@ -210,7 +210,7 @@ export const LiderancasManager = ({ liderancas, onSave }: LiderancasManagerProps
           <div className="flex flex-col gap-4">
             {Object.entries(liderancasPorCategoria).map(([categoria, liderancasCategoria]) => (
               <div key={categoria} className="lideranca-categoria">
-                <h3 className="text-lg font-semibold text-primary border-b pb-2 mb-3 print:text-sm">
+                <h3 className="text-lg font-semibold text-primary border-b pb-2 mb-3">
                   {categoria}
                 </h3>
                 {/* Flex column com espaçamento normal na tela */}
@@ -220,15 +220,12 @@ export const LiderancasManager = ({ liderancas, onSave }: LiderancasManagerProps
                     return (
                       <div
                         key={lideranca.id}
-                        className="
-                          border border-border rounded-lg p-4 bg-gray-50 lideranca-card
-                          print:border-0 print:bg-transparent print:p-0 print:rounded-none
-                        "
+                        className="border border-border rounded-lg p-4 bg-gray-50 lideranca-card"
                         style={{ breakInside: "avoid" }}
                       >
-                        <div className="grid grid-cols-1 md:grid-cols-12 gap-4 print:gap-0 items-center print:grid-cols-12">
-                          <div className="md:col-span-1 print:col-span-2 flex justify-center md:justify-start">
-                            <div className="w-24 h-24 print:w-16 print:h-16 bg-muted-foreground/20 rounded-full flex items-center justify-center overflow-hidden">
+                        <div className="grid grid-cols-1 md:grid-cols-12 gap-4 items-center">
+                          <div className="md:col-span-1 flex justify-center md:justify-start">
+                            <div className="w-24 h-24 bg-muted-foreground/20 rounded-full flex items-center justify-center overflow-hidden">
                               {lideranca.foto ? (
                                 <img 
                                   src={lideranca.foto} 
@@ -236,37 +233,37 @@ export const LiderancasManager = ({ liderancas, onSave }: LiderancasManagerProps
                                   className="w-full h-full object-cover"
                                 />
                               ) : (
-                                <User className="h-12 w-12 print:h-8 print:w-8 text-muted-foreground" />
+                                <User className="h-12 w-12 text-muted-foreground" />
                               )}
                             </div>
                           </div>
-                          <div className="md:col-span-4 print:col-span-4 text-center md:text-left">
-                            <h4 className="font-semibold text-foreground print:text-xs print:font-medium">
+                          <div className="md:col-span-4 text-center md:text-left">
+                            <h4 className="font-semibold text-foreground">
                               {lideranca.nome}
                             </h4>
-                            <p className="text-sm text-muted-foreground print:text-[9px]">
+                            <p className="text-sm text-muted-foreground">
                               {lideranca.cargo}
                             </p>
                           </div>
-                          <div className="md:col-span-2 print:col-span-2 text-center">
-                            <Badge variant="outline" className="font-semibold border-secondary text-secondary print:text-[7px] print:p-0 print:px-0.5 print:bg-gray-300 print:text-black print:border-gray-400">
+                          <div className="md:col-span-2 text-center">
+                            <Badge variant="outline" className="font-semibold border-secondary text-secondary">
                               {lideranca.partido}
                             </Badge>
                           </div>
-                          <div className="md:col-span-3 print:col-span-2 text-center print:text-right">
+                          <div className="md:col-span-3 text-center md:text-right">
                             {formattedVotes && (
-                              <div className="text-sm print:text-[9px] print:leading-none">
-                                <span className="font-semibold text-success print:block">
+                              <div className="text-sm">
+                                <span className="font-semibold text-success">
                                   {formattedVotes}
                                 </span>
-                                <span className="text-muted-foreground block text-xs print:text-[7px]">votos</span>
+                                <span className="text-muted-foreground block text-xs">votos</span>
                               </div>
                             )}
                           </div>
-                          <div className="md:col-span-2 print:col-span-2 text-center md:text-left">
-                            <div className="flex items-center justify-center md:justify-start gap-2 print:gap-0.5">
-                              <Phone className="h-4 w-4 text-muted-foreground flex-shrink-0 print:h-2 print:w-2" />
-                              <span className="text-sm text-foreground print:text-[9px]">
+                          <div className="md:col-span-2 text-center md:text-left">
+                            <div className="flex items-center justify-center md:justify-start gap-2">
+                              <Phone className="h-4 w-4 text-muted-foreground flex-shrink-0" />
+                              <span className="text-sm text-foreground">
                                 {lideranca.telefone}
                               </span>
                             </div>
