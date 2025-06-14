@@ -1,3 +1,4 @@
+
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
 @tailwind base;
 @tailwind components;
@@ -287,9 +288,9 @@
     padding: 0.25rem !important; /* Reduzido de 0.5rem para 0.25rem (50% menos novamente) */
   }
 
-  /* Ajustar layout do grid dos gestores - dar mais espaço ao telefone e menos aos votos */
+  /* Ajustar layout do grid dos gestores - dar muito mais espaço ao telefone */
   [data-component-name="LiderancasManager"] .grid.grid-cols-1.md\\:grid-cols-12 {
-    grid-template-columns: 1fr 4fr 2fr 2fr 3fr !important; /* Reduzir coluna dos votos de 3fr para 2fr e aumentar telefone para 3fr */
+    grid-template-columns: 1fr 3fr 2fr 1fr 4fr !important; /* Foto(1fr) Nome(3fr) Partido(2fr) Votos(1fr) Telefone(4fr) */
   }
 
   /* Force background colors to print */
