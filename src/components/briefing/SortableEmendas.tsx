@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react"
 import { DndContext, closestCenter, KeyboardSensor, PointerSensor, useSensor, useSensors } from '@dnd-kit/core'
 import { arrayMove, SortableContext, sortableKeyboardCoordinates, verticalListSortingStrategy } from '@dnd-kit/sortable'
@@ -200,7 +201,8 @@ export const SortableEmendas = ({ emendas, onSave, onAdd, onEdit, onDelete }: So
           </div>
           <Button 
             size="sm" 
-            className="bg-blue-600 hover:bg-blue-700 text-white no-print"
+            variant="secondary"
+            className="no-print"
             onClick={onAdd}
           >
             <Plus className="h-4 w-4" />

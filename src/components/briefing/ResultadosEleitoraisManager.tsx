@@ -1,3 +1,4 @@
+
 import { useState } from "react"
 import { Edit3, Check, X } from "lucide-react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
@@ -53,8 +54,8 @@ export const ResultadosEleitoraisManager = ({ dadosPoliticos, onSave }: Resultad
             ) : (
               <Button
                 size="sm"
+                variant="secondary"
                 onClick={() => setIsEditing(true)}
-                className="bg-blue-600 hover:bg-blue-700 text-white"
               >
                 <Edit3 className="h-4 w-4" />
                 Editar
