@@ -211,6 +211,21 @@
     margin: 1cm;
     size: A4;
   }
+
+  /* Ajuste: remover gap e espaçamento entre cards lideranca na impressão */
+  .flex.print\\:gap-0,
+  .flex-col.print\\:gap-0,
+  .gap-4.print\\:gap-0,
+  .gap-3.print\\:gap-0,
+  .print\\:gap-0 {
+    gap: 0 !important;
+  }
+  .lideranca-card {
+    margin-bottom: 0 !important;
+    margin-top: 0 !important;
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+  }
 }
 
 /* Screen-only styles */

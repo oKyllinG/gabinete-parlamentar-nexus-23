@@ -173,11 +173,13 @@ export const LiderancasManager = ({ liderancas, onSave }: LiderancasManagerProps
 
   return (
     <Card className="border-border">
-      <CardHeader className="bg-blue-600 text-white border-b border-border print-header">
+      {/* Mantém um detalhe visual padrão, o header não fica azul */}
+      <CardHeader className="bg-card border-b border-border print-header">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <div className="w-1 h-6 bg-white rounded"></div>
-            <CardTitle className="text-lg font-bold text-white">Lideranças Municipais</CardTitle>
+            <div className="w-1 h-6 bg-blue-600 rounded"></div>
+            {/* Título padronizado (fonte escura, sem bg azul) */}
+            <CardTitle className="text-lg font-bold text-foreground">Lideranças Municipais</CardTitle>
           </div>
           <Button
             onClick={() => setIsEditing(true)}
@@ -205,18 +207,29 @@ export const LiderancasManager = ({ liderancas, onSave }: LiderancasManagerProps
             </Button>
           </div>
         ) : (
-          <div className="space-y-4 print:space-y-0">
+          <div
+            className="
+              flex flex-col gap-4 print:gap-0
+            "
+          >
             {Object.entries(liderancasPorCategoria).map(([categoria, liderancasCategoria]) => (
               <div key={categoria} className="lideranca-categoria">
                 <h3 className="text-lg font-semibold text-primary border-b pb-2 mb-3 print:text-sm print:mb-1 print:pb-1">
                   {categoria}
                 </h3>
-                <div className="space-y-3 print:space-y-0">
+                {/* Flex column sem espaçamento na impressão */}
+                <div className="flex flex-col gap-3 print:gap-0">
                   {liderancasCategoria.map((lideranca) => {
                     const formattedVotes = formatVotes(lideranca.votos)
-                    
                     return (
-                      <div key={lideranca.id} className="border border-border rounded-lg p-4 print:p-1 bg-gray-50 lideranca-card print:border-0 print:bg-transparent print:mb-0 print:mt-0">
+                      <div
+                        key={lideranca.id}
+                        className="
+                          border border-border rounded-lg p-4 bg-gray-50 lideranca-card
+                          print:border-0 print:bg-transparent print:mb-0 print:mt-0 print:p-1
+                        "
+                        style={{ breakInside: "avoid" }}
+                      >
                         <div className="grid grid-cols-1 md:grid-cols-12 gap-4 print:gap-1 items-center print:grid-cols-12">
                           <div className="md:col-span-1 print:col-span-2 flex justify-center md:justify-start">
                             <div className="w-24 h-24 print:w-20 print:h-20 bg-muted-foreground/20 rounded-full flex items-center justify-center overflow-hidden">
@@ -231,7 +244,6 @@ export const LiderancasManager = ({ liderancas, onSave }: LiderancasManagerProps
                               )}
                             </div>
                           </div>
-                          
                           <div className="md:col-span-4 print:col-span-4 text-center md:text-left">
                             <h4 className="font-semibold text-foreground print:text-xs print:font-medium">
                               {lideranca.nome}
@@ -240,13 +252,11 @@ export const LiderancasManager = ({ liderancas, onSave }: LiderancasManagerProps
                               {lideranca.cargo}
                             </p>
                           </div>
-                          
                           <div className="md:col-span-2 print:col-span-2 text-center">
                             <Badge variant="outline" className="font-semibold border-secondary text-secondary print:text-[8px] print:p-0.5 print:px-1 print:bg-gray-300 print:text-black print:border-gray-400">
                               {lideranca.partido}
                             </Badge>
                           </div>
-                          
                           <div className="md:col-span-3 print:col-span-2 text-center print:text-right">
                             {formattedVotes && (
                               <div className="text-sm print:text-[10px] print:leading-none">
@@ -257,7 +267,6 @@ export const LiderancasManager = ({ liderancas, onSave }: LiderancasManagerProps
                               </div>
                             )}
                           </div>
-                          
                           <div className="md:col-span-2 print:col-span-2 text-center md:text-left">
                             <div className="flex items-center justify-center md:justify-start gap-2 print:gap-1">
                               <Phone className="h-4 w-4 text-muted-foreground flex-shrink-0 print:h-2 print:w-2" />
