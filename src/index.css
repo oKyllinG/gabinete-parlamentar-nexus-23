@@ -277,102 +277,53 @@
     min-height: 120px !important;
   }
 
-  /* Reduzir gap entre os cards dos gestores */
-  [data-component-name="LiderancasManager"] .flex.flex-col.gap-3 {
-    gap: 0.25rem !important; /* Substituir gap-3 por gap muito menor */
-  }
-
   /* Reduzir padding interno dos cards dos gestores para layout ainda mais compacto */
   [data-component-name="LiderancasManager"] .lideranca-card .p-4 {
-    padding: 0.25rem !important; /* Reduzido de 0.5rem para 0.25rem (50% menos novamente) */
+    padding: 0.5rem !important; /* Aumentado um pouco para dar respiro */
   }
 
-  /* Gestores: ajustar grid para partido+telefone na mesma coluna */
+  /* [LiderancasManager] - Correção Definitiva do Layout de Impressão */
   [data-component-name="LiderancasManager"] .grid.grid-cols-1.md\:grid-cols-12 {
     display: grid !important;
-    grid-template-columns: 1fr 3fr 0.01fr 0.2fr minmax(350px, 1fr) !important; /* Partido "desaparece", telefone+partido juntos */
+    /* Layout de 5 colunas: Foto, Nome, Partido, Votos, Telefone */
+    grid-template-columns: 0.8fr 3fr 1.5fr 0.5fr 3fr !important;
     align-items: center !important;
-  }
-  [data-component-name="LiderancasManager"] .grid.grid-cols-1.md\:grid-cols-12 > div:nth-child(1) { grid-column: span 1 !important; }
-  [data-component-name="LiderancasManager"] .grid.grid-cols-1.md\:grid-cols-12 > div:nth-child(2) { grid-column: span 3 !important; }
-  [data-component-name="LiderancasManager"] .grid.grid-cols-1.md\:grid-cols-12 > div:nth-child(3) { /* partido "some" */ display: none !important; width: 0 !important; min-width: 0 !important; max-width: 0 !important; padding: 0 !important; }
-  [data-component-name="LiderancasManager"] .grid.grid-cols-1.md\:grid-cols-12 > div:nth-child(4) { grid-column: span 0.2 !important; max-width: 40px !important; min-width: 20px !important; overflow: hidden !important; }
-  [data-component-name="LiderancasManager"] .grid.grid-cols-1.md\:grid-cols-12 > div:nth-child(5) {
-    grid-column: span 10 !important;
-    display: flex !important;
-    flex-direction: row !important;
-    align-items: center !important;
-    gap: 0.5rem !important;
-    white-space: nowrap !important;
-    overflow: visible !important;
-    min-width: 350px !important;
-    max-width: 100% !important;
-  }
-  /* Badge compacto (partido) */
-  [data-component-name="LiderancasManager"] .grid.grid-cols-1.md\:grid-cols-12 > div:nth-child(5) .badge,
-  [data-component-name="LiderancasManager"] .grid.grid-cols-1.md\:grid-cols-12 > div:nth-child(5) .badge-outline,
-  [data-component-name="LiderancasManager"] .grid.grid-cols-1.md\:grid-cols-12 > div:nth-child(5) span[class*="badge"] {
-    font-size: 7pt !important;
-    padding: 0.08em 0.6em !important;
-    min-width: 0 !important;
-    height: auto !important;
-    margin-right: 0.6em !important;
-    vertical-align: middle !important;
-    display: inline-block !important;
-    white-space: nowrap !important;
-    line-height: 1 !important;
-    box-sizing: border-box !important;
-  }
-  /* Telefone e ícone SEMPRE inline, nunca quebra */
-  [data-component-name="LiderancasManager"] .grid.grid-cols-1.md\:grid-cols-12 > div:nth-child(5) .flex,
-  [data-component-name="LiderancasManager"] .grid.grid-cols-1.md\:grid-cols-12 > div:nth-child(5) span,
-  [data-component-name="LiderancasManager"] .grid.grid-cols-1.md\:grid-cols-12 > div:nth-child(5) svg {
-    display: inline !important;
-    white-space: nowrap !important;
-    vertical-align: middle !important;
-    margin: 0 !important;
+    gap: 0.5rem !important; /* Espaçamento reduzido para caber melhor */
   }
 
-  /* Ajustar layout do grid dos gestores - votos mínimo espaço, telefone máximo */
-  [data-component-name="LiderancasManager"] .grid.grid-cols-1.md\:grid-cols-12 {
-    display: grid !important;
-    grid-template-columns: 1fr 3fr 2fr 0.2fr minmax(200px, 10fr) !important; /* Foto, Nome, Partido, Votos, Telefone */
-    align-items: center !important;
+  /* Resetar o grid-column dos filhos para que se ajustem ao novo template */
+  [data-component-name="LiderancasManager"] .grid.grid-cols-1.md\:grid-cols-12 > div {
+    grid-column: auto / auto !important;
+    padding: 0 !important; /* Remover padding extra */
+    text-align: left !important; /* Alinhar tudo à esquerda por padrão */
   }
-
+  
+  /* Centralizar foto */
   [data-component-name="LiderancasManager"] .grid.grid-cols-1.md\:grid-cols-12 > div:nth-child(1) {
-    grid-column: span 1 !important; /* Foto */
+    display: flex;
+    justify-content: center;
   }
-  [data-component-name="LiderancasManager"] .grid.grid-cols-1.md\:grid-cols-12 > div:nth-child(2) {
-    grid-column: span 3 !important; /* Nome */
-  }
+  
+  /* Centralizar partido */
   [data-component-name="LiderancasManager"] .grid.grid-cols-1.md\:grid-cols-12 > div:nth-child(3) {
-    grid-column: span 2 !important; /* Partido */
+    text-align: center !important;
   }
+  
+  /* Alinhar votos à direita */
   [data-component-name="LiderancasManager"] .grid.grid-cols-1.md\:grid-cols-12 > div:nth-child(4) {
-    grid-column: span 0.2 !important; /* Votos: EXTREMAMENTE estreito */
-    max-width: 40px !important;
-    min-width: 20px !important;
-    overflow: hidden !important;
-  }
-  [data-component-name="LiderancasManager"] .grid.grid-cols-1.md\:grid-cols-12 > div:nth-child(5) {
-    grid-column: span 10 !important; /* Telefone: máximo espaço */
-    white-space: nowrap !important;
-    overflow: visible !important;
-    text-overflow: unset !important;
-    min-width: 220px !important;
-    max-width: 100% !important;
+    text-align: right !important;
   }
 
-  /* Telefone nunca quebra linha: tanto div quanto span */
-  [data-component-name="LiderancasManager"] .grid.grid-cols-1.md\:grid-cols-12 > div:nth-child(5),
-  [data-component-name="LiderancasManager"] .grid.grid-cols-1.md\:grid-cols-12 > div:nth-child(5) span {
+  /* Garantir que a coluna do telefone não quebre a linha */
+  [data-component-name="LiderancasManager"] .grid.grid-cols-1.md\:grid-cols-12 > div:nth-child(5) {
     white-space: nowrap !important;
-    display: inline-block !important;
-    overflow: visible !important;
-    text-overflow: unset !important;
-    max-width: 100% !important;
-    min-width: 200px !important;
+  }
+
+  /* Garantir que o ícone do telefone e o texto fiquem juntos */
+  [data-component-name="LiderancasManager"] .grid.grid-cols-1.md\:grid-cols-12 > div:nth-child(5) .flex {
+      display: inline-flex !important;
+      align-items: center !important;
+      gap: 0.25rem !important;
   }
 
   /* Force background colors to print */
