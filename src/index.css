@@ -134,8 +134,42 @@
     gap: 1rem !important;
   }
 
+  /* Deputados Tables - Restore specific styling */
+  .deputies-table {
+    width: 100% !important;
+    border-collapse: collapse !important;
+  }
+  
+  .deputies-table .pos-col { width: 5% !important; }
+  .deputies-table .name-col { width: 55% !important; }
+  .deputies-table .party-col { width: 12% !important; }
+  .deputies-table .votes-col { width: 14% !important; }
+  .deputies-table .percent-col { width: 14% !important; }
+
+  .deputies-table th,
+  .deputies-table td {
+    padding: 0.25rem 0.5rem !important;
+    border: 1px solid #d1d5db !important;
+    font-size: 7pt !important;
+  }
+  
+  .deputies-table th {
+    background-color: #f3f4f6 !important;
+    font-weight: 600 !important;
+  }
+
+  .deputies-table .party-col {
+    font-size: 6pt !important;
+    padding: 0.1rem 0.25rem !important;
+  }
+
+  .deputies-table .votes-col,
+  .deputies-table .percent-col {
+    font-size: 6pt !important;
+  }
+
   /* Force background colors to print */
-  .bg-cyan-600, .bg-blue-600 {
+  .bg-cyan-600, .bg-blue-600, .deputies-table th {
     -webkit-print-color-adjust: exact !important;
     print-color-adjust: exact !important;
   }
