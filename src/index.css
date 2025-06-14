@@ -1,3 +1,4 @@
+
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
 @tailwind base;
 @tailwind components;
@@ -84,7 +85,7 @@
   }
 }
 
-/* Print Styles - Simplified to maintain screen appearance */
+/* Print Styles - Melhorado para evitar cortes */
 @media print {
   body {
     /* Use screen styles */
@@ -104,17 +105,21 @@
     background: white !important;
   }
 
-  /* Only essential page break rules to avoid orphaned titles */
+  /* Controle geral de quebras de página */
   .print-section,
   [class*="Card"] {
     page-break-inside: auto !important;
     break-inside: auto !important;
   }
 
+  /* Proteger cabeçalhos de serem cortados */
   .print-header,
-  [class*="CardHeader"] {
+  [class*="CardHeader"],
+  [data-component-name="LiderancasManager"] .bg-cyan-600 {
     page-break-after: avoid !important;
     break-after: avoid !important;
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
   }
   
   [class*="CardContent"] {
@@ -167,7 +172,6 @@
     font-size: 6pt !important;
   }
 
-  /* Redução de 10% para seções específicas */
   /* Histórico do Deputado */
   [data-component-name="HistoricoDeputadoManager"] {
     transform: scale(0.9) !important;
@@ -177,125 +181,83 @@
 
   /* Otimização específica para Obras e Equipamentos */
   [data-component-name="SortableObras"] {
-    transform: scale(0.85) !important;
+    transform: scale(0.88) !important;
     transform-origin: top left !important;
-    margin-bottom: -3rem !important;
+    margin-bottom: -2.5rem !important;
   }
 
-  /* Cards de obra - melhor controle de quebras */
-  [data-component-name="SortableObras"] .border.border-gray-200.rounded-lg {
-    padding: 0.5rem !important;
-    margin-bottom: 0.5rem !important;
-    font-size: 0.75rem !important;
+  /* Cards de obra - controle melhorado de quebras */
+  [data-component-name="SortableObras"] .drag-item,
+  [data-component-name="SortableObras"] [class*="Card"] {
     page-break-inside: avoid !important;
     break-inside: avoid !important;
-    min-height: 120px !important;
+    margin-bottom: 0.75rem !important;
+    min-height: 140px !important;
   }
 
-  [data-component-name="SortableObras"] .space-y-2 > div {
-    margin-bottom: 0.25rem !important;
-  }
-
-  [data-component-name="SortableObras"] .grid.gap-3 {
-    gap: 0.5rem !important;
-  }
-
-  [data-component-name="SortableObras"] h4,
-  [data-component-name="SortableObras"] h5 {
+  [data-component-name="SortableObras"] .drag-item .p-4 {
+    padding: 0.75rem !important;
     font-size: 0.8rem !important;
-    line-height: 1.1 !important;
-    margin-bottom: 0.25rem !important;
+  }
+
+  [data-component-name="SortableObras"] h3,
+  [data-component-name="SortableObras"] h4 {
     page-break-after: avoid !important;
     break-after: avoid !important;
-  }
-
-  [data-component-name="SortableObras"] p {
-    font-size: 0.7rem !important;
+    font-size: 0.85rem !important;
     line-height: 1.2 !important;
-    margin-bottom: 0.5rem !important;
   }
 
-  /* Proteger observações de corte */
-  [data-component-name="SortableObras"] .text-sm.text-gray-600 {
-    page-break-inside: avoid !important;
-    break-inside: avoid !important;
+  [data-component-name="SortableObras"] .text-sm {
+    font-size: 0.75rem !important;
+    line-height: 1.3 !important;
   }
 
   /* Otimização específica para Emendas */
   [data-component-name="SortableEmendas"] {
-    transform: scale(0.85) !important;
+    transform: scale(0.88) !important;
     transform-origin: top left !important;
-    margin-bottom: -3rem !important;
+    margin-bottom: -2.5rem !important;
   }
 
-  /* Cards de emenda - melhor controle de quebras */
-  [data-component-name="SortableEmendas"] .border.border-gray-200.rounded-lg {
-    padding: 0.5rem !important;
-    margin-bottom: 0.5rem !important;
-    font-size: 0.75rem !important;
+  /* Cards de emenda - controle melhorado de quebras */
+  [data-component-name="SortableEmendas"] .drag-item,
+  [data-component-name="SortableEmendas"] [class*="Card"] {
     page-break-inside: avoid !important;
     break-inside: avoid !important;
+    margin-bottom: 0.75rem !important;
+    min-height: 140px !important;
+  }
+
+  [data-component-name="SortableEmendas"] .drag-item .p-4 {
+    padding: 0.75rem !important;
+    font-size: 0.8rem !important;
+  }
+
+  [data-component-name="SortableEmendas"] h3,
+  [data-component-name="SortableEmendas"] h4 {
+    page-break-after: avoid !important;
+    break-after: avoid !important;
+    font-size: 0.85rem !important;
+    line-height: 1.2 !important;
+  }
+
+  [data-component-name="SortableEmendas"] .text-sm {
+    font-size: 0.75rem !important;
+    line-height: 1.3 !important;
+  }
+
+  /* Lideranças Municipais - proteger cards de quebra */
+  [data-component-name="LiderancasManager"] .lideranca-card {
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+    margin-bottom: 0.5rem !important;
     min-height: 120px !important;
   }
 
-  [data-component-name="SortableEmendas"] .space-y-2 > div {
-    margin-bottom: 0.25rem !important;
-  }
-
-  [data-component-name="SortableEmendas"] .grid.gap-3 {
-    gap: 0.5rem !important;
-  }
-
-  [data-component-name="SortableEmendas"] h4 {
-    font-size: 0.8rem !important;
-    line-height: 1.1 !important;
-    margin-bottom: 0.25rem !important;
+  [data-component-name="LiderancasManager"] .lideranca-categoria h3 {
     page-break-after: avoid !important;
     break-after: avoid !important;
-  }
-
-  [data-component-name="SortableEmendas"] .text-xs {
-    font-size: 0.65rem !important;
-  }
-
-  [data-component-name="SortableEmendas"] p {
-    font-size: 0.7rem !important;
-    line-height: 1.2 !important;
-    margin-bottom: 0.5rem !important;
-  }
-
-  /* Proteger observações de corte */
-  [data-component-name="SortableEmendas"] .text-sm.text-gray-600 {
-    page-break-inside: avoid !important;
-    break-inside: avoid !important;
-  }
-
-  /* Melhor controle para grids de cards */
-  [data-component-name="SortableObras"] .grid,
-  [data-component-name="SortableEmendas"] .grid {
-    display: block !important;
-  }
-
-  [data-component-name="SortableObras"] .grid > div,
-  [data-component-name="SortableEmendas"] .grid > div {
-    display: block !important;
-    width: 100% !important;
-    margin-bottom: 0.5rem !important;
-  }
-
-  /* Correção específica para o cabeçalho das Lideranças */
-  [data-component-name="LiderancasManager"] .flex.items-center.justify-between {
-    font-size: 1rem !important;
-    padding: 1rem !important;
-  }
-
-  [data-component-name="LiderancasManager"] h3 {
-    font-size: 1.125rem !important;
-  }
-
-  [data-component-name="LiderancasManager"] .w-1.h-6 {
-    width: 0.25rem !important;
-    height: 1.5rem !important;
   }
 
   /* Force background colors to print */

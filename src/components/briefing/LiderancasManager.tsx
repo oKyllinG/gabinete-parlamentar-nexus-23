@@ -1,3 +1,4 @@
+
 import { useState } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -172,7 +173,7 @@ export const LiderancasManager = ({ liderancas, onSave }: LiderancasManagerProps
   }
 
   return (
-    <Card className="border-border">
+    <Card className="border-border" data-component-name="LiderancasManager">
       {/* Header com fundo azul padrão igual aos outros títulos */}
       <CardHeader className="bg-cyan-600 text-white border-b border-border print-header">
         <div className="flex items-center justify-between">

@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react"
 import { DndContext, closestCenter, KeyboardSensor, PointerSensor, useSensor, useSensors } from '@dnd-kit/core'
 import { arrayMove, SortableContext, sortableKeyboardCoordinates, verticalListSortingStrategy } from '@dnd-kit/sortable'
@@ -193,7 +194,7 @@ export const SortableObras = ({ obras, onSave, onAdd, onEdit, onDelete }: Sortab
   const categorias = Object.keys(obrasPorCategoria).sort()
 
   return (
-    <Card className="border-gray-300">
+    <Card className="border-gray-300" data-component-name="SortableObras">
       <CardHeader className="bg-cyan-600 text-white border-b border-gray-300">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
