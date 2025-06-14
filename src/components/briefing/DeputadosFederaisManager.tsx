@@ -84,7 +84,8 @@ export const DeputadosFederaisManager = ({ deputadosFederais, onSave }: Deputado
           </div>
           <Button
             size="sm"
-            className="bg-blue-600 hover:bg-blue-700 text-white no-print"
+            variant="secondary"
+            className="no-print"
             onClick={() => setShowAddForm(true)}
           >
             <Plus className="h-4 w-4" />
