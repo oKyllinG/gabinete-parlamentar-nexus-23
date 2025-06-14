@@ -105,7 +105,7 @@
     background: white !important;
   }
 
-  /* --- Remover quebras de página entre seções --- */
+  /* --- Evitar quebras de cabeçalhos no final das páginas --- */
   .print-section,
   [class*="Card"] {
     page-break-inside: auto !important;
@@ -118,11 +118,13 @@
   .print-header,
   [class*="CardHeader"] {
     page-break-after: avoid !important;
+    break-after: avoid !important;
   }
   
   /* Evita quebras logo antes do conteúdo */
   [class*="CardContent"] {
     page-break-before: avoid !important;
+    break-before: avoid !important;
   }
   
   .print-first-page-group {
@@ -179,7 +181,7 @@
     font-size: 6pt !important;
   }
 
-  /* --- Lideranças Municipais - Espaçamento Balanceado --- */
+  /* --- Lideranças Municipais - Espaçamento Balanceado e Redução de Tamanho --- */
   .lideranca-card,
   .lideranca-categoria {
     page-break-inside: avoid !important;
@@ -188,18 +190,63 @@
     padding: 0 !important;
   }
 
-  /* Espaçamento entre lideranças individuais */
-  .lideranca-card {
-    margin-bottom: 8pt !important;
+  /* Manter seções contíguas - Secretários seguidos de Câmara Municipal */
+  .lideranca-categoria:has(h3:contains("Secretários")) {
+    page-break-after: avoid !important;
+    break-after: avoid !important;
   }
 
-  /* Espaçamento entre categorias */
+  .lideranca-categoria:has(h3:contains("Câmara Municipal")) {
+    page-break-before: avoid !important;
+    break-before: avoid !important;
+  }
+
+  /* Espaçamento entre lideranças individuais - reduzido 15% */
+  .lideranca-card {
+    margin-bottom: 7pt !important; /* 8pt reduzido para 7pt */
+    transform: scale(0.85); /* Reduz 15% do tamanho */
+    transform-origin: top left;
+  }
+
+  /* Espaçamento entre categorias - reduzido 15% */
   .lideranca-categoria {
-    margin-bottom: 12pt !important;
+    margin-bottom: 10pt !important; /* 12pt reduzido para 10pt */
   }
 
   .lideranca-categoria h3 {
-    margin-bottom: 6pt !important;
+    margin-bottom: 5pt !important; /* 6pt reduzido para 5pt */
+    font-size: 0.85rem !important; /* Reduz 15% do tamanho do título */
+  }
+
+  /* Redução de 15% para outros componentes - EXCETO deputados */
+  .print-card-content:not(.deputies-table):not([class*="deputados"]) {
+    transform: scale(0.85);
+    transform-origin: top left;
+    padding: 0.85rem !important; /* Reduz padding também */
+  }
+
+  /* Resultados Eleitorais - redução de 15% */
+  .print-section:has([class*="ResultadosEleitorais"]) .print-card-content {
+    transform: scale(0.85);
+    transform-origin: top left;
+  }
+
+  /* Votação Histórica - redução de 15% */
+  .print-section:has([class*="VotacaoHistorica"]) .print-card-content {
+    transform: scale(0.85);
+    transform-origin: top left;
+  }
+
+  /* Histórico de Ações - redução de 15% */
+  .print-section:has([class*="HistoricoDeputado"]) .print-card-content {
+    transform: scale(0.85);
+    transform-origin: top left;
+  }
+
+  /* Briefing Components - redução de 15% */
+  .print-section:has([class*="BriefingComponents"]) .print-card-content {
+    transform: scale(0.85);
+    transform-origin: top left;
   }
 
   /* Outros espaçamentos zerados */
