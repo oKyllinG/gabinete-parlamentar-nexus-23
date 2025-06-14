@@ -317,6 +317,7 @@
   /* Garantir que a coluna do telefone não quebre a linha */
   [data-component-name="LiderancasManager"] .grid.grid-cols-1.md\:grid-cols-12 > div:nth-child(5) {
     white-space: nowrap !important;
+    text-align: right !important;
   }
 
   /* Garantir que o ícone do telefone e o texto fiquem juntos */

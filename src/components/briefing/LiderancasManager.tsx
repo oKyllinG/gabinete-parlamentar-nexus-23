@@ -1,4 +1,3 @@
-
 import { useState } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -261,8 +260,8 @@ export const LiderancasManager = ({ liderancas, onSave }: LiderancasManagerProps
                               </div>
                             )}
                           </div>
-                          <div className="md:col-span-2 text-center md:text-left">
-                            <div className="flex items-center justify-center md:justify-start gap-2">
+                          <div className="md:col-span-2 text-center md:text-right">
+                            <div className="flex items-center justify-center md:justify-end gap-2">
                               <Phone className="h-4 w-4 text-muted-foreground flex-shrink-0" />
                               <span className="text-sm text-foreground">
                                 {lideranca.telefone}
