@@ -182,6 +182,18 @@
     page-break-inside: avoid !important;
     break-inside: avoid !important;
   }
+  /* Remover espaçamento vertical na impressão */
+  .space-y-4.print\\:space-y-0 > :not([hidden]) ~ :not([hidden]),
+  .space-y-6.print\\:space-y-0 > :not([hidden]) ~ :not([hidden]),
+  .space-y-3.print\\:space-y-0 > :not([hidden]) ~ :not([hidden]),
+  .print\\:space-y-0 > :not([hidden]) ~ :not([hidden]) {
+    --tw-space-y-reverse: 0 !important;
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+  }
+  .lideranca-card {
+    margin: 0 !important;
+  }
 
   /* --- Emendas e Obras --- */
   .drag-item {

@@ -1,4 +1,3 @@
-
 import { useState } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -178,7 +177,7 @@ export const LiderancasManager = ({ liderancas, onSave }: LiderancasManagerProps
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <div className="w-1 h-6 bg-white rounded"></div>
-            <CardTitle className="text-lg font-bold">Lideranças Municipais</CardTitle>
+            <CardTitle className="text-lg font-bold text-white">Lideranças Municipais</CardTitle>
           </div>
           <Button
             onClick={() => setIsEditing(true)}
@@ -206,18 +205,18 @@ export const LiderancasManager = ({ liderancas, onSave }: LiderancasManagerProps
             </Button>
           </div>
         ) : (
-          <div className="space-y-4 print:space-y-1">
+          <div className="space-y-4 print:space-y-0">
             {Object.entries(liderancasPorCategoria).map(([categoria, liderancasCategoria]) => (
               <div key={categoria} className="lideranca-categoria">
                 <h3 className="text-lg font-semibold text-primary border-b pb-2 mb-3 print:text-sm print:mb-1 print:pb-1">
                   {categoria}
                 </h3>
-                <div className="space-y-3 print:space-y-1">
+                <div className="space-y-3 print:space-y-0">
                   {liderancasCategoria.map((lideranca) => {
                     const formattedVotes = formatVotes(lideranca.votos)
                     
                     return (
-                      <div key={lideranca.id} className="border border-border rounded-lg p-4 print:p-1 bg-gray-50 lideranca-card print:border-0 print:bg-transparent">
+                      <div key={lideranca.id} className="border border-border rounded-lg p-4 print:p-1 bg-gray-50 lideranca-card print:border-0 print:bg-transparent print:mb-0 print:mt-0">
                         <div className="grid grid-cols-1 md:grid-cols-12 gap-4 print:gap-1 items-center print:grid-cols-12">
                           <div className="md:col-span-1 print:col-span-2 flex justify-center md:justify-start">
                             <div className="w-24 h-24 print:w-20 print:h-20 bg-muted-foreground/20 rounded-full flex items-center justify-center overflow-hidden">
