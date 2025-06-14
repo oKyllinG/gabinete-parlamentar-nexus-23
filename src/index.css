@@ -1,3 +1,4 @@
+
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
 @tailwind base;
 @tailwind components;
@@ -113,7 +114,12 @@
   /* Proteger cabeçalhos de serem cortados */
   .print-header,
   [data-component-name="LiderancasManager"] .bg-cyan-600,
-  [data-component-name="VotacaoHistoricaManager"] .bg-cyan-600 {
+  [data-component-name="VotacaoHistoricaManager"] .bg-cyan-600,
+  [data-component-name="ResultadosEleitoraisManager"] .bg-blue-600,
+  [data-component-name="DeputadosFederaisManager"] .bg-cyan-600,
+  [data-component-name="DeputadosEstaduaisManager"] .bg-cyan-600,
+  [data-component-name="SortableEmendas"] .bg-cyan-600,
+  [data-component-name="SortableObras"] .bg-cyan-600 {
     page-break-after: avoid !important;
     break-after: avoid !important;
     page-break-inside: avoid !important;
