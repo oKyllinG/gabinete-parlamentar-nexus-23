@@ -1,3 +1,4 @@
+
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
 @tailwind base;
 @tailwind components;
@@ -181,18 +182,42 @@
   .lideranca-categoria {
     page-break-inside: avoid !important;
     break-inside: avoid !important;
+    margin: 0 !important;
+    padding: 0 !important;
   }
-  /* Remover espaçamento vertical na impressão */
-  .space-y-4.print\\:space-y-0 > :not([hidden]) ~ :not([hidden]),
-  .space-y-6.print\\:space-y-0 > :not([hidden]) ~ :not([hidden]),
-  .space-y-3.print\\:space-y-0 > :not([hidden]) ~ :not([hidden]),
-  .print\\:space-y-0 > :not([hidden]) ~ :not([hidden]) {
-    --tw-space-y-reverse: 0 !important;
+
+  /* Remover TODOS os espaçamentos na impressão */
+  .print\\:space-y-0 > * {
     margin-top: 0 !important;
     margin-bottom: 0 !important;
   }
-  .lideranca-card {
-    margin: 0 !important;
+
+  .print\\:gap-0 {
+    gap: 0 !important;
+  }
+
+  .print\\:mb-0 {
+    margin-bottom: 0 !important;
+  }
+
+  .print\\:mt-0 {
+    margin-top: 0 !important;
+  }
+
+  .print\\:p-0 {
+    padding: 0 !important;
+  }
+
+  .print\\:pb-0 {
+    padding-bottom: 0 !important;
+  }
+
+  .print\\:border-b-0 {
+    border-bottom: 0 !important;
+  }
+
+  .print\\:rounded-none {
+    border-radius: 0 !important;
   }
 
   /* --- Emendas e Obras --- */
@@ -210,21 +235,6 @@
   @page {
     margin: 1cm;
     size: A4;
-  }
-
-  /* Ajuste: remover gap e espaçamento entre cards lideranca na impressão */
-  .flex.print\\:gap-0,
-  .flex-col.print\\:gap-0,
-  .gap-4.print\\:gap-0,
-  .gap-3.print\\:gap-0,
-  .print\\:gap-0 {
-    gap: 0 !important;
-  }
-  .lideranca-card {
-    margin-bottom: 0 !important;
-    margin-top: 0 !important;
-    page-break-inside: avoid !important;
-    break-inside: avoid !important;
   }
 }
 
