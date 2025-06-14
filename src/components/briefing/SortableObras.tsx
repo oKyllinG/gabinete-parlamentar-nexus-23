@@ -208,7 +208,8 @@ export const SortableObras = ({ obras, onSave, onAdd, onEdit, onDelete }: Sortab
           </div>
           <Button 
             size="sm" 
-            className="bg-blue-600 hover:bg-blue-700 text-white no-print"
+            variant="secondary"
+            className="no-print"
             onClick={onAdd}
           >
             <Plus className="h-4 w-4" />
