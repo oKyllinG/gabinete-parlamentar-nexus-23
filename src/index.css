@@ -282,9 +282,9 @@
     gap: 0.25rem !important; /* Substituir gap-3 por gap muito menor */
   }
 
-  /* Reduzir padding interno dos cards dos gestores para layout mais compacto */
+  /* Reduzir padding interno dos cards dos gestores para layout ainda mais compacto */
   [data-component-name="LiderancasManager"] .lideranca-card .p-4 {
-    padding: 0.5rem !important; /* Reduzido de 1rem (p-4) para 0.5rem (50% menos) */
+    padding: 0.25rem !important; /* Reduzido de 0.5rem para 0.25rem (50% menos novamente) */
   }
 
   /* Force background colors to print */
