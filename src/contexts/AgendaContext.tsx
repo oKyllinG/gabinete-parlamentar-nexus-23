@@ -32,7 +32,7 @@ const demoCompromissos: Compromisso[] = [
   },
 ];
 
-type AgendaView = "CALENDARIO" | "GERENCIAR";
+type AgendaView = "CALENDARIO" | "GERENCIAR" | "CATEGORIAS";
 type AgendaFilter = "PENDENTE" | "HOJE" | "CONCLUIDO" | "RECUSADO" | "CANCELADO";
 
 interface AgendaContextType {

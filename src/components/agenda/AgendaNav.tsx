@@ -26,7 +26,7 @@ export function AgendaNav() {
         <Plus className="mr-2 h-4 w-4" />
         Agendar
       </Button>
-      <Button variant="ghost" className="text-muted-foreground hover:text-primary h-12 rounded-none px-4">
+      <Button variant="ghost" onClick={() => setView('CATEGORIAS')} className={cn("font-semibold text-muted-foreground hover:text-primary h-12 rounded-none px-4", view === 'CATEGORIAS' && "text-primary border-b-2 border-primary")}>
         <Tag className="mr-2 h-4 w-4" />
         Categorias
       </Button>
