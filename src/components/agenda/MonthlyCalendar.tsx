@@ -1,8 +1,7 @@
-
 import { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Calendar as CalendarIcon, ArrowLeft, ArrowRight } from 'lucide-react';
-import { format, addMonths, subMonths, startOfMonth, endOfMonth, startOfWeek, endOfWeek, eachDayOfInterval, isSameMonth, isSameDay } from 'date-fns';
+import { format, addMonths, subMonths, startOfMonth, endOfMonth, startOfWeek, endOfWeek, eachDayOfInterval, isSameMonth, isSameDay, parseISO } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import { useAgenda } from '@/contexts/AgendaContext';
 import { Compromisso } from '@/types/agenda';
@@ -34,7 +33,7 @@ export function MonthlyCalendar() {
     const weekDays = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
 
     const getCompromissosForDay = (day: Date) => {
-        return compromissos.filter(c => isSameDay(new Date(c.data), day) && c.status === 'CONFIRMADO');
+        return compromissos.filter(c => isSameDay(parseISO(c.data), day) && c.status === 'CONFIRMADO');
     }
 
     return (
@@ -84,7 +83,7 @@ export function MonthlyCalendar() {
                             <span
                                 className={cn(
                                     "flex items-center justify-center h-7 w-7 rounded-full text-sm self-end",
-                                    isSameDay(day, new Date('2025-06-15T12:00:00Z')) && "bg-blue-600 text-white font-bold"
+                                    isSameDay(day, new Date()) && "bg-blue-600 text-white font-bold"
                                 )}
                             >
                                 {format(day, 'd')}

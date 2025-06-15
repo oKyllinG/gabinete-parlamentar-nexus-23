@@ -1,4 +1,3 @@
-
 import React, { createContext, useContext, useState, useEffect, ReactNode, useMemo, useCallback } from "react";
 import { Compromisso, StatusCompromisso } from "@/types/agenda";
 import { parseISO, startOfDay } from "date-fns";
@@ -36,11 +35,11 @@ const demoCompromissos: Compromisso[] = [
   },
 ];
 
-type AgendaFilter = "PENDENTE" | "HOJE" | "CONCLUIDO";
+type AgendaView = "CALENDARIO" | "GERENCIAR";
+type AgendaFilter = "PENDENTE" | "HOJE" | "CONCLUIDO" | "RECUSADO" | "CANCELADO";
 
 interface AgendaContextType {
   compromissos: Compromisso[];
-  filteredCompromissos: Compromisso[];
   addCompromisso: (compromisso: Omit<Compromisso, "id" | "status">) => void;
   updateCompromisso: (compromisso: Compromisso) => void;
   deleteCompromisso: (id: string) => void;
@@ -52,6 +51,10 @@ interface AgendaContextType {
   setFilter: (filter: AgendaFilter | null) => void;
   editingCompromisso: Compromisso | null;
   setEditingCompromisso: (compromisso: Compromisso | null) => void;
+  view: AgendaView;
+  setView: (view: AgendaView) => void;
+  isFormOpen: boolean;
+  setFormOpen: (isOpen: boolean) => void;
 }
 
 const AgendaContext = createContext<AgendaContextType | null>(null);
@@ -67,9 +70,10 @@ export const AgendaProvider = ({ children }: { children: ReactNode }) => {
   });
 
   const [selectedDate, setSelectedDate] = useState<Date>(startOfDay(new Date()));
-  const [filter, setFilter] = useState<AgendaFilter | null>("PENDENTE");
+  const [filter, setFilter] = useState<AgendaFilter | null>(null);
   const [editingCompromisso, setEditingCompromisso] = useState<Compromisso | null>(null);
-
+  const [view, setView] = useState<AgendaView>('CALENDARIO');
+  const [isFormOpen, setFormOpen] = useState(false);
 
   useEffect(() => {
     localStorage.setItem("compromissos", JSON.stringify(compromissos));
@@ -125,7 +129,11 @@ export const AgendaProvider = ({ children }: { children: ReactNode }) => {
     filter,
     setFilter,
     editingCompromisso,
-    setEditingCompromisso
+    setEditingCompromisso,
+    view,
+    setView,
+    isFormOpen,
+    setFormOpen
   };
 
   return <AgendaContext.Provider value={value}>{children}</AgendaContext.Provider>;
