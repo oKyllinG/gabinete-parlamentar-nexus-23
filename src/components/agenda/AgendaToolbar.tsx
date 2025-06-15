@@ -28,7 +28,6 @@ export function AgendaToolbar() {
         </Button>
       </div>
       <div className="flex items-center gap-4">
-        <Button variant="outline" className="bg-gray-100 border-gray-300">Reunião com gestores</Button>
         <Button variant="link" className="text-primary">Selecionar Todos</Button>
         <Button variant="ghost" className="text-gray-600">
           <Filter className="mr-2 h-4 w-4" />
