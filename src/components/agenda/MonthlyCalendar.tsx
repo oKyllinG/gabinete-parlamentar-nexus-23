@@ -6,6 +6,7 @@ import { ptBR } from 'date-fns/locale';
 import { useAgenda } from '@/contexts/AgendaContext';
 import { Compromisso } from '@/types/agenda';
 import { cn } from '@/lib/utils';
+import { DayDetailsModal } from './DayDetailsModal';
 
 const EventItem = ({ compromisso }: { compromisso: Compromisso }) => {
     const statusColor = compromisso.status === 'CONFIRMADO' ? 'bg-blue-500' : 'bg-gray-400';
@@ -19,6 +20,8 @@ const EventItem = ({ compromisso }: { compromisso: Compromisso }) => {
 export function MonthlyCalendar() {
     const [currentDate, setCurrentDate] = useState(new Date());
     const [view, setView] = useState('Mês'); // Mês, Semana, Dia
+    const [selectedDay, setSelectedDay] = useState<Date | null>(null);
+    const [isDayModalOpen, setIsDayModalOpen] = useState(false);
     const { compromissos } = useAgenda();
 
     const nextMonth = () => setCurrentDate(addMonths(currentDate, 1));
@@ -33,8 +36,13 @@ export function MonthlyCalendar() {
     const weekDays = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
 
     const getCompromissosForDay = (day: Date) => {
-        return compromissos.filter(c => isSameDay(parseISO(c.data), day) && c.status === 'CONFIRMADO');
+        return compromissos.filter(c => isSameDay(parseISO(c.data), day));
     }
+
+    const handleDayClick = (day: Date) => {
+        setSelectedDay(day);
+        setIsDayModalOpen(true);
+    };
 
     return (
         <div className="bg-white p-6 rounded-lg border">
@@ -71,14 +79,16 @@ export function MonthlyCalendar() {
             <div className="grid grid-cols-7">
                 {days.map((day, index) => {
                     const compromissosDoDia = getCompromissosForDay(day);
+                    const compromissosConfirmados = compromissosDoDia.filter(c => c.status === 'CONFIRMADO');
                     return (
                         <div
                             key={index}
                             className={cn(
-                                "h-32 p-1 border-b border-r overflow-hidden flex flex-col",
+                                "h-32 p-1 border-b border-r overflow-hidden flex flex-col cursor-pointer hover:bg-gray-50 transition-colors",
                                 !isSameMonth(day, monthStart) && "bg-gray-50 text-gray-400",
                                 (index + 1) % 7 === 0 && "border-r-0"
                             )}
+                            onClick={() => handleDayClick(day)}
                         >
                             <span
                                 className={cn(
@@ -89,9 +99,9 @@ export function MonthlyCalendar() {
                                 {format(day, 'd')}
                             </span>
                             <div className="mt-1 space-y-1 flex-grow overflow-y-auto pr-1">
-                                {compromissosDoDia.slice(0, 2).map(c => <EventItem key={c.id} compromisso={c} />)}
-                                {compromissosDoDia.length > 2 && (
-                                    <div className="text-xs text-blue-700 font-semibold cursor-pointer">+ {compromissosDoDia.length - 2} mais</div>
+                                {compromissosConfirmados.slice(0, 2).map(c => <EventItem key={c.id} compromisso={c} />)}
+                                {compromissosConfirmados.length > 2 && (
+                                    <div className="text-xs text-blue-700 font-semibold cursor-pointer">+ {compromissosConfirmados.length - 2} mais</div>
                                 )}
                             </div>
                         </div>
@@ -104,6 +114,15 @@ export function MonthlyCalendar() {
                     Dicas de interação
                 </Button>
             </footer>
+
+            {selectedDay && (
+                <DayDetailsModal
+                    open={isDayModalOpen}
+                    onOpenChange={setIsDayModalOpen}
+                    selectedDate={selectedDay}
+                    compromissos={getCompromissosForDay(selectedDay)}
+                />
+            )}
         </div>
     );
 }
