@@ -1,4 +1,3 @@
-
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
@@ -82,15 +81,19 @@ export function CompromissoForm({ open, onOpenChange }: CompromissoFormProps) {
   }, [editingCompromisso, form]);
 
   const onSubmit = (values: FormValues) => {
-    const compromissoData = {
-        ...values,
+    const compromissoPayload = {
+        titulo: values.titulo,
         data: values.data.toISOString(),
+        horaInicio: values.horaInicio,
+        horaFim: values.horaFim,
+        local: values.local,
+        descricao: values.descricao,
     };
 
     if (editingCompromisso) {
-      updateCompromisso({ ...editingCompromisso, ...compromissoData });
+      updateCompromisso({ ...editingCompromisso, ...compromissoPayload });
     } else {
-      addCompromisso(compromissoData);
+      addCompromisso(compromissoPayload);
     }
     handleClose();
   };
@@ -222,4 +225,3 @@ export function CompromissoForm({ open, onOpenChange }: CompromissoFormProps) {
     </Dialog>
   );
 }
-

@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { AgendaProvider, useAgenda } from "@/contexts/AgendaContext";
 import { Button } from "@/components/ui/button";
@@ -56,10 +55,10 @@ function AgendaView() {
       
       <main className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <div className="lg:col-span-2">
-            {filter === 'PENDENTE' ? <PreAgendaList /> : <AgendaCalendar />}
+            <AgendaCalendar />
         </div>
         <div className="lg:col-span-1">
-            {filter !== 'PENDENTE' && <PreAgendaList />}
+            <PreAgendaList />
         </div>
       </main>
 
@@ -75,4 +74,3 @@ export default function Agenda() {
     </AgendaProvider>
   );
 }
-

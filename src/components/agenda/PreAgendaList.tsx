@@ -3,9 +3,9 @@ import { useAgenda } from "@/contexts/AgendaContext";
 import { CompromissoCard } from "./CompromissoCard";
 
 export function PreAgendaList() {
-  const { filteredCompromissos, filter } = useAgenda();
+  const { compromissos } = useAgenda();
 
-  if (filter !== "PENDENTE") return null;
+  const filteredCompromissos = compromissos.filter(c => c.status === 'PENDENTE');
 
   return (
     <div className="space-y-4">
