@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { PermissionsGrid } from "./PermissionsGrid";
 import { AppUser, ModuleKey, PermissionLevel, UserPermissions } from "@/types/permissions";
 
-const defaultModules: ModuleKey[] = [
+const defaultModules: Exclude<ModuleKey, "usuarios">[] = [
   "painel-controle",
   "agenda",
   "oficios",
@@ -14,7 +14,6 @@ const defaultModules: ModuleKey[] = [
   "obras-equipamentos",
   "emendas",
   "configuracoes",
-  "usuarios",
 ];
 
 type UserFormProps = {
@@ -25,9 +24,13 @@ type UserFormProps = {
 };
 
 function getInitialPerm(u?: AppUser | null): UserPermissions {
-  return (
-    u?.permissions ?? Object.fromEntries(defaultModules.map(m => [m, "SEM_ACESSO"]))
-  ) as UserPermissions;
+  if (!u) {
+    return Object.fromEntries(defaultModules.map(m => [m, "SEM_ACESSO"])) as UserPermissions;
+  }
+  // Remove 'usuarios' if exists
+  const newPerms = { ...u.permissions };
+  delete newPerms.usuarios;
+  return newPerms;
 }
 
 export function UserForm({ userEdit, onSave, saving, onCancel }: UserFormProps) {
@@ -57,7 +60,9 @@ export function UserForm({ userEdit, onSave, saving, onCancel }: UserFormProps) 
       </div>
       <div>
         <label className="block mb-1 font-medium">Permissões</label>
-        <PermissionsGrid value={permissions} onChange={onPermChange} />
+        <div className="w-full">
+          <PermissionsGrid value={permissions} onChange={onPermChange} />
+        </div>
       </div>
       <div className="flex gap-2 justify-end">
         <Button type="button" variant="outline" onClick={onCancel}>Cancelar</Button>

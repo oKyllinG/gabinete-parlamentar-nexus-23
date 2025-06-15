@@ -21,7 +21,8 @@ const icons: Record<PermissionLevel, string> = {
   SEM_ACESSO: "🚫",
 };
 
-const MODULES_LABELS: Record<ModuleKey, string> = {
+// Módulos permitidos para grid (remover "usuarios")
+const MODULES_LABELS: Record<Exclude<ModuleKey, "usuarios">, string> = {
   "painel-controle": "Painel",
   "agenda": "Agenda",
   "oficios": "Ofícios",
@@ -30,7 +31,6 @@ const MODULES_LABELS: Record<ModuleKey, string> = {
   "obras-equipamentos": "Obras/Equip.",
   "emendas": "Emendas",
   "configuracoes": "Configurações",
-  "usuarios": "Usuários",
 };
 
 type PermissionsGridProps = {
@@ -40,18 +40,18 @@ type PermissionsGridProps = {
 
 export function PermissionsGrid({ value, onChange }: PermissionsGridProps) {
   return (
-    <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
       {Object.entries(MODULES_LABELS).map(([mKey, mLabel]) => {
-        const module = mKey as ModuleKey;
+        const module = mKey as Exclude<ModuleKey, "usuarios">;
         return (
-          <div key={module} className="flex flex-col gap-1 border rounded p-2">
+          <div key={module} className="flex flex-col gap-2 border rounded p-3 bg-background min-w-0">
             <div className="font-medium text-xs mb-1">{mLabel}</div>
-            <div className="flex gap-1">
+            <div className="flex flex-col sm:flex-row gap-1">
               {perms.map(level =>
                 <button
                   key={level}
                   type="button"
-                  className={`flex items-center px-2 py-1 rounded border text-xs font-semibold transition ${color[level]}
+                  className={`flex items-center px-2 py-1 sm:py-0.5 rounded border text-xs font-semibold transition ${color[level]}
                     ${value[module] === level ? "ring-2 ring-offset-1 border-2" : ""}
                   `}
                   onClick={() => onChange(module, level)}

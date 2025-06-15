@@ -4,12 +4,13 @@ import { Button } from "@/components/ui/button";
 import { PermissionLevel, ModuleKey } from "@/types/permissions";
 import { AppUser } from "@/types/permissions";
 
-type UserTableProps = {
-  users: AppUser[];
-  onEdit: (user: AppUser) => void;
-  onDelete: (user: AppUser) => void;
-  currentUserId: string;
-};
+// Colunas principais removendo "usuarios"
+const MAIN_MODULES: Exclude<ModuleKey, "usuarios">[] = [
+  "painel-controle",
+  "contatos",
+  "oficios",
+  "configuracoes",
+];
 
 const permColor = {
   ADMIN: "text-green-500",
@@ -22,7 +23,12 @@ const permIcon = {
   SEM_ACESSO: "🚫",
 };
 
-export function UserTable({ users, onEdit, onDelete, currentUserId }: UserTableProps) {
+export function UserTable({ users, onEdit, onDelete, currentUserId }: {
+  users: AppUser[];
+  onEdit: (user: AppUser) => void;
+  onDelete: (user: AppUser) => void;
+  currentUserId: string;
+}) {
   return (
     <div className="overflow-x-auto border rounded bg-background">
       <table className="min-w-full divide-y">
@@ -40,7 +46,7 @@ export function UserTable({ users, onEdit, onDelete, currentUserId }: UserTableP
               <td className="p-3">{u.name}</td>
               <td className="p-3">{u.email}</td>
               <td className="p-3 flex flex-wrap gap-3 items-center justify-center">
-                {["painel-controle", "contatos", "oficios", "usuarios"].map((k: ModuleKey) => (
+                {MAIN_MODULES.map((k) => (
                   <span
                     className={`inline-flex items-center px-2 py-1 rounded text-xs font-semibold border ${permColor[u.permissions[k]]} border-gray-200 gap-1`}
                     key={k}
