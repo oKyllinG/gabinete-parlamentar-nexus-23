@@ -1,3 +1,4 @@
+
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar"
 import { AppSidebar } from "@/components/AppSidebar"
 import { Dashboard } from "@/components/Dashboard"
@@ -9,6 +10,7 @@ import ObrasEquipamentos from "@/pages/ObrasEquipamentos"
 import PainelControle from "@/pages/PainelControle"
 import Briefing from "@/pages/Briefing"
 import MunicipioBriefing from "@/pages/MunicipioBriefing"
+import Usuarios from "@/pages/Usuarios"
 import { useLocation } from "react-router-dom"
 
 const Index = () => {
@@ -29,6 +31,8 @@ const Index = () => {
         return <ObrasEquipamentos />
       case '/briefing':
         return <Briefing />
+      case '/usuarios':
+        return <Usuarios />
       default:
         // Check if it's a municipality briefing route
         if (location.pathname.startsWith('/briefing/')) {
@@ -52,6 +56,8 @@ const Index = () => {
         return 'Obras e Equipamentos'
       case '/briefing':
         return 'Briefing'
+      case '/usuarios':
+        return 'Usuários'
       default:
         // Check if it's a municipality briefing route
         if (location.pathname.startsWith('/briefing/')) {
@@ -91,3 +97,4 @@ const Index = () => {
 };
 
 export default Index;
+

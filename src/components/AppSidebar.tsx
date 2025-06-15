@@ -8,9 +8,9 @@ import {
   DollarSign,
   Settings,
   User,
-  LayoutDashboard
+  LayoutDashboard,
+  Shield
 } from "lucide-react"
-
 import {
   Sidebar,
   SidebarContent,
@@ -23,51 +23,75 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
+import { usePermissions } from "@/contexts/PermissionsContext"
+import { NavLink, useLocation } from "react-router-dom"
 
-const menuItems = [
+const allMenuItems = [
   {
+    key: "painel-controle",
     title: "Painel de Controle",
     url: "/painel-controle",
     icon: LayoutDashboard,
   },
   {
+    key: "agenda",
     title: "Agenda",
     url: "/agenda",
     icon: Calendar,
   },
   {
+    key: "oficios",
     title: "Ofícios",
     url: "/oficios",
     icon: FileText,
   },
   {
+    key: "contatos",
     title: "Contatos",
     url: "/contatos",
     icon: Users,
   },
   {
+    key: "briefing",
     title: "Briefing",
     url: "/briefing",
     icon: Briefcase,
   },
   {
+    key: "obras-equipamentos",
     title: "Obras e Equipamentos",
     url: "/obras-equipamentos",
     icon: Building,
   },
   {
+    key: "emendas",
     title: "Emendas",
     url: "/emendas",
     icon: DollarSign,
   },
   {
+    key: "usuarios",
+    title: "Usuários",
+    url: "/usuarios",
+    icon: Shield,
+  },
+  {
+    key: "configuracoes",
     title: "Configurações",
     url: "/configuracoes",
     icon: Settings,
   },
-]
+];
 
 export function AppSidebar() {
+  const { getPermission } = usePermissions();
+  const location = useLocation();
+
+  // Filtra apenas módulos que o usuário pode enxergar (≠ SEM_ACESSO)
+  const menuItems = allMenuItems.filter(
+    (item) => getPermission(item.key) !== "SEM_ACESSO"
+  );
+
   return (
     <Sidebar>
       <SidebarHeader className="p-4">
@@ -97,12 +121,20 @@ export function AppSidebar() {
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton 
                     asChild 
-                    className="data-[active=true]:bg-sidebar-accent data-[active=true]:text-sidebar-accent-foreground hover:bg-sidebar-accent/50"
+                    className={
+                      location.pathname.startsWith(item.url)
+                        ? "bg-sidebar-accent text-sidebar-accent-foreground font-semibold"
+                        : "hover:bg-sidebar-accent/50"
+                    }
                   >
-                    <a href={item.url} className="flex items-center gap-3 px-3 py-2">
+                    <NavLink
+                      to={item.url}
+                      end
+                      className="flex items-center gap-3 px-3 py-2"
+                    >
                       <item.icon className="w-4 h-4" />
                       <span className="text-sm font-medium">{item.title}</span>
-                    </a>
+                    </NavLink>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}
@@ -119,3 +151,4 @@ export function AppSidebar() {
     </Sidebar>
   )
 }
+
