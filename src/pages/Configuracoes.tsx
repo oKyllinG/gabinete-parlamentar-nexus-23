@@ -33,14 +33,15 @@ function UserManagement() {
         ...editUser.permissions,
         ...formData.permissions,
       };
-      updateUser({ ...editUser, ...formData, permissions: finalPermissions });
+      // Constrói o payload do usuário manualmente para evitar sobrescrita incorreta de permissões
+      updateUser({ id: editUser.id, name: formData.name, email: formData.email, permissions: finalPermissions });
     } else {
       // Adiciona um novo usuário com permissão 'usuarios' definida como 'SEM_ACESSO' por padrão
       const finalPermissions = {
         ...formData.permissions,
         usuarios: "SEM_ACESSO",
       } as UserPermissions;
-      addUser({ ...formData, permissions: finalPermissions });
+      addUser({ name: formData.name, email: formData.email, permissions: finalPermissions });
     }
     setModalOpen(false);
   }
