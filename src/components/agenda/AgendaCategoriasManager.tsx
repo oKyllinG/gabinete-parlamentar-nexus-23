@@ -9,13 +9,17 @@ import { SimpleCategoriaFormDialog } from "./SimpleCategoriaFormDialog";
 import { CategoriaAgenda } from "@/types/agenda";
 
 export default function AgendaCategoriasManager() {
-  const { categorias } = useAgendaCategorias();
+  const { categorias, removeCategoria } = useAgendaCategorias();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editingCategoria, setEditingCategoria] = useState<CategoriaAgenda | null>(null);
 
   const handleEdit = (categoria: CategoriaAgenda) => {
     setEditingCategoria(categoria);
     setIsDialogOpen(true);
+  };
+
+  const handleDelete = (categoriaId: string) => {
+    removeCategoria(categoriaId);
   };
 
   const handleCloseDialog = () => {
@@ -48,6 +52,7 @@ export default function AgendaCategoriasManager() {
                   key={categoria.id}
                   categoria={categoria}
                   onEdit={handleEdit}
+                  onDelete={() => handleDelete(categoria.id)}
                 />
               ))}
             </div>
