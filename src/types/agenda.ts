@@ -1,4 +1,3 @@
-
 // Compartilhado entre compromissos e seleção de participantes
 export interface Participante {
   id: string;
@@ -16,4 +15,12 @@ export interface Compromisso {
   descricao?: string;
   status: StatusCompromisso;
   participantes?: Participante[]; // Nova propriedade opcional para o form
+}
+
+// === NOVO - Categoria da agenda ===
+export interface CategoriaAgenda {
+  id: string;
+  nome: string;
+  cor: string; // ex: "#4851EC" ou qualquer cor Tailwind/Hex
+  slug: string; // usado para identificar unicamente e para exibir na legenda
 }
