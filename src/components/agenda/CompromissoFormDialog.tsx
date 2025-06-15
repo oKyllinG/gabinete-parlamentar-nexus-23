@@ -30,9 +30,10 @@ import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover
 import { cn } from "@/lib/utils";
 import { Calendar } from "@/components/ui/calendar";
 import { ParticipantesInput } from "./ParticipantesInput";
+import type { Participante } from "@/types/agenda"; // <-- Importar o tipo correto
 
 // Simulação dos contatos cadastrados (real: importar de contexto de contatos)
-const useContatosList = () =>
+const useContatosList = (): Participante[] =>
   [
     { id: "1", nome: "Maria Silva" },
     { id: "2", nome: "João Souza" },
@@ -46,11 +47,12 @@ const compromissoSchema = z.object({
   categoria: z.string().optional(),
   local: z.string().optional(),
   endereco: z.string().optional(),
-  participantes: z.array(z.object({ id: z.string(), nome: z.string() })),
+  participantes: z
+    .array(z.object({ id: z.string(), nome: z.string() }))
+    .default([]),
   descricao: z.string().optional(),
   anexo: z.any().optional(),
 });
-
 type CompromissoFormValues = z.infer<typeof compromissoSchema>;
 
 export function CompromissoFormDialog() {
@@ -83,12 +85,12 @@ export function CompromissoFormDialog() {
   useEffect(() => {
     if (isFormOpen) {
       if (editingCompromisso) {
-        // para compatibilidade, converter string -> Date
+        // Garantir que participantes esteja correto e evitar erro de tipos
         const dateObj = new Date(editingCompromisso.data);
         form.reset({
           ...editingCompromisso,
           data: isValid(dateObj) ? dateObj : new Date(),
-          participantes: editingCompromisso.participantes || [],
+          participantes: editingCompromisso.participantes ?? [],
         });
       } else {
         form.reset({
@@ -119,7 +121,7 @@ export function CompromissoFormDialog() {
       categoria: values.categoria,
       local: values.local,
       endereco: values.endereco,
-      participantes: values.participantes,
+      participantes: values.participantes as Participante[], // garante o tipo correto
       descricao: values.descricao,
       // anexo ignorado por enquanto
     };
@@ -267,7 +269,7 @@ export function CompromissoFormDialog() {
                 <FormItem>
                   <FormLabel>Participantes</FormLabel>
                   <ParticipantesInput
-                    value={field.value}
+                    value={field.value as Participante[]}
                     onChange={field.onChange}
                     allContacts={contatosList}
                   />
@@ -315,4 +317,3 @@ export function CompromissoFormDialog() {
     </Dialog>
   );
 }
-

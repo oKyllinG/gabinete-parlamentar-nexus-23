@@ -1,4 +1,10 @@
 
+// Compartilhado entre compromissos e seleção de participantes
+export interface Participante {
+  id: string;
+  nome: string;
+}
+
 export type StatusCompromisso = "PENDENTE" | "CONFIRMADO" | "RECUSADO" | "CANCELADO";
 
 export interface Compromisso {
@@ -9,4 +15,5 @@ export interface Compromisso {
   local?: string;
   descricao?: string;
   status: StatusCompromisso;
+  participantes?: Participante[]; // Nova propriedade opcional para o form
 }
