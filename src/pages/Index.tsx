@@ -1,7 +1,7 @@
+
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar"
 import { AppSidebar } from "@/components/AppSidebar"
-import { Dashboard } from "@/components/Dashboard"
-import { Toaster } from "@/components/ui/toaster"
+// Removido: import { Dashboard } from "@/components/Dashboard"
 import Oficios from "@/pages/Oficios"
 import Contatos from "@/pages/Contatos"
 import Emendas from "@/pages/Emendas"
@@ -11,11 +11,16 @@ import Briefing from "@/pages/Briefing"
 import MunicipioBriefing from "@/pages/MunicipioBriefing"
 import Configuracoes from "@/pages/Configuracoes"
 import Agenda from "@/pages/Agenda"
-import { useLocation } from "react-router-dom"
+import { useLocation, Navigate } from "react-router-dom"
 
 const Index = () => {
   const location = useLocation()
   
+  // Redirecionar "/" para "/painel-controle"
+  if (location.pathname === "/") {
+    return <Navigate to="/painel-controle" replace />
+  }
+
   // Determine which content to show based on route
   const getPageContent = () => {
     switch (location.pathname) {
@@ -40,7 +45,9 @@ const Index = () => {
         if (location.pathname.startsWith('/briefing/')) {
           return <MunicipioBriefing />
         }
-        return <Dashboard />
+        // Antes: return <Dashboard />
+        // Agora: retornar PainelControle também como fallback padrão.
+        return <PainelControle />
     }
   }
   
@@ -67,7 +74,7 @@ const Index = () => {
         if (location.pathname.startsWith('/briefing/')) {
           return 'Briefing Municipal'
         }
-        return 'Sistema de Gestão de Gabinete'
+        return 'Painel de Controle'
     }
   }
 
@@ -95,7 +102,6 @@ const Index = () => {
           </div>
         </main>
       </div>
-      <Toaster />
     </SidebarProvider>
   );
 };
