@@ -35,7 +35,6 @@ const formSchema = z.object({
   titulo: z.string().min(3, { message: "O título deve ter pelo menos 3 caracteres." }),
   data: z.date({ required_error: "A data é obrigatória." }),
   horaInicio: z.string().regex(/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/, { message: "Formato de hora inválido (HH:mm)."}),
-  horaFim: z.string().regex(/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/, { message: "Formato de hora inválido (HH:mm)."}),
   local: z.string().optional(),
   descricao: z.string().optional(),
 });
@@ -56,7 +55,6 @@ export function CompromissoForm({ open, onOpenChange }: CompromissoFormProps) {
       titulo: "",
       data: new Date(),
       horaInicio: "09:00",
-      horaFim: "10:00",
       local: "",
       descricao: "",
     },
@@ -73,7 +71,6 @@ export function CompromissoForm({ open, onOpenChange }: CompromissoFormProps) {
         titulo: "",
         data: new Date(),
         horaInicio: "09:00",
-        horaFim: "10:00",
         local: "",
         descricao: "",
       });
@@ -85,7 +82,6 @@ export function CompromissoForm({ open, onOpenChange }: CompromissoFormProps) {
         titulo: values.titulo,
         data: values.data.toISOString(),
         horaInicio: values.horaInicio,
-        horaFim: values.horaFim,
         local: values.local,
         descricao: values.descricao,
     };
@@ -159,34 +155,19 @@ export function CompromissoForm({ open, onOpenChange }: CompromissoFormProps) {
                 </FormItem>
               )}
             />
-            <div className="grid grid-cols-2 gap-4">
-              <FormField
-                control={form.control}
-                name="horaInicio"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Início</FormLabel>
-                    <FormControl>
-                      <Input type="time" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="horaFim"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Fim</FormLabel>
-                    <FormControl>
-                      <Input type="time" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
+            <FormField
+              control={form.control}
+              name="horaInicio"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Horário</FormLabel>
+                  <FormControl>
+                    <Input type="time" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
             <FormField
               control={form.control}
               name="local"

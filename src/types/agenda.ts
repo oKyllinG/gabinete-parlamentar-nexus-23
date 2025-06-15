@@ -6,7 +6,6 @@ export interface Compromisso {
   titulo: string;
   data: string; // ISO 8601 string format
   horaInicio: string;
-  horaFim: string;
   local?: string;
   descricao?: string;
   status: StatusCompromisso;

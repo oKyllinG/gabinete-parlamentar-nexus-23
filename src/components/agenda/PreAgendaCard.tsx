@@ -15,7 +15,7 @@ export function PreAgendaCard({ compromisso }: PreAgendaCardProps) {
         <CardTitle className="text-base font-semibold">{compromisso.titulo}</CardTitle>
         <CardDescription className="flex items-center gap-2 pt-1">
             <Clock className="h-4 w-4" />
-            <span>{compromisso.horaInicio} - {compromisso.horaFim}</span>
+            <span>{compromisso.horaInicio}</span>
         </CardDescription>
       </CardHeader>
       <CardContent className="p-4 pt-2">

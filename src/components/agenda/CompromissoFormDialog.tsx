@@ -1,4 +1,3 @@
-
 import { useAgenda } from "@/contexts/AgendaContext";
 import { Button } from "@/components/ui/button";
 import {
@@ -30,7 +29,6 @@ const compromissoSchema = z.object({
   titulo: z.string().min(3, { message: "Título deve ter no mínimo 3 caracteres." }),
   data: z.string().nonempty({ message: "Data é obrigatória." }),
   horaInicio: z.string().regex(/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/, { message: "Formato de hora inválido (HH:MM)." }),
-  horaFim: z.string().regex(/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/, { message: "Formato de hora inválido (HH:MM)." }),
   local: z.string().optional(),
   descricao: z.string().optional(),
 });
@@ -54,7 +52,6 @@ export function CompromissoFormDialog() {
       titulo: "",
       data: "",
       horaInicio: "",
-      horaFim: "",
       local: "",
       descricao: "",
     },
@@ -73,7 +70,6 @@ export function CompromissoFormDialog() {
                 titulo: "",
                 data: format(new Date(), 'yyyy-MM-dd'),
                 horaInicio: "",
-                horaFim: "",
                 local: "",
                 descricao: "",
             });
@@ -89,15 +85,11 @@ export function CompromissoFormDialog() {
   };
 
   const onSubmit = (values: CompromissoFormValues) => {
-    // Combine date and time correctly, avoiding timezone issues
     const dataISO = new Date(values.data).toISOString();
-
-    // Construir o objeto para bater com o tipo Omit<Compromisso, "id" | "status">
     const compromissoData = {
       titulo: values.titulo,
       data: dataISO,
       horaInicio: values.horaInicio,
-      horaFim: values.horaFim,
       local: values.local,
       descricao: values.descricao,
     };
@@ -106,7 +98,7 @@ export function CompromissoFormDialog() {
       updateCompromisso({ ...editingCompromisso, ...compromissoData });
       toast({ title: "Compromisso atualizado com sucesso!" });
     } else {
-      addCompromisso(compromissoData); // Agora o tipo casa perfeitamente!
+      addCompromisso(compromissoData);
       toast({ title: "Compromisso agendado com sucesso!" });
     }
     handleOpenChange(false);
@@ -136,12 +128,12 @@ export function CompromissoFormDialog() {
                 </FormItem>
               )}
             />
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <FormField
                 control={form.control}
                 name="data"
                 render={({ field }) => (
-                  <FormItem className="sm:col-span-3">
+                  <FormItem className="sm:col-span-2">
                     <FormLabel>Data</FormLabel>
                     <FormControl>
                       <Input type="date" {...field} />
@@ -155,20 +147,7 @@ export function CompromissoFormDialog() {
                 name="horaInicio"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Início</FormLabel>
-                    <FormControl>
-                      <Input type="time" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="horaFim"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Fim</FormLabel>
+                    <FormLabel>Horário</FormLabel>
                     <FormControl>
                       <Input type="time" {...field} />
                     </FormControl>
