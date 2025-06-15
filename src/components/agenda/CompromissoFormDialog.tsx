@@ -91,13 +91,22 @@ export function CompromissoFormDialog() {
   const onSubmit = (values: CompromissoFormValues) => {
     // Combine date and time correctly, avoiding timezone issues
     const dataISO = new Date(values.data).toISOString();
-    const compromissoData = { ...values, data: dataISO };
-    
+
+    // Construir o objeto para bater com o tipo Omit<Compromisso, "id" | "status">
+    const compromissoData = {
+      titulo: values.titulo,
+      data: dataISO,
+      horaInicio: values.horaInicio,
+      horaFim: values.horaFim,
+      local: values.local,
+      descricao: values.descricao,
+    };
+
     if (editingCompromisso) {
       updateCompromisso({ ...editingCompromisso, ...compromissoData });
       toast({ title: "Compromisso atualizado com sucesso!" });
     } else {
-      addCompromisso(compromissoData);
+      addCompromisso(compromissoData); // Agora o tipo casa perfeitamente!
       toast({ title: "Compromisso agendado com sucesso!" });
     }
     handleOpenChange(false);
