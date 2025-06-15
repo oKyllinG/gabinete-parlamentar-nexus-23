@@ -1,4 +1,3 @@
-
 import React, { createContext, useContext, useState, useEffect, ReactNode } from "react";
 import { AppUser, PermissionLevel, ModuleKey, UserPermissions } from "@/types/permissions";
 
@@ -44,7 +43,7 @@ const demoUsers: AppUser[] = [
     email: "carlos@email.com",
     permissions: {
       "painel-controle": "ADMIN",
-      "agenda": "VISUALIZACAO",
+      "agenda": "ADMIN",
       "oficios": "VISUALIZACAO",
       "contatos": "ADMIN",
       "briefing": "ADMIN",

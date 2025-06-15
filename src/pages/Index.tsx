@@ -10,6 +10,7 @@ import PainelControle from "@/pages/PainelControle"
 import Briefing from "@/pages/Briefing"
 import MunicipioBriefing from "@/pages/MunicipioBriefing"
 import Configuracoes from "@/pages/Configuracoes"
+import Agenda from "@/pages/Agenda"
 import { useLocation } from "react-router-dom"
 
 const Index = () => {
@@ -20,6 +21,8 @@ const Index = () => {
     switch (location.pathname) {
       case '/painel-controle':
         return <PainelControle />
+      case '/agenda':
+        return <Agenda />
       case '/oficios':
         return <Oficios />
       case '/contatos':
@@ -45,6 +48,8 @@ const Index = () => {
     switch (location.pathname) {
       case '/painel-controle':
         return 'Painel de Controle'
+      case '/agenda':
+        return 'Agenda'
       case '/oficios':
         return 'Ofícios'
       case '/contatos':
