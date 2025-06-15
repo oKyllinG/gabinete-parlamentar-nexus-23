@@ -1,13 +1,19 @@
-
 import { useMemo } from "react";
 import { useAgenda } from "@/contexts/AgendaContext";
 import { PreAgendaCard } from "./PreAgendaCard";
 import { Compromisso } from "@/types/agenda";
 import { format, parseISO, isSameDay } from "date-fns";
 import { ptBR } from "date-fns/locale";
+import { GerenciarCompromissosAccordion } from "./GerenciarCompromissosAccordion";
 
 export function PreAgendaList() {
-  const { compromissos, filter } = useAgenda();
+  const { compromissos, filter, view } = useAgenda();
+
+  // Se estiver no modo "Gerenciar", mostra accordion de dias c/ compromissos
+  if (view === "GERENCIAR") {
+    // Não faz filtros adicionais aqui, pois a ideia é mostrar todos os compromissos agrupados por dia
+    return <GerenciarCompromissosAccordion compromissos={compromissos} />;
+  }
 
   const filteredAgendas = useMemo(() => {
     let items: Compromisso[];
