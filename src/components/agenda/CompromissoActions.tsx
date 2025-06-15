@@ -1,4 +1,3 @@
-
 import { Button } from "@/components/ui/button";
 import { useAgenda } from "@/contexts/AgendaContext";
 import { Compromisso } from "@/types/agenda";
@@ -60,7 +59,7 @@ export function CompromissoActions({ compromisso }: CompromissoActionsProps) {
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>Cancelar</AlertDialogCancel>
-            <AlertDialogAction onClick={handleDelete} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">Excluir</Button>
+            <AlertDialogAction onClick={handleDelete} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">Excluir</AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
