@@ -1,4 +1,3 @@
-
 import {
   Calendar,
   FileText,
@@ -89,14 +88,17 @@ export function AppSidebar() {
   const { getPermission } = usePermissions();
   const location = useLocation();
 
-  // Itens visíveis exceto "configuracoes"
+  // Itens visíveis exceto "configuracoes" e "usuarios"
   const menuItems = allMenuItems.filter(
     (item) =>
-      getPermission(item.key) !== "SEM_ACESSO" && item.key !== "configuracoes"
+      getPermission(item.key) !== "SEM_ACESSO" &&
+      item.key !== "configuracoes" &&
+      item.key !== "usuarios"
   );
 
-  // Permissão para acessar o menu de usuários (como submenu)
+  // Permissão para acessar o menu de usuários
   const showUsuariosMenu = getPermission("usuarios") === "ADMIN";
+  const showConfiguracoes = getPermission("configuracoes") !== "SEM_ACESSO";
 
   return (
     <Sidebar>
@@ -145,13 +147,13 @@ export function AppSidebar() {
                 </SidebarMenuItem>
               ))}
 
-              {/* Configurações e Submenu Usuários */}
-              {getPermission("configuracoes") !== "SEM_ACESSO" && (
+              {/* Configurações */}
+              {showConfiguracoes && (
                 <SidebarMenuItem>
                   <SidebarMenuButton 
                     asChild
                     className={
-                      location.pathname.startsWith("/configuracoes")
+                      location.pathname === "/configuracoes"
                         ? "bg-sidebar-accent text-sidebar-accent-foreground font-semibold"
                         : "hover:bg-sidebar-accent/50"
                     }
@@ -165,31 +167,29 @@ export function AppSidebar() {
                       <span className="text-sm font-medium">Configurações</span>
                     </NavLink>
                   </SidebarMenuButton>
+                </SidebarMenuItem>
+              )}
 
-                  {/* Submenu Usuários */}
-                  {showUsuariosMenu && (
-                    <SidebarMenu>
-                      <SidebarMenuItem>
-                        <SidebarMenuButton
-                          asChild
-                          className={
-                            location.pathname === "/configuracoes/usuarios"
-                              ? "bg-sidebar-accent text-sidebar-accent-foreground font-semibold ml-8"
-                              : "hover:bg-sidebar-accent/50 ml-8"
-                          }
-                        >
-                          <NavLink
-                            to="/configuracoes/usuarios"
-                            end
-                            className="flex items-center gap-3 px-3 py-2"
-                          >
-                            <Shield className="w-4 h-4" />
-                            <span className="text-sm font-medium">Usuários</span>
-                          </NavLink>
-                        </SidebarMenuButton>
-                      </SidebarMenuItem>
-                    </SidebarMenu>
-                  )}
+              {/* Usuários - não é submenu */}
+              {showUsuariosMenu && (
+                <SidebarMenuItem>
+                  <SidebarMenuButton
+                    asChild
+                    className={
+                      location.pathname === "/configuracoes/usuarios"
+                        ? "bg-sidebar-accent text-sidebar-accent-foreground font-semibold"
+                        : "hover:bg-sidebar-accent/50"
+                    }
+                  >
+                    <NavLink
+                      to="/configuracoes/usuarios"
+                      end
+                      className="flex items-center gap-3 px-3 py-2"
+                    >
+                      <Shield className="w-4 h-4" />
+                      <span className="text-sm font-medium">Usuários</span>
+                    </NavLink>
+                  </SidebarMenuButton>
                 </SidebarMenuItem>
               )}
             </SidebarMenu>
