@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
@@ -6,7 +5,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { usePermissions } from "@/contexts/PermissionsContext";
 import { UserTable } from "@/components/usuarios/UserTable";
 import { UserForm } from "@/components/usuarios/UserForm";
-import { AppUser } from "@/types/permissions";
+import { AppUser, UserPermissions } from "@/types/permissions";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
 function UserManagement() {
@@ -27,11 +26,21 @@ function UserManagement() {
       removeUser(u.id);
     }
   }
-  function handleSave(u: Omit<AppUser, "id">) {
+  function handleSave(formData: Omit<AppUser, "id">) {
     if (editUser) {
-      updateUser({ ...editUser, ...u });
+      // Preserva as permissões existentes (como 'usuarios') e mescla com as novas
+      const finalPermissions = {
+        ...editUser.permissions,
+        ...formData.permissions,
+      };
+      updateUser({ ...editUser, ...formData, permissions: finalPermissions });
     } else {
-      addUser(u);
+      // Adiciona um novo usuário com permissão 'usuarios' definida como 'SEM_ACESSO' por padrão
+      const finalPermissions = {
+        ...formData.permissions,
+        usuarios: "SEM_ACESSO",
+      } as UserPermissions;
+      addUser({ ...formData, permissions: finalPermissions });
     }
     setModalOpen(false);
   }
@@ -143,4 +152,3 @@ export default function Configuracoes() {
     </div>
   );
 }
-
