@@ -14,19 +14,7 @@ import { ExportDialog } from "@/components/oficios/ExportDialog"
 type SortField = 'numero' | 'data' | 'tipo' | 'assunto' | 'municipio'
 type SortDirection = 'asc' | 'desc'
 
-export default function Oficios() {
-  const [searchTerm, setSearchTerm] = useState("")
-  const [isFormOpen, setIsFormOpen] = useState(false)
-  const [isViewOpen, setIsViewOpen] = useState(false)
-  const [isEditOpen, setIsEditOpen] = useState(false)
-  const [deleteDialog, setDeleteDialog] = useState<{ open: boolean; id: number | null }>({ open: false, id: null })
-  const [selectedOficio, setSelectedOficio] = useState<any>(null)
-  const [activeTab, setActiveTab] = useState("todos")
-  const [sortField, setSortField] = useState<SortField>('data')
-  const [sortDirection, setSortDirection] = useState<SortDirection>('desc')
-
-  // Mock data para demonstração
-  const oficios = [
+const initialOficios = [
     {
       id: 1,
       numero: "253/2025/CG",
@@ -90,6 +78,43 @@ export default function Oficios() {
     }
   ]
 
+export default function Oficios() {
+  const [oficios, setOficios] = useState(initialOficios)
+  const [searchTerm, setSearchTerm] = useState("")
+  const [isFormOpen, setIsFormOpen] = useState(false)
+  const [isViewOpen, setIsViewOpen] = useState(false)
+  const [isEditOpen, setIsEditOpen] = useState(false)
+  const [deleteDialog, setDeleteDialog] = useState<{ open: boolean; id: number | null }>({ open: false, id: null })
+  const [selectedOficio, setSelectedOficio] = useState<any>(null)
+  const [activeTab, setActiveTab] = useState("todos")
+  const [sortField, setSortField] = useState<SortField>('data')
+  const [sortDirection, setSortDirection] = useState<SortDirection>('desc')
+
+  const handleSaveOficio = (oficioData: any) => {
+    if (oficioData.id) {
+      // Update
+      setOficios(oficios.map(o => o.id === oficioData.id 
+        ? { 
+            ...o, 
+            ...oficioData, 
+            dataFormatada: new Date(oficioData.data).toLocaleDateString('pt-BR', {timeZone: 'UTC'})
+          } 
+        : o
+      ))
+      setIsEditOpen(false)
+    } else {
+      // Create
+      const newOficio = {
+        ...oficioData,
+        id: Date.now(), // simple id generation
+        dataFormatada: new Date(oficioData.data).toLocaleDateString('pt-BR', {timeZone: 'UTC'}),
+      }
+      setOficios([newOficio, ...oficios])
+      setIsFormOpen(false)
+    }
+    setSelectedOficio(null)
+  }
+
   const handleSort = (field: SortField) => {
     if (sortField === field) {
       setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc')
@@ -138,7 +163,7 @@ export default function Oficios() {
       return 0
     })
     return sorted
-  }, [sortField, sortDirection])
+  }, [oficios, sortField, sortDirection])
 
   const getTipoBadge = (tipo: string) => {
     const tipoMap = {
@@ -199,8 +224,9 @@ export default function Oficios() {
   }
 
   const confirmDelete = () => {
-    // Aqui seria implementada a lógica de exclusão
-    console.log('Excluindo ofício:', deleteDialog.id)
+    if (deleteDialog.id) {
+      setOficios(oficios.filter(o => o.id !== deleteDialog.id))
+    }
     setDeleteDialog({ open: false, id: null })
   }
 
@@ -295,7 +321,7 @@ export default function Oficios() {
                   Cadastre os ofícios enviados, recebidos ou convites
                 </DialogDescription>
               </DialogHeader>
-              <OficioForm onClose={() => setIsFormOpen(false)} />
+              <OficioForm onClose={() => setIsFormOpen(false)} onSave={handleSaveOficio} />
             </DialogContent>
           </Dialog>
         </div>
@@ -537,7 +563,10 @@ export default function Oficios() {
       </Dialog>
 
       {/* Dialog de edição */}
-      <Dialog open={isEditOpen} onOpenChange={setIsEditOpen}>
+      <Dialog open={isEditOpen} onOpenChange={(isOpen) => {
+        setIsEditOpen(isOpen)
+        if (!isOpen) setSelectedOficio(null)
+      }}>
         <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle>Editar Ofício</DialogTitle>
@@ -545,12 +574,13 @@ export default function Oficios() {
           <OficioForm 
             oficio={selectedOficio}
             onClose={() => setIsEditOpen(false)} 
+            onSave={handleSaveOficio}
           />
         </DialogContent>
       </Dialog>
 
       {/* Dialog de confirmação de exclusão */}
-      <AlertDialog open={deleteDialog.open} onOpenChange={(open) => setDeleteDialog({ open, id: null })}>
+      <AlertDialog open={deleteDialog.open} onOpenChange={(open) => setDeleteDialog({ ...deleteDialog, open })}>
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>Confirmar Exclusão</AlertDialogTitle>
@@ -559,7 +589,7 @@ export default function Oficios() {
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Cancelar</AlertDialogCancel>
+            <AlertDialogCancel onClick={() => setDeleteDialog({ open: false, id: null })}>Cancelar</AlertDialogCancel>
             <AlertDialogAction 
               onClick={confirmDelete}
               className="bg-destructive hover:bg-destructive/90"
