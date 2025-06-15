@@ -31,8 +31,15 @@ const Index = () => {
         return <ObrasEquipamentos />
       case '/briefing':
         return <Briefing />
-      case '/usuarios':
+      case '/configuracoes/usuarios':
         return <Usuarios />
+      case '/configuracoes':
+        return <div className="p-8 max-w-2xl mx-auto">
+          <h1 className="text-2xl font-bold mb-4">Configurações</h1>
+          <div className="text-muted-foreground mb-4">
+            Acesse o submenu ao lado para gerenciar usuários e outras configurações.
+          </div>
+        </div>
       default:
         // Check if it's a municipality briefing route
         if (location.pathname.startsWith('/briefing/')) {
@@ -56,8 +63,10 @@ const Index = () => {
         return 'Obras e Equipamentos'
       case '/briefing':
         return 'Briefing'
-      case '/usuarios':
-        return 'Usuários'
+      case '/configuracoes':
+        return 'Configurações'
+      case '/configuracoes/usuarios':
+        return 'Gerenciamento de Usuários'
       default:
         // Check if it's a municipality briefing route
         if (location.pathname.startsWith('/briefing/')) {
