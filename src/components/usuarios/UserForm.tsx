@@ -1,9 +1,9 @@
-
 import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { PermissionsGrid } from "./PermissionsGrid";
 import { AppUser, ModuleKey, PermissionLevel, UserPermissions } from "@/types/permissions";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 const defaultModules: Exclude<ModuleKey, "usuarios">[] = [
   "painel-controle",
@@ -49,7 +49,7 @@ export function UserForm({ userEdit, onSave, saving, onCancel }: UserFormProps) 
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-5 w-full max-w-lg">
+    <form onSubmit={handleSubmit} className="space-y-5 w-full">
       <div>
         <label className="block mb-1 font-medium">Nome</label>
         <Input value={name} onChange={e => setName(e.target.value)} required />
@@ -60,9 +60,9 @@ export function UserForm({ userEdit, onSave, saving, onCancel }: UserFormProps) 
       </div>
       <div>
         <label className="block mb-1 font-medium">Permissões</label>
-        <div className="w-full">
+        <ScrollArea className="h-[45vh] w-full rounded-md border p-4">
           <PermissionsGrid value={permissions} onChange={onPermChange} />
-        </div>
+        </ScrollArea>
       </div>
       <div className="flex gap-2 justify-end">
         <Button type="button" variant="outline" onClick={onCancel}>Cancelar</Button>

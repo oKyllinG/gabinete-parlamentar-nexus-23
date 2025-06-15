@@ -42,12 +42,18 @@ const badgeVariants: Record<PermissionLevel, string> = {
 
 export function PermissionsGrid({ value, onChange }: PermissionsGridProps) {
   return (
-    <div className="space-y-4">
-      {Object.entries(MODULES_LABELS).map(([mKey, mLabel]) => {
+    <div className="space-y-2">
+      {Object.entries(MODULES_LABELS).map(([mKey, mLabel], index, arr) => {
         const module = mKey as Exclude<ModuleKey, "usuarios">;
         return (
-          <div key={module} className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-4 border rounded-lg bg-background">
-            <div className="font-medium mb-2 sm:mb-0">{mLabel}</div>
+          <div
+            key={module}
+            className={cn(
+              "flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 py-3",
+              index < arr.length - 1 && "border-b"
+            )}
+          >
+            <div className="font-medium whitespace-nowrap text-sm">{mLabel}</div>
             <div className="flex gap-2 flex-wrap">
               {perms.map(level =>
                 <Badge
