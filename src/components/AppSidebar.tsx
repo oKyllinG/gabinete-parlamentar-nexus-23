@@ -1,4 +1,3 @@
-
 import {
   Calendar,
   FileText,
@@ -25,8 +24,14 @@ import {
 } from "@/components/ui/sidebar"
 import { usePermissions } from "@/contexts/PermissionsContext"
 import { NavLink, useLocation } from "react-router-dom"
+import type { ModuleKey } from "@/types/permissions";
 
-const allMenuItems = [
+const allMenuItems: {
+  key: ModuleKey;
+  title: string;
+  url: string;
+  icon: React.ElementType;
+}[] = [
   {
     key: "painel-controle",
     title: "Painel de Controle",
@@ -151,4 +156,3 @@ export function AppSidebar() {
     </Sidebar>
   )
 }
-
