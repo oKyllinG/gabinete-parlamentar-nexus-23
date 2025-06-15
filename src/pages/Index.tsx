@@ -1,4 +1,3 @@
-
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar"
 import { AppSidebar } from "@/components/AppSidebar"
 import { Dashboard } from "@/components/Dashboard"
@@ -10,7 +9,7 @@ import ObrasEquipamentos from "@/pages/ObrasEquipamentos"
 import PainelControle from "@/pages/PainelControle"
 import Briefing from "@/pages/Briefing"
 import MunicipioBriefing from "@/pages/MunicipioBriefing"
-import Usuarios from "@/pages/Usuarios"
+import Configuracoes from "@/pages/Configuracoes"
 import { useLocation } from "react-router-dom"
 
 const Index = () => {
@@ -31,15 +30,8 @@ const Index = () => {
         return <ObrasEquipamentos />
       case '/briefing':
         return <Briefing />
-      case '/configuracoes/usuarios':
-        return <Usuarios />
       case '/configuracoes':
-        return <div className="p-8 max-w-2xl mx-auto">
-          <h1 className="text-2xl font-bold mb-4">Configurações</h1>
-          <div className="text-muted-foreground mb-4">
-            Acesse o submenu ao lado para gerenciar usuários e outras configurações.
-          </div>
-        </div>
+        return <Configuracoes />
       default:
         // Check if it's a municipality briefing route
         if (location.pathname.startsWith('/briefing/')) {
@@ -65,8 +57,6 @@ const Index = () => {
         return 'Briefing'
       case '/configuracoes':
         return 'Configurações'
-      case '/configuracoes/usuarios':
-        return 'Gerenciamento de Usuários'
       default:
         // Check if it's a municipality briefing route
         if (location.pathname.startsWith('/briefing/')) {
@@ -106,4 +96,3 @@ const Index = () => {
 };
 
 export default Index;
-

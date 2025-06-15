@@ -1,3 +1,4 @@
+
 import {
   Calendar,
   FileText,
@@ -8,7 +9,6 @@ import {
   Settings,
   User,
   LayoutDashboard,
-  Shield
 } from "lucide-react"
 import {
   Sidebar,
@@ -26,7 +26,7 @@ import { usePermissions } from "@/contexts/PermissionsContext"
 import { NavLink, useLocation } from "react-router-dom"
 import type { ModuleKey } from "@/types/permissions";
 
-// Itens principais sem "usuarios"
+// Itens principais sem "usuarios" e "configuracoes"
 const allMenuItems: {
   key: ModuleKey;
   title: string;
@@ -75,29 +75,16 @@ const allMenuItems: {
     url: "/emendas",
     icon: DollarSign,
   },
-  // Não incluir "usuarios" aqui
-  {
-    key: "configuracoes",
-    title: "Configurações",
-    url: "/configuracoes",
-    icon: Settings,
-  },
 ];
 
 export function AppSidebar() {
   const { getPermission } = usePermissions();
   const location = useLocation();
 
-  // Itens visíveis exceto "configuracoes" e "usuarios"
   const menuItems = allMenuItems.filter(
-    (item) =>
-      getPermission(item.key) !== "SEM_ACESSO" &&
-      item.key !== "configuracoes" &&
-      item.key !== "usuarios"
+    (item) => getPermission(item.key) !== "SEM_ACESSO"
   );
 
-  // Permissão para acessar o menu de usuários
-  const showUsuariosMenu = getPermission("usuarios") === "ADMIN";
   const showConfiguracoes = getPermission("configuracoes") !== "SEM_ACESSO";
 
   return (
@@ -153,41 +140,17 @@ export function AppSidebar() {
                   <SidebarMenuButton 
                     asChild
                     className={
-                      location.pathname === "/configuracoes"
+                      location.pathname.startsWith("/configuracoes")
                         ? "bg-sidebar-accent text-sidebar-accent-foreground font-semibold"
                         : "hover:bg-sidebar-accent/50"
                     }
                   >
                     <NavLink
                       to="/configuracoes"
-                      end
                       className="flex items-center gap-3 px-3 py-2"
                     >
                       <Settings className="w-4 h-4" />
                       <span className="text-sm font-medium">Configurações</span>
-                    </NavLink>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              )}
-
-              {/* Usuários - não é submenu */}
-              {showUsuariosMenu && (
-                <SidebarMenuItem>
-                  <SidebarMenuButton
-                    asChild
-                    className={
-                      location.pathname === "/configuracoes/usuarios"
-                        ? "bg-sidebar-accent text-sidebar-accent-foreground font-semibold"
-                        : "hover:bg-sidebar-accent/50"
-                    }
-                  >
-                    <NavLink
-                      to="/configuracoes/usuarios"
-                      end
-                      className="flex items-center gap-3 px-3 py-2"
-                    >
-                      <Shield className="w-4 h-4" />
-                      <span className="text-sm font-medium">Usuários</span>
                     </NavLink>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
