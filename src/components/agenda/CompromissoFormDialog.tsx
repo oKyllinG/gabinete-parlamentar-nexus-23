@@ -25,7 +25,7 @@ import * as z from "zod";
 import { useEffect, useState, useMemo } from "react";
 import { useToast } from "@/components/ui/use-toast";
 import { format, parse, isValid } from "date-fns";
-import { CalendarIcon, Paperclip } from "lucide-react";
+import { CalendarIcon, Paperclip, Plane } from "lucide-react";
 import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
 import { Calendar } from "@/components/ui/calendar";
@@ -143,6 +143,12 @@ export function CompromissoFormDialog() {
       setEditingCompromisso(null);
       setAppointmentType?.(null);
     }
+  };
+
+  const handleTravelClick = () => {
+    setAppointmentType("travel");
+    form.setValue("categoria", "Viagem");
+    setActiveTab("viagem");
   };
 
   const onSubmit = (values: CompromissoFormValues) => {
@@ -274,12 +280,23 @@ export function CompromissoFormDialog() {
             ) : (
               // Para compromissos normais, mostrar as abas
               <Tabs value={activeTab} onValueChange={setActiveTab}>
-                <TabsList className="grid w-full grid-cols-2">
-                  <TabsTrigger value="geral">Informações Gerais</TabsTrigger>
-                  <TabsTrigger value="viagem" disabled={categoria !== "Viagem"}>
+                <div className="flex items-center justify-between mb-4">
+                  <TabsList className="grid w-full grid-cols-2">
+                    <TabsTrigger value="geral">Informações Gerais</TabsTrigger>
+                    <TabsTrigger value="viagem">
+                      Viagem
+                    </TabsTrigger>
+                  </TabsList>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={handleTravelClick}
+                    className="ml-2 gap-2"
+                  >
+                    <Plane className="w-4 h-4" />
                     Viagem
-                  </TabsTrigger>
-                </TabsList>
+                  </Button>
+                </div>
                 
                 <TabsContent value="geral" className="space-y-4 mt-4">
                   <FormField
