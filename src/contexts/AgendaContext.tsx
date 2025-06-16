@@ -34,6 +34,7 @@ const demoCompromissos: Compromisso[] = [
 
 type AgendaView = "CALENDARIO" | "GERENCIAR" | "CATEGORIAS";
 type AgendaFilter = "PENDENTE" | "HOJE" | "CONCLUIDO" | "RECUSADO" | "CANCELADO";
+type AppointmentType = "travel" | null;
 
 interface AgendaContextType {
   compromissos: Compromisso[];
@@ -52,6 +53,8 @@ interface AgendaContextType {
   setView: (view: AgendaView) => void;
   isFormOpen: boolean;
   setFormOpen: (isOpen: boolean) => void;
+  appointmentType: AppointmentType;
+  setAppointmentType: (type: AppointmentType) => void;
 }
 
 const AgendaContext = createContext<AgendaContextType | null>(null);
@@ -71,6 +74,7 @@ export const AgendaProvider = ({ children }: { children: ReactNode }) => {
   const [editingCompromisso, setEditingCompromisso] = useState<Compromisso | null>(null);
   const [view, setView] = useState<AgendaView>('CALENDARIO');
   const [isFormOpen, setFormOpen] = useState(false);
+  const [appointmentType, setAppointmentType] = useState<AppointmentType>(null);
 
   useEffect(() => {
     localStorage.setItem("compromissos", JSON.stringify(compromissos));
@@ -130,7 +134,9 @@ export const AgendaProvider = ({ children }: { children: ReactNode }) => {
     view,
     setView,
     isFormOpen,
-    setFormOpen
+    setFormOpen,
+    appointmentType,
+    setAppointmentType
   };
 
   return <AgendaContext.Provider value={value}>{children}</AgendaContext.Provider>;
