@@ -1,3 +1,4 @@
+
 // Compartilhado entre compromissos e seleção de participantes
 export interface Participante {
   id: string;
@@ -14,7 +15,15 @@ export interface Compromisso {
   local?: string;
   descricao?: string;
   status: StatusCompromisso;
-  participantes?: Participante[]; // Nova propriedade opcional para o form
+  participantes?: Participante[];
+  categoria?: string;
+  endereco?: string;
+  // Campos específicos para viagem
+  municipioSaida?: string;
+  municipioDestino?: string;
+  distanciaKm?: number;
+  horarioSaida?: string;
+  acompanhantes?: string[];
 }
 
 // === NOVO - Categoria da agenda ===
