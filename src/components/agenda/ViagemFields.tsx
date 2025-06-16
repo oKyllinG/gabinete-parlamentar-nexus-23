@@ -65,40 +65,24 @@ export function ViagemFields({ form }: ViagemFieldsProps) {
         />
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <FormField
-          control={form.control}
-          name="distanciaKm"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Distância (km)</FormLabel>
-              <FormControl>
-                <Input 
-                  type="number" 
-                  placeholder="Ex: 430" 
-                  {...field}
-                  onChange={(e) => field.onChange(e.target.value ? Number(e.target.value) : "")}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        
-        <FormField
-          control={form.control}
-          name="horarioSaida"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Horário de Saída</FormLabel>
-              <FormControl>
-                <Input type="time" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-      </div>
+      <FormField
+        control={form.control}
+        name="distanciaKm"
+        render={({ field }) => (
+          <FormItem>
+            <FormLabel>Distância (km)</FormLabel>
+            <FormControl>
+              <Input 
+                type="number" 
+                placeholder="Ex: 430" 
+                {...field}
+                onChange={(e) => field.onChange(e.target.value ? Number(e.target.value) : "")}
+              />
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
 
       <div>
         <FormLabel>Quem Acompanhará</FormLabel>

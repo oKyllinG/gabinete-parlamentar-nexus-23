@@ -1,4 +1,5 @@
 import { useAgenda } from "@/contexts/AgendaContext";
+import { useAgendaCategorias } from "@/contexts/AgendaCategoriasContext";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -73,6 +74,7 @@ export function CompromissoFormDialog() {
     appointmentType,
     setAppointmentType,
   } = useAgenda();
+  const { categorias } = useAgendaCategorias();
   const { toast } = useToast();
   const contatosList = useContatosList();
   const [activeTab, setActiveTab] = useState("geral");
@@ -97,7 +99,7 @@ export function CompromissoFormDialog() {
     },
   });
 
-  const isTravel = appointmentType === "travel" || form.watch("categoria") === "Viagem";
+  const isTravel = appointmentType === "travel" || form.watch("categoria") === "viagem";
 
   useEffect(() => {
     if (isFormOpen) {
@@ -112,7 +114,7 @@ export function CompromissoFormDialog() {
         // Se é viagem ou foi marcado como viagem
         if (editingCompromisso.categoria === "Viagem" || appointmentType === "travel") {
           setActiveTab("viagem");
-          form.setValue("categoria", "Viagem");
+          form.setValue("categoria", "viagem");
         }
       } else {
         const initialValues = {
@@ -147,7 +149,7 @@ export function CompromissoFormDialog() {
 
   const handleTravelClick = () => {
     setAppointmentType("travel");
-    form.setValue("categoria", "Viagem");
+    form.setValue("categoria", "viagem");
     setActiveTab("viagem");
   };
 
@@ -181,7 +183,7 @@ export function CompromissoFormDialog() {
   // Detecta se categoria é Viagem para mostrar aba automaticamente
   const categoria = form.watch("categoria");
   useEffect(() => {
-    if (categoria === "Viagem") {
+    if (categoria === "viagem") {
       setActiveTab("viagem");
     }
   }, [categoria]);
@@ -265,7 +267,7 @@ export function CompromissoFormDialog() {
                     name="horaInicio"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Hora</FormLabel>
+                        <FormLabel>Hora de Saída</FormLabel>
                         <FormControl>
                           <Input type="time" {...field} />
                         </FormControl>
@@ -278,15 +280,10 @@ export function CompromissoFormDialog() {
                 <ViagemFields form={form} />
               </div>
             ) : (
-              // Para compromissos normais, mostrar as abas
-              <Tabs value={activeTab} onValueChange={setActiveTab}>
+              // Para compromissos normais, mostrar apenas a aba geral
+              <>
                 <div className="flex items-center justify-between mb-4">
-                  <TabsList className="grid w-full grid-cols-2">
-                    <TabsTrigger value="geral">Informações Gerais</TabsTrigger>
-                    <TabsTrigger value="viagem">
-                      Viagem
-                    </TabsTrigger>
-                  </TabsList>
+                  <div className="text-lg font-semibold">Informações Gerais</div>
                   <Button
                     type="button"
                     variant="outline"
@@ -298,7 +295,7 @@ export function CompromissoFormDialog() {
                   </Button>
                 </div>
                 
-                <TabsContent value="geral" className="space-y-4 mt-4">
+                <div className="space-y-4">
                   <FormField
                     control={form.control}
                     name="titulo"
@@ -368,7 +365,7 @@ export function CompromissoFormDialog() {
                     />
                   </div>
 
-                  {/* Categoria - only showing non-locked categories */}
+                  {/* Categoria usando as categorias cadastradas */}
                   <FormField
                     control={form.control}
                     name="categoria"
@@ -381,10 +378,11 @@ export function CompromissoFormDialog() {
                             {...field}
                           >
                             <option value="">Selecione uma categoria</option>
-                            <option value="Audiência">Audiência</option>
-                            <option value="Visita">Visita</option>
-                            <option value="Evento">Evento</option>
-                            <option value="Outro">Outro</option>
+                            {categorias.map(categoria => (
+                              <option key={categoria.id} value={categoria.slug}>
+                                {categoria.nome}
+                              </option>
+                            ))}
                           </select>
                         </FormControl>
                         <FormMessage />
@@ -469,12 +467,8 @@ export function CompromissoFormDialog() {
                       </Button>
                     </div>
                   </div>
-                </TabsContent>
-
-                <TabsContent value="viagem" className="mt-4">
-                  <ViagemFields form={form} />
-                </TabsContent>
-              </Tabs>
+                </div>
+              </>
             )}
 
             <DialogFooter>

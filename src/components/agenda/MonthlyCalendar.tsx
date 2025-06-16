@@ -1,18 +1,28 @@
-
 import { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Calendar as CalendarIcon, ArrowLeft, ArrowRight } from 'lucide-react';
 import { format, addMonths, subMonths, startOfMonth, endOfMonth, startOfWeek, endOfWeek, eachDayOfInterval, isSameMonth, isSameDay, parseISO, addWeeks, subWeeks, startOfWeek as startOfWeekFn, endOfWeek as endOfWeekFn, addDays, subDays } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import { useAgenda } from '@/contexts/AgendaContext';
+import { useAgendaCategorias } from '@/contexts/AgendaCategoriasContext';
 import { Compromisso } from '@/types/agenda';
 import { cn } from '@/lib/utils';
 import { DayDetailsModal } from './DayDetailsModal';
 
 const EventItem = ({ compromisso }: { compromisso: Compromisso }) => {
-    const statusColor = compromisso.status === 'CONFIRMADO' ? 'bg-blue-500' : 'bg-gray-400';
+    const { categorias } = useAgendaCategorias();
+    
+    // Encontrar a categoria do compromisso
+    const categoria = categorias.find(cat => cat.slug === compromisso.categoria);
+    const cor = categoria?.cor || '#4267F1'; // Cor padrão azul
+    
+    const statusColor = compromisso.status === 'CONFIRMADO' ? cor : '#9CA3AF'; // Cinza para não confirmado
+    
     return (
-        <div className={cn("text-white rounded p-1 text-xs mb-1 truncate", statusColor)}>
+        <div 
+            className="text-white rounded p-1 text-xs mb-1 truncate"
+            style={{ backgroundColor: statusColor }}
+        >
             {compromisso.horaInicio} - {compromisso.titulo}
         </div>
     )
@@ -24,6 +34,7 @@ export function MonthlyCalendar() {
     const [selectedDay, setSelectedDay] = useState<Date | null>(null);
     const [isDayModalOpen, setIsDayModalOpen] = useState(false);
     const { compromissos } = useAgenda();
+    const { categorias } = useAgendaCategorias();
 
     const nextPeriod = () => {
         if (view === 'Mês') setCurrentDate(addMonths(currentDate, 1));
