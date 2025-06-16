@@ -70,6 +70,8 @@ export function CompromissoFormDialog() {
     setEditingCompromisso,
     addCompromisso,
     updateCompromisso,
+    appointmentType,
+    setAppointmentType,
   } = useAgenda();
   const { toast } = useToast();
   const contatosList = useContatosList();
@@ -95,6 +97,8 @@ export function CompromissoFormDialog() {
     },
   });
 
+  const isTravel = appointmentType === "travel" || form.watch("categoria") === "Viagem";
+
   useEffect(() => {
     if (isFormOpen) {
       if (editingCompromisso) {
@@ -105,16 +109,17 @@ export function CompromissoFormDialog() {
           participantes: editingCompromisso.participantes ?? [],
           acompanhantes: editingCompromisso.acompanhantes ?? [],
         });
-        // Se é viagem, ativa a aba de viagem
-        if (editingCompromisso.categoria === "Viagem") {
+        // Se é viagem ou foi marcado como viagem
+        if (editingCompromisso.categoria === "Viagem" || appointmentType === "travel") {
           setActiveTab("viagem");
+          form.setValue("categoria", "Viagem");
         }
       } else {
-        form.reset({
+        const initialValues = {
           titulo: "",
           data: new Date(),
           horaInicio: "",
-          categoria: "",
+          categoria: appointmentType === "travel" ? "Viagem" : "",
           local: "",
           endereco: "",
           participantes: [],
@@ -125,15 +130,19 @@ export function CompromissoFormDialog() {
           distanciaKm: 0,
           horarioSaida: "",
           acompanhantes: [],
-        });
-        setActiveTab("geral");
+        };
+        form.reset(initialValues);
+        setActiveTab(appointmentType === "travel" ? "viagem" : "geral");
       }
     }
-  }, [editingCompromisso, isFormOpen, form]);
+  }, [editingCompromisso, isFormOpen, form, appointmentType]);
 
   const handleOpenChange = (open: boolean) => {
     setFormOpen(open);
-    if (!open) setEditingCompromisso(null);
+    if (!open) {
+      setEditingCompromisso(null);
+      setAppointmentType?.(null);
+    }
   };
 
   const onSubmit = (values: CompromissoFormValues) => {
@@ -155,10 +164,10 @@ export function CompromissoFormDialog() {
 
     if (editingCompromisso) {
       updateCompromisso({ ...editingCompromisso, ...compromissoData });
-      toast({ title: "Compromisso atualizado com sucesso!" });
+      toast({ title: isTravel ? "Viagem atualizada com sucesso!" : "Compromisso atualizado com sucesso!" });
     } else {
       addCompromisso(compromissoData);
-      toast({ title: "Compromisso agendado com sucesso!" });
+      toast({ title: isTravel ? "Viagem agendada com sucesso!" : "Compromisso agendado com sucesso!" });
     }
     handleOpenChange(false);
   };
@@ -177,10 +186,10 @@ export function CompromissoFormDialog() {
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <CalendarIcon className="w-5 h-5" />
-            {editingCompromisso ? "Editar Compromisso" : "Nova Reunião"}
+            {editingCompromisso ? (isTravel ? "Editar Viagem" : "Editar Compromisso") : (isTravel ? "Nova Viagem" : "Nova Reunião")}
           </DialogTitle>
           <DialogDescription>
-            Agende uma nova reunião ou compromisso
+            {isTravel ? "Agende uma nova viagem" : "Agende uma nova reunião ou compromisso"}
           </DialogDescription>
         </DialogHeader>
         
@@ -189,30 +198,23 @@ export function CompromissoFormDialog() {
             onSubmit={form.handleSubmit(onSubmit)}
             className="flex flex-col gap-4 py-2"
           >
-            <Tabs value={activeTab} onValueChange={setActiveTab}>
-              <TabsList className="grid w-full grid-cols-2">
-                <TabsTrigger value="geral">Informações Gerais</TabsTrigger>
-                <TabsTrigger value="viagem" disabled={categoria !== "Viagem"}>
-                  Viagem
-                </TabsTrigger>
-              </TabsList>
-              
-              <TabsContent value="geral" className="space-y-4 mt-4">
+            {isTravel ? (
+              // Para viagem, mostrar apenas campos básicos + aba de viagem
+              <div className="space-y-4">
                 <FormField
                   control={form.control}
                   name="titulo"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Título</FormLabel>
+                      <FormLabel>Título da Viagem</FormLabel>
                       <FormControl>
-                        <Input placeholder="Título do compromisso" {...field} />
+                        <Input placeholder="Ex: Viagem para Brasília" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}
                 />
 
-                {/* Data + Hora (lado a lado) */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <FormField
                     control={form.control}
@@ -267,122 +269,203 @@ export function CompromissoFormDialog() {
                   />
                 </div>
 
-                {/* Categoria */}
-                <FormField
-                  control={form.control}
-                  name="categoria"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Categoria</FormLabel>
-                      <FormControl>
-                        <select
-                          className="w-full border rounded px-3 py-2 text-base bg-gray-50"
-                          {...field}
-                        >
-                          <option value="">Selecione uma categoria</option>
-                          <option value="Reunião">Reunião</option>
-                          <option value="Audiência">Audiência</option>
-                          <option value="Visita">Visita</option>
-                          <option value="Evento">Evento</option>
-                          <option value="Viagem">Viagem</option>
-                          <option value="Outro">Outro</option>
-                        </select>
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                {/* Local */}
-                <FormField
-                  control={form.control}
-                  name="local"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Local</FormLabel>
-                      <FormControl>
-                        <Input placeholder="Gabinete, Plenário..." {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                {/* Endereço completo */}
-                <FormField
-                  control={form.control}
-                  name="endereco"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Endereço Completo</FormLabel>
-                      <FormControl>
-                        <Input
-                          placeholder="Av. Paulista, 1000 - São Paulo, SP"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                {/* Participantes */}
-                <FormField
-                  control={form.control}
-                  name="participantes"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Participantes</FormLabel>
-                      <ParticipantesInput
-                        value={field.value as Participante[]}
-                        onChange={field.onChange}
-                        allContacts={contatosList}
-                      />
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                {/* Pauta/Assunto (descrição) */}
-                <FormField
-                  control={form.control}
-                  name="descricao"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Pauta/Assunto</FormLabel>
-                      <FormControl>
-                        <Textarea placeholder="Detalhes do compromisso..." {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                {/* Anexos (visual) */}
-                <div>
-                  <span className="font-medium flex gap-2 items-center">
-                    <Paperclip className="w-4 h-4" /> Anexos
-                  </span>
-                  <div className="bg-gray-50 p-3 rounded flex justify-between mt-2 items-center">
-                    <span className="text-sm text-muted-foreground">Adicionar Anexo</span>
-                    <Button type="button" variant="outline" className="gap-1">
-                      <Paperclip className="w-4 h-4" /> Adicionar Anexo
-                    </Button>
-                  </div>
-                </div>
-              </TabsContent>
-
-              <TabsContent value="viagem" className="mt-4">
                 <ViagemFields form={form} />
-              </TabsContent>
-            </Tabs>
+              </div>
+            ) : (
+              // Para compromissos normais, mostrar as abas
+              <Tabs value={activeTab} onValueChange={setActiveTab}>
+                <TabsList className="grid w-full grid-cols-2">
+                  <TabsTrigger value="geral">Informações Gerais</TabsTrigger>
+                  <TabsTrigger value="viagem" disabled={categoria !== "Viagem"}>
+                    Viagem
+                  </TabsTrigger>
+                </TabsList>
+                
+                <TabsContent value="geral" className="space-y-4 mt-4">
+                  <FormField
+                    control={form.control}
+                    name="titulo"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Título</FormLabel>
+                        <FormControl>
+                          <Input placeholder="Título do compromisso" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  {/* Data + Hora (lado a lado) */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <FormField
+                      control={form.control}
+                      name="data"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Data</FormLabel>
+                          <Popover>
+                            <PopoverTrigger asChild>
+                              <FormControl>
+                                <Button
+                                  variant={"outline"}
+                                  className={cn(
+                                    "w-full justify-start text-left font-normal",
+                                    !field.value && "text-muted-foreground"
+                                  )}
+                                >
+                                  <CalendarIcon className="mr-2 h-4 w-4" />
+                                  {field.value
+                                    ? format(field.value, "dd 'de' MMMM 'de' yyyy")
+                                    : <span>Escolha a data</span>}
+                                </Button>
+                              </FormControl>
+                            </PopoverTrigger>
+                            <PopoverContent className="w-auto p-0" align="start">
+                              <Calendar
+                                mode="single"
+                                selected={field.value}
+                                onSelect={field.onChange}
+                                initialFocus
+                                className="p-3 pointer-events-auto"
+                              />
+                            </PopoverContent>
+                          </Popover>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    
+                    <FormField
+                      control={form.control}
+                      name="horaInicio"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Hora</FormLabel>
+                          <FormControl>
+                            <Input type="time" {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+
+                  {/* Categoria - only showing non-locked categories */}
+                  <FormField
+                    control={form.control}
+                    name="categoria"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Categoria</FormLabel>
+                        <FormControl>
+                          <select
+                            className="w-full border rounded px-3 py-2 text-base bg-gray-50"
+                            {...field}
+                          >
+                            <option value="">Selecione uma categoria</option>
+                            <option value="Audiência">Audiência</option>
+                            <option value="Visita">Visita</option>
+                            <option value="Evento">Evento</option>
+                            <option value="Outro">Outro</option>
+                          </select>
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  {/* Local */}
+                  <FormField
+                    control={form.control}
+                    name="local"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Local</FormLabel>
+                        <FormControl>
+                          <Input placeholder="Gabinete, Plenário..." {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  {/* Endereço completo */}
+                  <FormField
+                    control={form.control}
+                    name="endereco"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Endereço Completo</FormLabel>
+                        <FormControl>
+                          <Input
+                            placeholder="Av. Paulista, 1000 - São Paulo, SP"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  {/* Participantes */}
+                  <FormField
+                    control={form.control}
+                    name="participantes"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Participantes</FormLabel>
+                        <ParticipantesInput
+                          value={field.value as Participante[]}
+                          onChange={field.onChange}
+                          allContacts={contatosList}
+                        />
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  {/* Pauta/Assunto (descrição) */}
+                  <FormField
+                    control={form.control}
+                    name="descricao"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Pauta/Assunto</FormLabel>
+                        <FormControl>
+                          <Textarea placeholder="Detalhes do compromisso..." {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  {/* Anexos (visual) */}
+                  <div>
+                    <span className="font-medium flex gap-2 items-center">
+                      <Paperclip className="w-4 h-4" /> Anexos
+                    </span>
+                    <div className="bg-gray-50 p-3 rounded flex justify-between mt-2 items-center">
+                      <span className="text-sm text-muted-foreground">Adicionar Anexo</span>
+                      <Button type="button" variant="outline" className="gap-1">
+                        <Paperclip className="w-4 h-4" /> Adicionar Anexo
+                      </Button>
+                    </div>
+                  </div>
+                </TabsContent>
+
+                <TabsContent value="viagem" className="mt-4">
+                  <ViagemFields form={form} />
+                </TabsContent>
+              </Tabs>
+            )}
 
             <DialogFooter>
               <Button type="button" variant="ghost" onClick={() => handleOpenChange(false)}>
                 Cancelar
               </Button>
               <Button type="submit" className="bg-blue-600 hover:bg-blue-700 text-white">
-                {editingCompromisso ? "Atualizar" : "Agendar"} {categoria === "Viagem" ? "Viagem" : "Reunião"}
+                {editingCompromisso ? "Atualizar" : "Agendar"} {isTravel ? "Viagem" : "Reunião"}
               </Button>
             </DialogFooter>
           </form>

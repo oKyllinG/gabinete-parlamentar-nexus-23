@@ -2,7 +2,6 @@
 import { FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
 import { Plus, X } from "lucide-react";
 import { useState } from "react";
 
@@ -30,17 +29,6 @@ export function ViagemFields({ form }: ViagemFieldsProps) {
     newAcompanhantes[index] = value;
     setAcompanhantes(newAcompanhantes);
     form.setValue("acompanhantes", newAcompanhantes);
-  };
-
-  const calculateDistance = async () => {
-    const municipioSaida = form.getValues("municipioSaida");
-    const municipioDestino = form.getValues("municipioDestino");
-    
-    if (municipioSaida && municipioDestino) {
-      // Simulação de cálculo de distância - em um app real, usaria uma API como Google Maps
-      const randomDistance = Math.floor(Math.random() * 500) + 50;
-      form.setValue("distanciaKm", randomDistance);
-    }
   };
 
   return (
@@ -84,19 +72,14 @@ export function ViagemFields({ form }: ViagemFieldsProps) {
           render={({ field }) => (
             <FormItem>
               <FormLabel>Distância (km)</FormLabel>
-              <div className="flex gap-2">
-                <FormControl>
-                  <Input 
-                    type="number" 
-                    placeholder="Ex: 430" 
-                    {...field}
-                    onChange={(e) => field.onChange(e.target.value ? Number(e.target.value) : "")}
-                  />
-                </FormControl>
-                <Button type="button" variant="outline" onClick={calculateDistance}>
-                  Calcular
-                </Button>
-              </div>
+              <FormControl>
+                <Input 
+                  type="number" 
+                  placeholder="Ex: 430" 
+                  {...field}
+                  onChange={(e) => field.onChange(e.target.value ? Number(e.target.value) : "")}
+                />
+              </FormControl>
               <FormMessage />
             </FormItem>
           )}
