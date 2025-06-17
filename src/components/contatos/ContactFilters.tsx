@@ -64,8 +64,7 @@ export const ContactFilters: React.FC<ContactFiltersProps> = ({
               <Badge variant="secondary">{totalContacts}</Badge>
             </Button>
             
-            {(Object.keys(tipo
-Labels) as Array<keyof typeof tipoLabels>).map((tipo) => {
+            {(Object.keys(tipoLabels) as Array<keyof typeof tipoLabels>).map((tipo) => {
               const count = getTypeCount(tipo);
               if (count === 0) return null;
               
