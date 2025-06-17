@@ -24,16 +24,17 @@ export function DraggableEventItem({ compromisso }: DraggableEventItemProps) {
     },
   });
 
-  const style = {
-    transform: CSS.Translate.toString(transform),
-    opacity: isDragging ? 0.5 : 1,
-  };
-
   // Encontrar a categoria do compromisso
   const categoria = categorias.find(cat => cat.slug === compromisso.categoria);
   const cor = categoria?.cor || '#4267F1'; // Cor padrão azul
   
   const statusColor = compromisso.status === 'CONFIRMADO' ? cor : '#9CA3AF'; // Cinza para não confirmado
+  
+  const style = {
+    transform: CSS.Translate.toString(transform),
+    opacity: isDragging ? 0.5 : 1,
+    backgroundColor: statusColor
+  };
   
   return (
     <div 
@@ -44,10 +45,6 @@ export function DraggableEventItem({ compromisso }: DraggableEventItemProps) {
       className={`text-white rounded p-1 text-xs mb-1 truncate cursor-grab active:cursor-grabbing ${
         isDragging ? 'z-50' : ''
       }`}
-      style={{
-        ...style,
-        backgroundColor: statusColor
-      }}
     >
       {compromisso.horaInicio} - {compromisso.titulo}
     </div>
