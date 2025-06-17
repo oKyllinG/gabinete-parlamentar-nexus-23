@@ -8,6 +8,9 @@ import { useAgendaCategorias } from '@/contexts/AgendaCategoriasContext';
 import { Compromisso } from '@/types/agenda';
 import { cn } from '@/lib/utils';
 import { DayDetailsModal } from './DayDetailsModal';
+import { DndContext, DragEndEvent, DragOverlay } from '@dnd-kit/core';
+import { DroppableCalendarDay } from './DroppableCalendarDay';
+import { DraggableEventItem } from './DraggableEventItem';
 
 const EventItem = ({ compromisso }: { compromisso: Compromisso }) => {
     const { categorias } = useAgendaCategorias();
@@ -33,7 +36,9 @@ export function MonthlyCalendar() {
     const [view, setView] = useState('Mês');
     const [selectedDay, setSelectedDay] = useState<Date | null>(null);
     const [isDayModalOpen, setIsDayModalOpen] = useState(false);
-    const { compromissos } = useAgenda();
+    const [draggedCompromisso, setDraggedCompromisso] = useState<Compromisso | null>(null);
+    
+    const { compromissos, updateCompromisso } = useAgenda();
     const { categorias } = useAgendaCategorias();
 
     const nextPeriod = () => {
@@ -59,6 +64,37 @@ export function MonthlyCalendar() {
         setIsDayModalOpen(true);
     };
 
+    const handleDragStart = (event: any) => {
+        const compromisso = event.active.data.current?.compromisso;
+        if (compromisso) {
+            setDraggedCompromisso(compromisso);
+        }
+    };
+
+    const handleDragEnd = (event: DragEndEvent) => {
+        const { active, over } = event;
+        
+        if (!over) {
+            setDraggedCompromisso(null);
+            return;
+        }
+
+        const compromisso = active.data.current?.compromisso as Compromisso;
+        const newDateString = over.id as string;
+        
+        if (compromisso && newDateString) {
+            const newDate = new Date(newDateString);
+            const updatedCompromisso = {
+                ...compromisso,
+                data: newDate.toISOString()
+            };
+            
+            updateCompromisso(updatedCompromisso);
+        }
+        
+        setDraggedCompromisso(null);
+    };
+
     const renderMonthView = () => {
         const monthStart = startOfMonth(currentDate);
         const monthEnd = endOfMonth(monthStart);
@@ -75,32 +111,14 @@ export function MonthlyCalendar() {
                 <div className="grid grid-cols-7">
                     {days.map((day, index) => {
                         const compromissosDoDia = getCompromissosForDay(day);
-                        const compromissosConfirmados = compromissosDoDia.filter(c => c.status === 'CONFIRMADO');
                         return (
-                            <div
+                            <DroppableCalendarDay
                                 key={index}
-                                className={cn(
-                                    "h-32 p-1 border-b border-r overflow-hidden flex flex-col cursor-pointer hover:bg-gray-50 transition-colors",
-                                    !isSameMonth(day, monthStart) && "bg-gray-50 text-gray-400",
-                                    (index + 1) % 7 === 0 && "border-r-0"
-                                )}
+                                day={day}
+                                currentMonth={monthStart}
+                                compromissos={compromissosDoDia}
                                 onClick={() => handleDayClick(day)}
-                            >
-                                <span
-                                    className={cn(
-                                        "flex items-center justify-center h-7 w-7 rounded-full text-sm self-end",
-                                        isSameDay(day, new Date()) && "bg-blue-600 text-white font-bold"
-                                    )}
-                                >
-                                    {format(day, 'd')}
-                                </span>
-                                <div className="mt-1 space-y-1 flex-grow overflow-y-auto pr-1">
-                                    {compromissosConfirmados.slice(0, 2).map(c => <EventItem key={c.id} compromisso={c} />)}
-                                    {compromissosConfirmados.length > 2 && (
-                                        <div className="text-xs text-blue-700 font-semibold cursor-pointer">+ {compromissosConfirmados.length - 2} mais</div>
-                                    )}
-                                </div>
-                            </div>
+                            />
                         );
                     })}
                 </div>
@@ -195,51 +213,59 @@ export function MonthlyCalendar() {
     };
 
     return (
-        <div className="bg-white p-6 rounded-lg border">
-            <header className="flex justify-between items-center mb-4 flex-wrap gap-4">
-                <div className="flex items-center gap-2">
-                    <CalendarIcon className="h-6 w-6 text-gray-600" />
-                    <h2 className="text-xl font-bold text-gray-800 capitalize">
-                        Agenda - {getTitle()}
-                    </h2>
-                </div>
-
-                <div className="flex items-center gap-4">
-                    <div className="hidden sm:flex items-center rounded-md bg-gray-100 p-1">
-                        <Button size="sm" variant={view === 'Mês' ? 'secondary' : 'ghost'} onClick={() => setView('Mês')} className="h-8">Mês</Button>
-                        <Button size="sm" variant={view === 'Semana' ? 'secondary' : 'ghost'} onClick={() => setView('Semana')} className="h-8">Semana</Button>
-                        <Button size="sm" variant={view === 'Dia' ? 'secondary' : 'ghost'} onClick={() => setView('Dia')} className="h-8">Dia</Button>
+        <DndContext onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
+            <div className="bg-white p-6 rounded-lg border">
+                <header className="flex justify-between items-center mb-4 flex-wrap gap-4">
+                    <div className="flex items-center gap-2">
+                        <CalendarIcon className="h-6 w-6 text-gray-600" />
+                        <h2 className="text-xl font-bold text-gray-800 capitalize">
+                            Agenda - {getTitle()}
+                        </h2>
                     </div>
-                    <div className="flex items-center gap-1">
-                        <Button variant="outline" size="icon" onClick={prevPeriod} className="h-9 w-9">
-                            <ArrowLeft className="h-4 w-4" />
-                        </Button>
-                        <Button variant="outline" onClick={today} className="h-9 px-4">Hoje</Button>
-                        <Button variant="outline" size="icon" onClick={nextPeriod} className="h-9 w-9">
-                            <ArrowRight className="h-4 w-4" />
-                        </Button>
+
+                    <div className="flex items-center gap-4">
+                        <div className="hidden sm:flex items-center rounded-md bg-gray-100 p-1">
+                            <Button size="sm" variant={view === 'Mês' ? 'secondary' : 'ghost'} onClick={() => setView('Mês')} className="h-8">Mês</Button>
+                            <Button size="sm" variant={view === 'Semana' ? 'secondary' : 'ghost'} onClick={() => setView('Semana')} className="h-8">Semana</Button>
+                            <Button size="sm" variant={view === 'Dia' ? 'secondary' : 'ghost'} onClick={() => setView('Dia')} className="h-8">Dia</Button>
+                        </div>
+                        <div className="flex items-center gap-1">
+                            <Button variant="outline" size="icon" onClick={prevPeriod} className="h-9 w-9">
+                                <ArrowLeft className="h-4 w-4" />
+                            </Button>
+                            <Button variant="outline" onClick={today} className="h-9 px-4">Hoje</Button>
+                            <Button variant="outline" size="icon" onClick={nextPeriod} className="h-9 w-9">
+                                <ArrowRight className="h-4 w-4" />
+                            </Button>
+                        </div>
                     </div>
-                </div>
-            </header>
+                </header>
 
-            {view === 'Mês' && renderMonthView()}
-            {view === 'Semana' && renderWeekView()}
-            {view === 'Dia' && renderDayView()}
+                {view === 'Mês' && renderMonthView()}
+                {view === 'Semana' && renderWeekView()}
+                {view === 'Dia' && renderDayView()}
 
-            <footer className="mt-4 flex justify-end">
-                <Button variant="ghost" className="text-gray-600 font-normal">
-                    Dicas de interação
-                </Button>
-            </footer>
+                <footer className="mt-4 flex justify-end">
+                    <Button variant="ghost" className="text-gray-600 font-normal">
+                        Arraste compromissos para alterar datas
+                    </Button>
+                </footer>
 
-            {selectedDay && (
-                <DayDetailsModal
-                    open={isDayModalOpen}
-                    onOpenChange={setIsDayModalOpen}
-                    selectedDate={selectedDay}
-                    compromissos={getCompromissosForDay(selectedDay)}
-                />
-            )}
-        </div>
+                {selectedDay && (
+                    <DayDetailsModal
+                        open={isDayModalOpen}
+                        onOpenChange={setIsDayModalOpen}
+                        selectedDate={selectedDay}
+                        compromissos={getCompromissosForDay(selectedDay)}
+                    />
+                )}
+            </div>
+            
+            <DragOverlay>
+                {draggedCompromisso && (
+                    <DraggableEventItem compromisso={draggedCompromisso} />
+                )}
+            </DragOverlay>
+        </DndContext>
     );
 }
