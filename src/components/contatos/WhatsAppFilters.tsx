@@ -40,9 +40,11 @@ export const WhatsAppFilters: React.FC<WhatsAppFiltersProps> = ({
   }, [contacts]);
 
   const updateFilters = (key: keyof FilterType, value: any) => {
+    // Convert "all" back to empty string for filtering logic
+    const filterValue = value === "all" ? "" : value;
     onFiltersChange({
       ...filters,
-      [key]: value
+      [key]: filterValue
     });
   };
 
@@ -59,6 +61,9 @@ export const WhatsAppFilters: React.FC<WhatsAppFiltersProps> = ({
   const activeFiltersCount = Object.values(filters).filter(value => 
     value !== '' && value !== true
   ).length;
+
+  // Convert empty string to "all" for Select component
+  const getSelectValue = (value: string) => value === '' ? 'all' : value;
 
   return (
     <div className="border-b bg-gray-50">
@@ -82,12 +87,12 @@ export const WhatsAppFilters: React.FC<WhatsAppFiltersProps> = ({
           {/* Tipo de Contato */}
           <div>
             <Label className="text-sm font-medium mb-2 block">Tipo de Contato</Label>
-            <Select value={filters.tipo} onValueChange={(value) => updateFilters('tipo', value)}>
+            <Select value={getSelectValue(filters.tipo)} onValueChange={(value) => updateFilters('tipo', value)}>
               <SelectTrigger className="w-full">
                 <SelectValue placeholder="Todos os tipos" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">Todos os tipos</SelectItem>
+                <SelectItem value="all">Todos os tipos</SelectItem>
                 {Object.entries(tipoLabels).map(([key, label]) => (
                   <SelectItem key={key} value={key}>{label}</SelectItem>
                 ))}
@@ -98,12 +103,12 @@ export const WhatsAppFilters: React.FC<WhatsAppFiltersProps> = ({
           {/* Município */}
           <div>
             <Label className="text-sm font-medium mb-2 block">Município</Label>
-            <Select value={filters.municipio} onValueChange={(value) => updateFilters('municipio', value)}>
+            <Select value={getSelectValue(filters.municipio)} onValueChange={(value) => updateFilters('municipio', value)}>
               <SelectTrigger className="w-full">
                 <SelectValue placeholder="Todos os municípios" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">Todos os municípios</SelectItem>
+                <SelectItem value="all">Todos os municípios</SelectItem>
                 {uniqueValues.municipios.map((municipio) => (
                   <SelectItem key={municipio} value={municipio}>{municipio}</SelectItem>
                 ))}
@@ -114,12 +119,12 @@ export const WhatsAppFilters: React.FC<WhatsAppFiltersProps> = ({
           {/* Cargo */}
           <div>
             <Label className="text-sm font-medium mb-2 block">Cargo</Label>
-            <Select value={filters.cargo} onValueChange={(value) => updateFilters('cargo', value)}>
+            <Select value={getSelectValue(filters.cargo)} onValueChange={(value) => updateFilters('cargo', value)}>
               <SelectTrigger className="w-full">
                 <SelectValue placeholder="Todos os cargos" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">Todos os cargos</SelectItem>
+                <SelectItem value="all">Todos os cargos</SelectItem>
                 {uniqueValues.cargos.map((cargo) => (
                   <SelectItem key={cargo} value={cargo}>{cargo}</SelectItem>
                 ))}
@@ -130,12 +135,12 @@ export const WhatsAppFilters: React.FC<WhatsAppFiltersProps> = ({
           {/* Órgão */}
           <div>
             <Label className="text-sm font-medium mb-2 block">Órgão</Label>
-            <Select value={filters.orgao} onValueChange={(value) => updateFilters('orgao', value)}>
+            <Select value={getSelectValue(filters.orgao)} onValueChange={(value) => updateFilters('orgao', value)}>
               <SelectTrigger className="w-full">
                 <SelectValue placeholder="Todos os órgãos" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">Todos os órgãos</SelectItem>
+                <SelectItem value="all">Todos os órgãos</SelectItem>
                 {uniqueValues.orgaos.map((orgao) => (
                   <SelectItem key={orgao} value={orgao}>{orgao}</SelectItem>
                 ))}
