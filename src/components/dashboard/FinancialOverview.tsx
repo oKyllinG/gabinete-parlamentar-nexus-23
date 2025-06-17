@@ -2,8 +2,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { DollarSign, TrendingUp, Building2 } from "lucide-react";
-import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
-import { PieChart, Pie, Cell, ResponsiveContainer, BarChart, Bar, XAxis, YAxis } from "recharts";
+import { PieChart, Pie, Cell, ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip } from "recharts";
 import { useNavigate } from "react-router-dom";
 
 export function FinancialOverview() {
@@ -67,7 +66,16 @@ export function FinancialOverview() {
                       <Cell key={`cell-${index}`} fill={entry.color} />
                     ))}
                   </Pie>
-                  <ChartTooltip content={<ChartTooltipContent />} />
+                  <Tooltip 
+                    formatter={(value: number) => [`R$ ${(value / 1000).toFixed(0)}k`, 'Valor']}
+                    labelStyle={{ color: '#374151' }}
+                    contentStyle={{ 
+                      backgroundColor: 'white', 
+                      border: '1px solid #e5e7eb',
+                      borderRadius: '6px',
+                      fontSize: '12px'
+                    }}
+                  />
                 </PieChart>
               </ResponsiveContainer>
             </div>
@@ -121,7 +129,16 @@ export function FinancialOverview() {
                 <BarChart data={dadosObras}>
                   <XAxis dataKey="tipo" fontSize={12} />
                   <YAxis fontSize={12} />
-                  <ChartTooltip content={<ChartTooltipContent />} />
+                  <Tooltip 
+                    formatter={(value: number) => [`R$ ${(value / 1000).toFixed(0)}k`, 'Valor']}
+                    labelStyle={{ color: '#374151' }}
+                    contentStyle={{ 
+                      backgroundColor: 'white', 
+                      border: '1px solid #e5e7eb',
+                      borderRadius: '6px',
+                      fontSize: '12px'
+                    }}
+                  />
                   <Bar dataKey="valor" fill="#3B82F6" radius={[4, 4, 0, 0]} />
                 </BarChart>
               </ResponsiveContainer>
