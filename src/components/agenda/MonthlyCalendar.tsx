@@ -83,11 +83,26 @@ export function MonthlyCalendar() {
         const newDateString = over.id as string;
         
         if (compromisso && newDateString) {
-            const newDate = new Date(newDateString);
+            // Criar nova data mantendo o fuso horário local
+            const [year, month, day] = newDateString.split('-').map(Number);
+            const newDate = new Date(year, month - 1, day); // month - 1 porque Date usa 0-11 para meses
+            
+            // Manter a mesma hora do compromisso original, apenas mudando a data
+            const originalDate = new Date(compromisso.data);
+            newDate.setHours(originalDate.getHours(), originalDate.getMinutes(), originalDate.getSeconds(), originalDate.getMilliseconds());
+            
             const updatedCompromisso = {
                 ...compromisso,
                 data: newDate.toISOString()
             };
+            
+            console.log('Movendo compromisso:', {
+                titulo: compromisso.titulo,
+                dataOriginal: compromisso.data,
+                dataDestino: newDateString,
+                novaData: newDate.toISOString(),
+                novaDataLocal: newDate.toLocaleDateString('pt-BR')
+            });
             
             updateCompromisso(updatedCompromisso);
         }
