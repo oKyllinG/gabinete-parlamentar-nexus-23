@@ -38,9 +38,10 @@ export const ContactFilters: React.FC<ContactFiltersProps> = ({
   };
 
   const totalContacts = contacts.length;
+  const whatsappOptInCount = contacts.filter(c => c.whatsappOptIn !== false).length;
 
   return (
-    <Card className="w-80">
+    <Card className="h-fit">
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <Filter className="w-4 h-4" />
@@ -63,7 +64,8 @@ export const ContactFilters: React.FC<ContactFiltersProps> = ({
               <Badge variant="secondary">{totalContacts}</Badge>
             </Button>
             
-            {(Object.keys(tipoLabels) as Array<keyof typeof tipoLabels>).map((tipo) => {
+            {(Object.keys(tipo
+Labels) as Array<keyof typeof tipoLabels>).map((tipo) => {
               const count = getTypeCount(tipo);
               if (count === 0) return null;
               
@@ -103,6 +105,12 @@ export const ContactFilters: React.FC<ContactFiltersProps> = ({
               <span>Com email:</span>
               <span className="font-medium">
                 {contacts.filter(c => c.email).length}
+              </span>
+            </div>
+            <div className="flex justify-between">
+              <span>WhatsApp habilitado:</span>
+              <span className="font-medium text-green-600">
+                {whatsappOptInCount}
               </span>
             </div>
           </div>

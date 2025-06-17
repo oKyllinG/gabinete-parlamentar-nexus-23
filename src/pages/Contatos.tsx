@@ -1,3 +1,4 @@
+
 import React, { useState, useMemo } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -20,6 +21,7 @@ import { ContatoForm } from "@/components/contatos/ContatoForm";
 import { ContactFilters } from "@/components/contatos/ContactFilters";
 import { BirthdayList } from "@/components/contatos/BirthdayList";
 import { ExportDialog } from "@/components/contatos/ExportDialog";
+import { WhatsAppTab } from "@/components/contatos/WhatsAppTab";
 
 export interface Contact {
   id: string;
@@ -30,6 +32,9 @@ export interface Contact {
   tipo: 'servidor' | 'lideranca' | 'empresario' | 'cidadao' | 'politico';
   cargo?: string;
   empresa?: string;
+  municipio?: string;
+  orgao?: string;
+  whatsappOptIn?: boolean;
   endereco?: {
     rua: string;
     numero: string;
@@ -137,7 +142,7 @@ const Contatos = () => {
   };
 
   return (
-    <div className="p-6 max-w-7xl mx-auto">
+    <div className="container mx-auto px-4 py-6">
       <div className="flex items-center justify-between mb-6">
         <div>
           <h1 className="text-2xl font-bold text-foreground">Contatos</h1>
@@ -163,6 +168,10 @@ const Contatos = () => {
             <Users className="w-4 h-4 mr-2" />
             Contatos ({filteredContacts.length})
           </TabsTrigger>
+          <TabsTrigger value="whatsapp">
+            <MessageCircle className="w-4 h-4 mr-2" />
+            WhatsApp
+          </TabsTrigger>
           <TabsTrigger value="birthdays">
             <Calendar className="w-4 h-4 mr-2" />
             Aniversariantes
@@ -170,14 +179,16 @@ const Contatos = () => {
         </TabsList>
 
         <TabsContent value="contacts" className="space-y-6">
-          <div className="flex gap-6">
-            <ContactFilters 
-              selectedType={selectedType}
-              onTypeChange={setSelectedType}
-              contacts={contacts}
-            />
+          <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+            <div className="lg:col-span-1">
+              <ContactFilters 
+                selectedType={selectedType}
+                onTypeChange={setSelectedType}
+                contacts={contacts}
+              />
+            </div>
             
-            <div className="flex-1 space-y-4">
+            <div className="lg:col-span-3 space-y-4">
               <div className="flex gap-4">
                 <div className="relative flex-1">
                   <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
@@ -221,6 +232,9 @@ const Contatos = () => {
                             </div>
                             {contact.cargo && (
                               <p className="text-sm text-muted-foreground mb-1">{contact.cargo}</p>
+                            )}
+                            {contact.municipio && (
+                              <p className="text-sm text-muted-foreground mb-1">📍 {contact.municipio}</p>
                             )}
                             <div className="flex items-center gap-4 text-sm text-muted-foreground">
                               <div className="flex items-center gap-1">
@@ -279,6 +293,10 @@ const Contatos = () => {
               </div>
             </div>
           </div>
+        </TabsContent>
+
+        <TabsContent value="whatsapp">
+          <WhatsAppTab contacts={contacts} onUpdateContact={setContacts} />
         </TabsContent>
 
         <TabsContent value="birthdays">
