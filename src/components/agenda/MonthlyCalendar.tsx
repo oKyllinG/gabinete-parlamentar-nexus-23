@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Calendar as CalendarIcon, ArrowLeft, ArrowRight } from 'lucide-react';
@@ -8,7 +9,7 @@ import { useAgendaCategorias } from '@/contexts/AgendaCategoriasContext';
 import { Compromisso } from '@/types/agenda';
 import { cn } from '@/lib/utils';
 import { DayDetailsModal } from './DayDetailsModal';
-import { DndContext, DragEndEvent, DragOverlay } from '@dnd-kit/core';
+import { DndContext, DragEndEvent, DragOverlay, useDroppable } from '@dnd-kit/core';
 import { DroppableCalendarDay } from './DroppableCalendarDay';
 import { DraggableEventItem } from './DraggableEventItem';
 
@@ -53,7 +54,6 @@ const EventItem = ({ compromisso }: { compromisso: Compromisso }) => {
 
 // Componente DroppableWeekDay para semanas com drag and drop
 const DroppableWeekDay = ({ day, compromissos, onClick }: { day: Date, compromissos: Compromisso[], onClick: () => void }) => {
-    const { useDroppable } = require('@dnd-kit/core');
     const { isOver, setNodeRef } = useDroppable({
         id: format(day, 'yyyy-MM-dd'),
         data: {
