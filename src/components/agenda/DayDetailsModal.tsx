@@ -71,6 +71,15 @@ export function DayDetailsModal({ open, onOpenChange, selectedDate, compromissos
     }
   };
 
+  const getStatusText = (status: string) => {
+    switch (status) {
+      case 'PENDENTE':
+        return 'PRÉ-AGENDADO';
+      default:
+        return status;
+    }
+  };
+
   const sortedCompromissos = compromissos.sort((a, b) => a.horaInicio.localeCompare(b.horaInicio));
 
   return (
@@ -113,7 +122,7 @@ export function DayDetailsModal({ open, onOpenChange, selectedDate, compromissos
                         {compromisso.titulo}
                       </div>
                       <span className={`px-2 py-1 rounded-full text-xs font-medium border ${getStatusBadge(compromisso.status)}`}>
-                        {compromisso.status}
+                        {getStatusText(compromisso.status)}
                       </span>
                     </CardTitle>
                   </CardHeader>

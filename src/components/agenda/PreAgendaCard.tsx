@@ -55,6 +55,15 @@ export function PreAgendaCard({ compromisso }: PreAgendaCardProps) {
     }
   };
 
+  const getStatusText = () => {
+    switch (compromisso.status) {
+      case 'PENDENTE':
+        return 'PRÉ-AGENDADO';
+      default:
+        return compromisso.status;
+    }
+  };
+
   return (
     <Card className={`mb-4 shadow-sm hover:shadow-md transition-shadow duration-200 border-l-4 ${getCardBorder()}`}>
       <CardHeader className="p-4 pb-2">
@@ -70,7 +79,7 @@ export function PreAgendaCard({ compromisso }: PreAgendaCardProps) {
             </CardDescription>
           </div>
           <span className={`px-2 py-1 rounded-full text-xs font-medium border ${getStatusBadge()}`}>
-            {compromisso.status}
+            {getStatusText()}
           </span>
         </div>
       </CardHeader>

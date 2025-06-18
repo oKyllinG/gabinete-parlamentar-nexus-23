@@ -1,3 +1,4 @@
+
 import { Button } from "@/components/ui/button";
 import { useAgenda } from "@/contexts/AgendaContext";
 import { Compromisso } from "@/types/agenda";
@@ -32,6 +33,11 @@ export function CompromissoActions({ compromisso }: CompromissoActionsProps) {
     toast({ title: "Compromisso recusado." });
   };
 
+  const handlePreAgendar = () => {
+    updateStatus(compromisso.id, "PENDENTE");
+    toast({ title: "Compromisso voltou para pré-agendado." });
+  };
+
   const handleEdit = () => {
     setEditingCompromisso(compromisso);
     setFormOpen(true);
@@ -44,8 +50,18 @@ export function CompromissoActions({ compromisso }: CompromissoActionsProps) {
 
   return (
     <div className="flex items-center gap-2 mt-4 flex-wrap">
-      <Button size="sm" onClick={handleConfirm}>Confirmar</Button>
+      {/* Botão Confirmar - só aparece se não estiver confirmado */}
+      {compromisso.status !== 'CONFIRMADO' && (
+        <Button size="sm" onClick={handleConfirm}>Confirmar</Button>
+      )}
+      
+      {/* Botão Pré-agendar - só aparece se estiver confirmado ou recusado */}
+      {(compromisso.status === 'CONFIRMADO' || compromisso.status === 'RECUSADO') && (
+        <Button size="sm" variant="outline" onClick={handlePreAgendar}>Pré-agendar</Button>
+      )}
+      
       <Button size="sm" variant="outline" onClick={handleEdit}>Editar</Button>
+      
       <AlertDialog>
         <AlertDialogTrigger asChild>
           <Button size="sm" variant="ghost" className="text-red-500 hover:bg-red-50 hover:text-red-600">Excluir</Button>
@@ -63,7 +79,11 @@ export function CompromissoActions({ compromisso }: CompromissoActionsProps) {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
-      <Button size="sm" variant="ghost" onClick={handleRecusar}>Recusar</Button>
+      
+      {/* Botão Recusar - só aparece se não estiver recusado */}
+      {compromisso.status !== 'RECUSADO' && (
+        <Button size="sm" variant="ghost" onClick={handleRecusar}>Recusar</Button>
+      )}
     </div>
   );
 }
