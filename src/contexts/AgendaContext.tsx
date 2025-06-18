@@ -1,3 +1,4 @@
+
 import React, { createContext, useContext, useState, useEffect, ReactNode, useMemo, useCallback } from "react";
 import { Compromisso, StatusCompromisso } from "@/types/agenda";
 import { parseISO, startOfDay } from "date-fns";
@@ -33,7 +34,7 @@ const demoCompromissos: Compromisso[] = [
 ];
 
 type AgendaView = "CALENDARIO" | "GERENCIAR" | "CATEGORIAS";
-type AgendaFilter = "PENDENTE" | "HOJE" | "CONCLUIDO" | "RECUSADO" | "CANCELADO";
+type AgendaFilter = "PENDENTE" | "HOJE" | "CONFIRMADO" | "RECUSADO" | "CANCELADO";
 type AppointmentType = "travel" | null;
 
 interface AgendaContextType {
