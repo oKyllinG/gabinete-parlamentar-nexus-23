@@ -1,3 +1,4 @@
+
 import { useMemo } from "react";
 import { useAgenda } from "@/contexts/AgendaContext";
 import { PreAgendaCard } from "./PreAgendaCard";
@@ -21,7 +22,7 @@ export function PreAgendaList() {
         case 'HOJE':
             items = compromissos.filter(c => isSameDay(parseISO(c.data), new Date()));
             break;
-        case 'CONCLUIDO':
+        case 'CONFIRMADO':
             items = compromissos.filter(c => c.status === 'CONFIRMADO');
             break;
         case 'RECUSADO':
@@ -52,11 +53,24 @@ export function PreAgendaList() {
   const sortedDates = useMemo(() => Object.keys(groupedByDate).sort((a, b) => new Date(a).getTime() - new Date(b).getTime()), [groupedByDate]);
 
   if (sortedDates.length === 0) {
+    const getEmptyMessage = () => {
+      switch(filter) {
+        case 'HOJE':
+          return 'Não há compromissos agendados para hoje.';
+        case 'CONFIRMADO':
+          return 'Não há compromissos confirmados.';
+        case 'PENDENTE':
+          return 'Não há compromissos pré-agendados.';
+        default:
+          return 'Não há compromissos que correspondam ao filtro atual.';
+      }
+    };
+
     return (
-        <div className="text-center py-16 text-gray-500 bg-white rounded-lg border">
-            <h3 className="text-lg font-semibold">Nenhum item encontrado</h3>
-            <p className="mt-1">Não há compromissos que correspondam ao filtro atual.</p>
-        </div>
+      <div className="text-center py-16 text-gray-500 bg-white rounded-lg border">
+        <h3 className="text-lg font-semibold">Nenhum item encontrado</h3>
+        <p className="mt-1">{getEmptyMessage()}</p>
+      </div>
     );
   }
 

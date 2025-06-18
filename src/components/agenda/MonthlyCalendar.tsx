@@ -51,6 +51,37 @@ const EventItem = ({ compromisso }: { compromisso: Compromisso }) => {
     )
 }
 
+// Componente DroppableWeekDay para semanas com drag and drop
+const DroppableWeekDay = ({ day, compromissos, onClick }: { day: Date, compromissos: Compromisso[], onClick: () => void }) => {
+    const { useDroppable } = require('@dnd-kit/core');
+    const { isOver, setNodeRef } = useDroppable({
+        id: format(day, 'yyyy-MM-dd'),
+        data: {
+            date: day,
+        },
+    });
+
+    return (
+        <div
+            ref={setNodeRef}
+            className={cn(
+                "h-64 p-2 border-r cursor-pointer hover:bg-gray-50 transition-colors relative",
+                isOver && "bg-blue-50 border-blue-300"
+            )}
+            onClick={onClick}
+        >
+            <div className="space-y-1">
+                {compromissos.map(c => (
+                    <DraggableEventItem key={c.id} compromisso={c} />
+                ))}
+            </div>
+            {isOver && (
+                <div className="absolute inset-0 bg-blue-100 border-2 border-blue-300 border-dashed rounded opacity-50 pointer-events-none" />
+            )}
+        </div>
+    );
+};
+
 export function MonthlyCalendar() {
     const [currentDate, setCurrentDate] = useState(new Date());
     const [view, setView] = useState('Mês');
@@ -105,7 +136,7 @@ export function MonthlyCalendar() {
         if (compromisso && newDateString) {
             // Criar nova data mantendo o fuso horário local
             const [year, month, day] = newDateString.split('-').map(Number);
-            const newDate = new Date(year, month - 1, day); // month - 1 porque Date usa 0-11 para meses
+            const newDate = new Date(year, month - 1, day);
             
             // Manter a mesma hora do compromisso original, apenas mudando a data
             const originalDate = new Date(compromisso.data);
@@ -181,15 +212,12 @@ export function MonthlyCalendar() {
                     {days.map((day, index) => {
                         const compromissosDoDia = getCompromissosForDay(day);
                         return (
-                            <div
+                            <DroppableWeekDay
                                 key={index}
-                                className="h-64 p-2 border-r cursor-pointer hover:bg-gray-50 transition-colors"
+                                day={day}
+                                compromissos={compromissosDoDia}
                                 onClick={() => handleDayClick(day)}
-                            >
-                                <div className="space-y-1">
-                                    {compromissosDoDia.map(c => <EventItem key={c.id} compromisso={c} />)}
-                                </div>
-                            </div>
+                            />
                         );
                     })}
                 </div>
@@ -225,7 +253,7 @@ export function MonthlyCalendar() {
                                         compromisso.status === 'PENDENTE' ? 'bg-yellow-100 text-yellow-800' :
                                         'bg-gray-100 text-gray-800'
                                     }`}>
-                                        {compromisso.status}
+                                        {compromisso.status === 'PENDENTE' ? 'PRÉ-AGENDADO' : compromisso.status}
                                     </span>
                                 </div>
                             </div>
