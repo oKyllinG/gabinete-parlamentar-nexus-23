@@ -10,12 +10,6 @@ import { GerenciarCompromissosAccordion } from "./GerenciarCompromissosAccordion
 export function PreAgendaList() {
   const { compromissos, filter, view } = useAgenda();
 
-  // Se estiver no modo "Gerenciar", mostra accordion de dias c/ compromissos
-  if (view === "GERENCIAR") {
-    // Não faz filtros adicionais aqui, pois a ideia é mostrar todos os compromissos agrupados por dia
-    return <GerenciarCompromissosAccordion compromissos={compromissos} />;
-  }
-
   const filteredAgendas = useMemo(() => {
     let items: Compromisso[];
     switch(filter) {
@@ -32,12 +26,19 @@ export function PreAgendaList() {
             items = compromissos.filter(c => c.status === 'CANCELADO');
             break;
         case 'PENDENTE':
-        default: // if filter is null, show PENDENTE by default in this view
             items = compromissos.filter(c => c.status === 'PENDENTE');
+            break;
+        default: // if filter is null
+            items = view === "GERENCIAR" ? compromissos : compromissos.filter(c => c.status === 'PENDENTE');
             break;
     }
     return items;
-  }, [compromissos, filter]);
+  }, [compromissos, filter, view]);
+
+  // Se estiver no modo "Gerenciar", mostra accordion de dias c/ compromissos FILTRADOS
+  if (view === "GERENCIAR") {
+    return <GerenciarCompromissosAccordion compromissos={filteredAgendas} />;
+  }
   
   const groupedByDate = useMemo(() => {
     return filteredAgendas.reduce((acc, compromisso) => {

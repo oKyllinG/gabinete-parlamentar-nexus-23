@@ -74,8 +74,11 @@ export function AgendaToolbar() {
                 </Button>
             </div>
             <div className="flex items-center gap-4">
-                <Button variant="link" className="text-primary">Selecionar Todos</Button>
-                <Button variant="ghost" onClick={() => setFilter(null)} className="text-gray-600">
+                <Button 
+                    variant="ghost" 
+                    onClick={() => setFilter(null)} 
+                    className="text-gray-600 hover:text-primary"
+                >
                     <Filter className="mr-2 h-4 w-4" />
                     Limpar Filtros
                 </Button>
