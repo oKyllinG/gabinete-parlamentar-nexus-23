@@ -19,12 +19,32 @@ const EventItem = ({ compromisso }: { compromisso: Compromisso }) => {
     const categoria = categorias.find(cat => cat.slug === compromisso.categoria);
     const cor = categoria?.cor || '#4267F1'; // Cor padrão azul
     
-    const statusColor = compromisso.status === 'CONFIRMADO' ? cor : '#9CA3AF'; // Cinza para não confirmado
+    // Cores diferentes baseadas no status
+    let statusColor = cor;
+    let opacity = '1';
+    
+    switch (compromisso.status) {
+        case 'CONFIRMADO':
+            statusColor = cor; // Cor normal da categoria
+            break;
+        case 'PENDENTE':
+            statusColor = '#F59E0B'; // Amarelo para pendente
+            break;
+        case 'RECUSADO':
+            statusColor = '#EF4444'; // Vermelho para recusado
+            break;
+        case 'CANCELADO':
+            statusColor = '#9CA3AF'; // Cinza para cancelado
+            opacity = '0.6';
+            break;
+        default:
+            statusColor = '#9CA3AF';
+    }
     
     return (
         <div 
             className="text-white rounded p-1 text-xs mb-1 truncate"
-            style={{ backgroundColor: statusColor }}
+            style={{ backgroundColor: statusColor, opacity }}
         >
             {compromisso.horaInicio} - {compromisso.titulo}
         </div>
@@ -160,7 +180,6 @@ export function MonthlyCalendar() {
                 <div className="grid grid-cols-7">
                     {days.map((day, index) => {
                         const compromissosDoDia = getCompromissosForDay(day);
-                        const compromissosConfirmados = compromissosDoDia.filter(c => c.status === 'CONFIRMADO');
                         return (
                             <div
                                 key={index}
@@ -168,7 +187,7 @@ export function MonthlyCalendar() {
                                 onClick={() => handleDayClick(day)}
                             >
                                 <div className="space-y-1">
-                                    {compromissosConfirmados.map(c => <EventItem key={c.id} compromisso={c} />)}
+                                    {compromissosDoDia.map(c => <EventItem key={c.id} compromisso={c} />)}
                                 </div>
                             </div>
                         );
